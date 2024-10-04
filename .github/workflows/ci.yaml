@@ -24,4 +24,6 @@ jobs:
         cache: 'gradle'
 
     - name: Build with Gradle
-      run: chmod +x gradlew && ./gradlew build
+      run: |
+        chmod +x gradlew
+        ./gradlew clean build

@@ -30,4 +30,4 @@ jobs:
       uses: android-actions/setup-android@v3
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew wrapper build

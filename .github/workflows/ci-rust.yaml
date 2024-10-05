@@ -9,6 +9,11 @@ on:
     paths:
       - api/**
 
+defaults:
+  run:
+    shell: bash
+    working-directory: ./api
+
 env:
   CARGO_TERM_COLOR: always
   RUST_LOG: info

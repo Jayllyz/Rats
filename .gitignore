@@ -1,4 +1,6 @@
 *.iml
+*.env
+!.env.template
 /local.properties
 .DS_Store
 /build

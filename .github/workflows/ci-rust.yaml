@@ -1,0 +1,75 @@
+---
+name: CI Rust
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - api/**
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./api
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_LOG: info
+  RUST_BACKTRACE: 1
+  RUSTFLAGS: "-Dwarnings"
+  CI: true
+
+jobs:
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: moonrepo/setup-rust@v1
+        with:
+          components: clippy,rustfmt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      - name: Run Clippy
+        run: cargo clippy
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+         postgres:
+           image: postgres:17-alpine
+           env:
+             POSTGRES_PASSWORD: postgres
+           options: >-
+             --health-cmd pg_isready
+             --health-interval 10s
+             --health-timeout 5s
+             --health-retries 5
+           ports:
+             - 5432:5432
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: moonrepo/setup-rust@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check
+        run: cargo check
+
+      - name: Run tests
+        run: cargo test
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres

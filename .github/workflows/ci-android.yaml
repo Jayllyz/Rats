@@ -1,13 +1,16 @@
-name: CI
+name: CI Android
 
 on:
   push:
     branches: [ main ]
   pull_request:
+    paths-ignore:
+      - api/**
+      - *.md
 
 env:
   CI: true
-  FORCE_COLOR: 3
+  FORCE_COLOR: 1
 
 jobs:
   build:

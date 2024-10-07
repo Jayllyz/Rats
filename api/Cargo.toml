@@ -10,6 +10,9 @@ actix-web = "4.9.0"
 diesel = { version = "2.2.4", features = ["postgres", "r2d2"] }
 serde = { version = "1.0.210", features = ["derive"] }
 dotenvy = "0.15.7"
+password-auth = "1.0.0"
+argon2 = "0.5.3"
+jsonwebtoken = "9.3.0"
 
 [profile.release]
 lto = true

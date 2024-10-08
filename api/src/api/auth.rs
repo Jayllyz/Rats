@@ -10,11 +10,8 @@ use password_auth::{generate_hash, verify_password};
 use serde::Serialize;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-#[post("/auth/signup")]
-pub async fn signup(
-    pool: web::Data<DbPool>,
-    user: web::Json<SignupRequest>,
-) -> Result<HttpResponse> {
+#[post("/signup")]
+async fn signup(pool: web::Data<DbPool>, user: web::Json<SignupRequest>) -> Result<HttpResponse> {
     let password_hash = generate_hash(&user.password);
 
     let new_user =
@@ -33,8 +30,8 @@ pub async fn signup(
     }
 }
 
-#[post("/auth/login")]
-pub async fn login(
+#[post("/login")]
+async fn login(
     pool: web::Data<DbPool>,
     credentials: web::Json<LoginRequest>,
 ) -> Result<HttpResponse> {
@@ -49,9 +46,7 @@ pub async fn login(
     let user = match user {
         Ok(user) => user,
         Err(_e) => {
-            return Err(actix_web::error::ErrorNotFound(
-                format!("Email not found in the database",),
-            ))
+            return Err(actix_web::error::ErrorNotFound("User not found"));
         }
     };
 
@@ -63,6 +58,10 @@ pub async fn login(
         .map_err(|_| actix_web::error::ErrorInternalServerError("An internal error occurred"))?;
 
     Ok(HttpResponse::Ok().json(LoginResponse { token }))
+}
+
+pub fn config_auth(cfg: &mut web::ServiceConfig) {
+    cfg.service(web::scope("/auth").service(signup).service(login));
 }
 
 fn create_token(user_id: &i32) -> Result<String, jsonwebtoken::errors::Error> {
@@ -77,6 +76,8 @@ fn create_token(user_id: &i32) -> Result<String, jsonwebtoken::errors::Error> {
             + 24 * 60 * 60; // 24 hours from now
 
     let claims = Claims { sub: *user_id, exp: expiration };
+    dotenvy::dotenv().ok();
+    let secret = std::env::var("JWT_SECRET").unwrap_or_else(|_| "secure_secret_key".to_string());
 
-    encode(&Header::default(), &claims, &EncodingKey::from_secret("your_secret_key".as_ref()))
+    encode(&Header::default(), &claims, &EncodingKey::from_secret(secret.as_ref()))
 }

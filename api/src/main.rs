@@ -39,3 +39,27 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::{http, test};
+
+    #[actix_web::test]
+    async fn test_healthcheck() {
+        let app = test::init_service(App::new().service(healthcheck)).await;
+        let req = test::TestRequest::get().uri("/health").to_request();
+        let resp = test::call_service(&app, req).await;
+
+        assert_eq!(resp.status(), http::StatusCode::OK);
+    }
+
+    #[actix_web::test]
+    async fn test_not_found() {
+        let app = test::init_service(App::new().default_service(web::route().to(not_found))).await;
+        let req = test::TestRequest::get().uri("/non-existent-route").to_request();
+        let resp = test::call_service(&app, req).await;
+
+        assert_eq!(resp.status(), http::StatusCode::NOT_FOUND);
+    }
+}

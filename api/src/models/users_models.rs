@@ -2,7 +2,7 @@ use diesel::prelude::*;
 use diesel::Selectable;
 use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Selectable, Deserialize, Insertable)]
+#[derive(Serialize, Deserialize, Insertable, Selectable)]
 #[diesel(table_name = crate::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct CreateUser {
@@ -19,6 +19,7 @@ pub struct UserResponse {
     pub name: String,
     pub email: String,
     pub password: String,
+    pub token: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -28,7 +29,7 @@ pub struct SignupRequest {
     pub password: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct LoginRequest {
     pub email: String,
     pub password: String,

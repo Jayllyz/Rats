@@ -35,7 +35,7 @@ async fn main() -> std::io::Result<()> {
             .default_service(web::route().to(not_found))
             .wrap(actix_web::middleware::Logger::default())
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("127.0.0.1", 8000))?
     .run()
     .await
 }

@@ -24,6 +24,7 @@ env:
   RUST_LOG: info
   RUST_BACKTRACE: 1
   RUSTFLAGS: "-Dwarnings"
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
 
 jobs:
   code-quality:
@@ -39,6 +40,7 @@ jobs:
         uses: moonrepo/setup-rust@v1
         with:
           components: clippy,rustfmt
+          target-dirs: api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -71,6 +73,8 @@ jobs:
 
       - name: Install Rust toolchain
         uses: moonrepo/setup-rust@v1
+        with:
+          target-dirs: api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -81,9 +85,7 @@ jobs:
         run: |
           cargo install diesel_cli --no-default-features --features postgres
           diesel setup
-          diesel migration run --database-url postgres://postgres:postgres@localhost:5432/postgres
+          diesel migration run
 
       - name: Run tests
         run: cargo test
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres

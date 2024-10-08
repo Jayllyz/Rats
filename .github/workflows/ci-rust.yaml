@@ -10,17 +10,20 @@ on:
     paths:
       - api/**
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
+
 defaults:
   run:
-    shell: bash
     working-directory: ./api
 
 env:
+  CI: true
   CARGO_TERM_COLOR: always
   RUST_LOG: info
   RUST_BACKTRACE: 1
   RUSTFLAGS: "-Dwarnings"
-  CI: true
 
 jobs:
   code-quality:
@@ -29,6 +32,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: api
 
       - name: Install Rust toolchain
         uses: moonrepo/setup-rust@v1
@@ -61,6 +66,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: api
 
       - name: Install Rust toolchain
         uses: moonrepo/setup-rust@v1
@@ -69,6 +76,12 @@ jobs:
 
       - name: Check
         run: cargo check
+
+      - name: Setup diesel
+        run: |
+          cargo install diesel_cli --no-default-features --features postgres
+          diesel setup
+          diesel migration run --database-url postgres://postgres:postgres@localhost:5432/postgres
 
       - name: Run tests
         run: cargo test

@@ -1,3 +1,4 @@
+---
 name: CI Android
 
 on:
@@ -10,6 +11,10 @@ on:
     paths-ignore:
       - "api/**"
       - "*.md"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 env:
   CI: true

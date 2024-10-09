@@ -2,14 +2,15 @@ use crate::db::DbPool;
 use crate::models::users_models::UserResponse;
 use crate::schema::users;
 use actix_web::{get, web, HttpResponse, Result};
-use diesel::prelude::*;
+use diesel_async::RunQueryDsl;
 
 #[get("")]
 async fn get_all_users(pool: web::Data<DbPool>) -> Result<HttpResponse> {
-    let mut conn = pool.get().expect("Couldn't get db connection from pool");
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let users = users::table
         .load::<UserResponse>(&mut conn)
+        .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying users"))?;
 
     Ok(HttpResponse::Ok().json(users))

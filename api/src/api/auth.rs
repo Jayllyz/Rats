@@ -5,6 +5,7 @@ use crate::models::users_models::{
 use crate::schema::users;
 use actix_web::{post, web, HttpResponse, Result};
 use diesel::prelude::*;
+use diesel_async::RunQueryDsl;
 use jsonwebtoken::{encode, EncodingKey, Header};
 use password_auth::{generate_hash, verify_password};
 use serde::Serialize;
@@ -20,11 +21,12 @@ async fn signup(pool: web::Data<DbPool>, user: web::Json<SignupRequest>) -> Resu
     let new_user =
         CreateUser { name: user.name.clone(), email: user.email.clone(), password: password_hash };
 
-    let mut conn = pool
-        .get()
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Database connection error"))?;
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    match diesel::insert_into(users::table).values(&new_user).get_result::<UserResponse>(&mut conn)
+    match diesel::insert_into(users::table)
+        .values(&new_user)
+        .get_result::<UserResponse>(&mut conn)
+        .await
     {
         Ok(user) => Ok(HttpResponse::Created().json(user)),
         Err(e) => match e {
@@ -44,11 +46,12 @@ async fn login(
     pool: web::Data<DbPool>,
     credentials: web::Json<LoginRequest>,
 ) -> Result<HttpResponse> {
-    let mut conn = pool.get().expect("Couldn't get db connection from pool");
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let user = users::table
         .filter(users::email.eq(&credentials.email))
         .first::<UserResponse>(&mut conn)
+        .await
         .map_err(|e| match e {
             diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
             _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
@@ -65,6 +68,7 @@ async fn login(
     diesel::update(users::table.filter(users::id.eq(user.id)))
         .set(users::token.eq(&token))
         .execute(&mut conn)
+        .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to update user token"))?;
 
     Ok(HttpResponse::Ok().json(LoginResponse { token }))
@@ -111,9 +115,8 @@ mod tests {
 
     #[actix_web::test]
     async fn test_create_token() {
-        let text = "test";
         let token = create_token(&1).unwrap();
-        assert_ne!(token, text);
+        assert_ne!(token, "");
     }
 
     #[actix_web::test]
@@ -162,9 +165,10 @@ mod tests {
         let resp = test::call_service(&app, req).await;
         assert_eq!(resp.status(), http::StatusCode::UNAUTHORIZED);
 
-        let mut conn = pool.get().expect("Couldn't get db connection from pool");
+        let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
         diesel::delete(users::table.filter(users::email.eq(random_email)))
             .execute(&mut conn)
+            .await
             .expect("Error deleting user");
     }
 }

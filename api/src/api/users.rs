@@ -2,6 +2,7 @@ use crate::db::DbPool;
 use crate::models::users_models::UserResponse;
 use crate::schema::users;
 use actix_web::{get, web, HttpResponse, Result};
+use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
 #[get("")]
@@ -16,9 +17,26 @@ async fn get_all_users(pool: web::Data<DbPool>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok().json(users))
 }
 
-pub fn config_users(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/users").service(get_all_users));
+#[get("/{id}")]
+async fn get_user(pool: web::Data<DbPool>, user_id: web::Path<i32>) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let result = users::table
+        .filter(users::id.eq(*user_id))
+        .first::<UserResponse>(&mut conn)
+        .await;
+
+    match result {
+        Ok(user) => Ok(HttpResponse::Ok().json(user)),
+        Err(diesel::result::Error::NotFound) => Ok(HttpResponse::NotFound().body("User not found")),
+        Err(_) => Ok(HttpResponse::InternalServerError().finish()),
+    }
 }
+
+pub fn config_users(cfg: &mut web::ServiceConfig) {
+    cfg.service(web::scope("/users").service(get_all_users).service(get_user));
+}
+
 
 #[cfg(test)]
 mod tests {

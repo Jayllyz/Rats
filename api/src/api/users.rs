@@ -13,13 +13,13 @@ async fn get_all_users(
 ) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let query = users::table
+    let result = users::table
         .select(users::all_columns)
         .order(users::id)
         .paginate(params.page)
-        .page_size(params.page_size);
-
-    let result = query.load_and_count_pages::<UserResponse>(&mut conn).await;
+        .page_size(params.page_size)
+        .load_and_count_pages::<UserResponse>(&mut conn)
+        .await;
 
     match result {
         Ok((user_data, total_pages)) => Ok(HttpResponse::Ok().json({

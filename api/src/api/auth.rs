@@ -120,7 +120,7 @@ mod tests {
     }
 
     #[actix_web::test]
-    async fn test_auth_workflow() {
+    async fn auth_workflow() {
         let pool = establish_connection();
         let app = test::init_service(
             App::new().configure(config_auth).app_data(web::Data::new(pool.clone())),

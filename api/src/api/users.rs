@@ -8,12 +8,12 @@ use diesel_async::RunQueryDsl;
 async fn get_all_users(pool: web::Data<DbPool>) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let users = users::table
-        .load::<UserResponse>(&mut conn)
-        .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying users"))?;
+    let users = users::table.load::<UserResponse>(&mut conn).await;
 
-    Ok(HttpResponse::Ok().json(users))
+    match users {
+        Ok(users) => Ok(HttpResponse::Ok().json(users)),
+        Err(_) => Ok(HttpResponse::InternalServerError().finish()),
+    }
 }
 
 pub fn config_users(cfg: &mut web::ServiceConfig) {

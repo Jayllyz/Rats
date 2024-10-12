@@ -157,6 +157,17 @@ mod tests {
         let req = test::TestRequest::post()
             .uri("/auth/login")
             .set_json(&LoginRequest {
+                email: "wrong_email".to_string(),
+                password: random_password.to_string(),
+            })
+            .to_request();
+
+        let resp = test::call_service(&app, req).await;
+        assert_eq!(resp.status(), http::StatusCode::NOT_FOUND);
+
+        let req = test::TestRequest::post()
+            .uri("/auth/login")
+            .set_json(&LoginRequest {
                 email: random_email.clone(),
                 password: "wrong_password".to_string(),
             })

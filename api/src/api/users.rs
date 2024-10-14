@@ -1,7 +1,9 @@
 use crate::db::DbPool;
 use crate::models::users_models::UserResponse;
+use crate::models::users_models::SelfResponse;
 use crate::schema::users;
-use actix_web::{get, web, HttpResponse, Result};
+use crate::api::utils;
+use actix_web::{get, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
@@ -33,8 +35,38 @@ async fn get_user(pool: web::Data<DbPool>, id_user: web::Path<i32>) -> Result<Ht
     }
 }
 
+#[get("")]
+async fn get_self(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpResponse> {
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let result = users::table
+        .filter(users::id.eq(id_user))
+        .first::<UserResponse>(&mut conn)
+        .await;
+
+    match result {
+        Ok(user) => {
+            let user_response = SelfResponse {
+                id: user.id,
+                name: user.name.clone(),
+                email: user.email.clone(),
+            };
+
+            Ok(HttpResponse::Ok().json(user_response))
+        },
+        Err(diesel::result::Error::NotFound) => Ok(HttpResponse::NotFound().body("User not found")),
+        Err(_) => Ok(HttpResponse::InternalServerError().finish()),
+    }
+}
+
 pub fn config_users(cfg: &mut web::ServiceConfig) {
     cfg.service(web::scope("/users").service(get_all_users).service(get_user));
+    cfg.service(web::scope("/self").service(get_self));
 }
 
 

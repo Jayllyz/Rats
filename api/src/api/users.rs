@@ -18,11 +18,11 @@ async fn get_all_users(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 }
 
 #[get("/{id}")]
-async fn get_user(pool: web::Data<DbPool>, user_id: web::Path<i32>) -> Result<HttpResponse> {
+async fn get_user(pool: web::Data<DbPool>, id_user: web::Path<i32>) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let result = users::table
-        .filter(users::id.eq(*user_id))
+        .filter(users::id.eq(*id_user))
         .first::<UserResponse>(&mut conn)
         .await;
 

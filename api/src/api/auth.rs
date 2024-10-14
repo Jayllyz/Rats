@@ -95,6 +95,7 @@ fn create_token(user_id: &i32) -> Result<String, jsonwebtoken::errors::Error> {
 
     encode(&Header::default(), &claims, &EncodingKey::from_secret(secret.as_ref()))
 }
+
 #[cfg(test)]
 mod tests {
     use crate::{db, models};

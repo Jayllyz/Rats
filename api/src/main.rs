@@ -6,6 +6,7 @@ mod schema;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use api::auth::config_auth;
 use api::users::config_users;
+use api::ratings::config_ratings;
 use db::establish_connection;
 use serde::Serialize;
 
@@ -32,6 +33,7 @@ async fn main() -> std::io::Result<()> {
             .service(healthcheck)
             .configure(config_users)
             .configure(config_auth)
+            .configure(config_ratings)
             .default_service(web::route().to(not_found))
             .wrap(actix_web::middleware::Logger::default())
     })

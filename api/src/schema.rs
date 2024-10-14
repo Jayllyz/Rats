@@ -3,7 +3,8 @@
 diesel::table! {
     ratings (id) {
         id -> Int4,
-        user_id -> Int4,
+        id_receiver -> Int4,
+        id_sender -> Int4,
         stars -> Int4,
         comment -> Nullable<Text>,
         created_at -> Nullable<Timestamp>,

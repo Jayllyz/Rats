@@ -1,3 +1,4 @@
+use crate::api::utils;
 use crate::db::DbPool;
 use crate::models::users_models::{
     CreateUser, LoginRequest, LoginResponse, SignupRequest, UserResponse,
@@ -6,10 +7,7 @@ use crate::schema::users;
 use actix_web::{post, web, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
-use jsonwebtoken::{encode, EncodingKey, Header};
 use password_auth::{generate_hash, verify_password};
-use serde::Serialize;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 #[post("/signup")]
 async fn signup(pool: web::Data<DbPool>, user: web::Json<SignupRequest>) -> Result<HttpResponse> {
@@ -61,7 +59,7 @@ async fn login(
         return Err(actix_web::error::ErrorUnauthorized("Invalid credentials"));
     }
 
-    let token = create_token(&user.id).map_err(|e| {
+    let token = utils::create_token(&user.id).map_err(|e| {
         actix_web::error::ErrorInternalServerError(format!("Token creation error: {}", e))
     })?;
 
@@ -76,24 +74,6 @@ async fn login(
 
 pub fn config_auth(cfg: &mut web::ServiceConfig) {
     cfg.service(web::scope("/auth").service(signup).service(login));
-}
-
-fn create_token(user_id: &i32) -> Result<String, jsonwebtoken::errors::Error> {
-    #[derive(Serialize)]
-    struct Claims {
-        sub: i32,
-        exp: u64,
-    }
-
-    let expiration =
-        SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards").as_secs()
-            + 24 * 60 * 60; // 24 hours from now
-
-    let claims = Claims { sub: *user_id, exp: expiration };
-    dotenvy::dotenv().ok();
-    let secret = std::env::var("JWT_SECRET").unwrap_or_else(|_| "secure_secret_key".to_string());
-
-    encode(&Header::default(), &claims, &EncodingKey::from_secret(secret.as_ref()))
 }
 
 #[cfg(test)]
@@ -116,7 +96,7 @@ mod tests {
 
     #[actix_web::test]
     async fn test_create_token() {
-        let token = create_token(&1).unwrap();
+        let token = utils::create_token(&1).unwrap();
         assert_ne!(token, "");
     }
 

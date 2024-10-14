@@ -121,7 +121,7 @@ mod tests {
     }
 
     #[actix_web::test]
-    async fn test_auth_workflow() {
+    async fn auth_workflow() {
         let pool = establish_connection();
         let app = test::init_service(
             App::new().configure(config_auth).app_data(web::Data::new(pool.clone())),
@@ -154,6 +154,17 @@ mod tests {
         let resp = test::call_service(&app, req).await;
         assert_eq!(resp.status(), http::StatusCode::OK);
         assert_eq!(resp.headers().get("content-type").unwrap(), "application/json");
+
+        let req = test::TestRequest::post()
+            .uri("/auth/login")
+            .set_json(&LoginRequest {
+                email: "wrong_email".to_string(),
+                password: random_password.to_string(),
+            })
+            .to_request();
+
+        let resp = test::call_service(&app, req).await;
+        assert_eq!(resp.status(), http::StatusCode::NOT_FOUND);
 
         let req = test::TestRequest::post()
             .uri("/auth/login")

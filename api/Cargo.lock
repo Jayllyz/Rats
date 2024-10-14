@@ -1289,6 +1289,7 @@ dependencies = [
  "jsonwebtoken",
  "password-auth",
  "serde",
+ "serde_json",
 ]
 
 [[package]]

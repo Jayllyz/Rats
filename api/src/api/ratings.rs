@@ -1,10 +1,10 @@
-use crate::{db::DbPool, models::ratings_models::RatingRequest};
+use crate::api::utils;
 use crate::models::ratings_models::{CreateRating, RatingResponse};
 use crate::schema::ratings;
+use crate::{db::DbPool, models::ratings_models::RatingRequest};
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
-use crate::api::utils;
 
 #[get("")]
 async fn get_ratings(pool: web::Data<DbPool>) -> Result<HttpResponse> {
@@ -22,20 +22,23 @@ async fn get_ratings(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 async fn get_rating(pool: web::Data<DbPool>, id_rating: web::Path<i32>) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let result = ratings::table
-        .filter(ratings::id.eq(*id_rating))
-        .first::<RatingResponse>(&mut conn)
-        .await;
+    let result =
+        ratings::table.filter(ratings::id.eq(*id_rating)).first::<RatingResponse>(&mut conn).await;
 
     match result {
         Ok(rating) => Ok(HttpResponse::Ok().json(rating)),
-        Err(diesel::result::Error::NotFound) => Ok(HttpResponse::NotFound().body("Rating not found")),
+        Err(diesel::result::Error::NotFound) => {
+            Ok(HttpResponse::NotFound().body("Rating not found"))
+        }
         Err(_) => Ok(HttpResponse::InternalServerError().finish()),
     }
 }
 
 #[get("/sender/{id}")]
-async fn get_ratings_by_sender(pool: web::Data<DbPool>, id_sender: web::Path<i32>) -> Result<HttpResponse> {
+async fn get_ratings_by_sender(
+    pool: web::Data<DbPool>,
+    id_sender: web::Path<i32>,
+) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let ratings = ratings::table
@@ -48,7 +51,10 @@ async fn get_ratings_by_sender(pool: web::Data<DbPool>, id_sender: web::Path<i32
 }
 
 #[get("/receiver/{id}")]
-async fn get_ratings_by_receiver(pool: web::Data<DbPool>, id_receiver: web::Path<i32>) -> Result<HttpResponse> {
+async fn get_ratings_by_receiver(
+    pool: web::Data<DbPool>,
+    id_receiver: web::Path<i32>,
+) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let ratings = ratings::table
@@ -62,10 +68,10 @@ async fn get_ratings_by_receiver(pool: web::Data<DbPool>, id_receiver: web::Path
 
 #[post("/{id}")]
 async fn create_rating(
-    pool: web::Data<DbPool>, 
-    id_receiver: web::Path<i32>, 
+    pool: web::Data<DbPool>,
+    id_receiver: web::Path<i32>,
     rating: web::Json<RatingRequest>,
-    req: HttpRequest
+    req: HttpRequest,
 ) -> Result<HttpResponse> {
     let id_user = match utils::validate_token(&req) {
         Ok(claims) => claims.sub,
@@ -95,15 +101,17 @@ async fn create_rating(
             _ => {
                 Err(actix_web::error::ErrorInternalServerError(format!("Database error: {:?}", e)))
             }
-        }
+        },
     }
 }
 
 pub fn config_ratings(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/ratings")
-        .service(get_ratings)
-        .service(get_rating)
-        .service(get_ratings_by_sender)
-        .service(get_ratings_by_receiver)
-        .service(create_rating));
+    cfg.service(
+        web::scope("/ratings")
+            .service(get_ratings)
+            .service(get_rating)
+            .service(get_ratings_by_sender)
+            .service(get_ratings_by_receiver)
+            .service(create_rating),
+    );
 }

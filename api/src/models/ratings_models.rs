@@ -1,7 +1,7 @@
+use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use diesel::Selectable;
 use serde::{Deserialize, Serialize};
-use chrono::NaiveDateTime;
 
 #[derive(Serialize, Selectable, Deserialize, Queryable)]
 #[diesel(table_name = crate::schema::ratings)]

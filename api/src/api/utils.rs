@@ -11,8 +11,8 @@ pub struct Claims {
 pub fn validate_token(req: &HttpRequest) -> Result<Claims, actix_web::Error> {
     let auth_header = req.headers().get("Authorization");
 
-    if auth_header.is_none(){
-        return Err(actix_web::error::ErrorUnauthorized("Missing token"))
+    if auth_header.is_none() {
+        return Err(actix_web::error::ErrorUnauthorized("Missing token"));
     }
 
     let header_value = auth_header.unwrap();
@@ -34,11 +34,8 @@ pub fn validate_token(req: &HttpRequest) -> Result<Claims, actix_web::Error> {
     let mut validation = Validation::default();
     validation.validate_exp = true; // Check si le token a expiré
 
-    let token_data = decode::<Claims>(
-        token, 
-        &decoding_key, 
-        &validation
-    ).map_err(|_| actix_web::error::ErrorUnauthorized("Invalid token"))?;
+    let token_data = decode::<Claims>(token, &decoding_key, &validation)
+        .map_err(|_| actix_web::error::ErrorUnauthorized("Invalid token"))?;
 
     Ok(token_data.claims)
 }

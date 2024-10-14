@@ -41,7 +41,7 @@ pub struct LoginResponse {
 }
 
 #[derive(Serialize)]
-pub struct SelfResponse{
+pub struct SelfResponse {
     pub id: i32,
     pub name: String,
     pub email: String,

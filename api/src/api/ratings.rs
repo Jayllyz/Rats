@@ -41,6 +41,11 @@ async fn get_ratings_by_sender(
 ) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
+    match utils::user_exists(&mut conn, *id_sender).await {
+        Ok(_) => (),
+        Err(e) => return Err(e),
+    }
+
     let ratings = ratings::table
         .filter(ratings::id_sender.eq(*id_sender))
         .load::<RatingResponse>(&mut conn)
@@ -56,6 +61,11 @@ async fn get_ratings_by_receiver(
     id_receiver: web::Path<i32>,
 ) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    match utils::user_exists(&mut conn, *id_receiver).await {
+        Ok(_) => (),
+        Err(e) => return Err(e),
+    }
 
     let ratings = ratings::table
         .filter(ratings::id_receiver.eq(*id_receiver))

@@ -1,4 +1,10 @@
+use crate::models::users_models::UserResponse;
+use crate::schema::users;
 use actix_web::{HttpRequest, Result};
+use diesel::prelude::*;
+use diesel_async::pooled_connection::deadpool;
+use diesel_async::AsyncPgConnection;
+use diesel_async::RunQueryDsl;
 use jsonwebtoken::{decode, DecodingKey, Validation};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use serde::Deserialize;
@@ -54,4 +60,20 @@ pub fn validate_token(req: &HttpRequest) -> Result<Claims, actix_web::Error> {
         .map_err(|_| actix_web::error::ErrorUnauthorized("Invalid token"))?;
 
     Ok(token_data.claims)
+}
+
+pub async fn user_exists(
+    conn: &mut deadpool::Object<AsyncPgConnection>,
+    id_user: i32,
+) -> Result<(), actix_web::Error> {
+    let _user = users::table
+        .filter(users::id.eq(id_user))
+        .first::<UserResponse>(conn)
+        .await
+        .map_err(|e| match e {
+            diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
+            _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
+        })?;
+
+    Ok(())
 }

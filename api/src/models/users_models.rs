@@ -39,3 +39,10 @@ pub struct LoginRequest {
 pub struct LoginResponse {
     pub token: String,
 }
+
+#[derive(Serialize)]
+pub struct SelfResponse {
+    pub id: i32,
+    pub name: String,
+    pub email: String,
+}

@@ -6,9 +6,11 @@ on:
     branches: [main]
     paths:
       - api/**
+      - rust-toolchain.toml
   pull_request:
     paths:
       - api/**
+      - rust-toolchain.toml
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}

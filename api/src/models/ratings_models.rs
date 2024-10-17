@@ -15,7 +15,7 @@ pub struct RatingResponse {
     pub created_at: Option<NaiveDateTime>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct RatingRequest {
     pub stars: i32,
     pub comment: Option<String>,

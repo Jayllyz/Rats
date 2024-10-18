@@ -66,8 +66,23 @@ pub async fn user_exists(
     conn: &mut deadpool::Object<AsyncPgConnection>,
     id_user: i32,
 ) -> Result<(), actix_web::Error> {
-    let _user = users::table
-        .filter(users::id.eq(id_user))
+    users::table.filter(users::id.eq(id_user)).first::<UserResponse>(conn).await.map_err(|e| {
+        match e {
+            diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
+            _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
+        }
+    })?;
+
+    Ok(())
+}
+
+#[allow(dead_code)] // Used in tests
+pub async fn user_id_by_email(
+    conn: &mut deadpool::Object<AsyncPgConnection>,
+    email: &str,
+) -> Result<i32, actix_web::Error> {
+    let user = users::table
+        .filter(users::email.eq(email))
         .first::<UserResponse>(conn)
         .await
         .map_err(|e| match e {
@@ -75,5 +90,5 @@ pub async fn user_exists(
             _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
         })?;
 
-    Ok(())
+    Ok(user.id)
 }

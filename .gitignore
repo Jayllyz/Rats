@@ -81,3 +81,5 @@ google-services.json
 
 # Android Profiling
 *.hprof
+/.kotlin
+secrets.properties

@@ -1,10 +1,11 @@
 use crate::api::utils;
 use crate::db::DbPool;
+use crate::models::users_models::PositionRequest;
 use crate::models::users_models::SelfResponse;
 use crate::models::users_models::UserResponse;
 use crate::pagination::*;
 use crate::schema::users;
-use actix_web::{get, web, HttpRequest, HttpResponse, Result};
+use actix_web::{get, put, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 use serde_json::json;
@@ -17,7 +18,7 @@ async fn get_all_users(
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let result = users::table
-        .select(users::all_columns)
+        .select(UserResponse::as_select())
         .order(users::id)
         .paginate(params.page)
         .page_size(params.page_size)
@@ -39,7 +40,11 @@ async fn get_all_users(
 async fn get_user(pool: web::Data<DbPool>, id_user: web::Path<i32>) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let result = users::table.filter(users::id.eq(*id_user)).first::<UserResponse>(&mut conn).await;
+    let result = users::table
+        .filter(users::id.eq(*id_user))
+        .select(UserResponse::as_select())
+        .first::<UserResponse>(&mut conn)
+        .await;
 
     match result {
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
@@ -57,7 +62,11 @@ async fn get_self(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpRespo
 
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let result = users::table.filter(users::id.eq(id_user)).first::<UserResponse>(&mut conn).await;
+    let result = users::table
+        .filter(users::id.eq(id_user))
+        .select(UserResponse::as_select())
+        .first::<UserResponse>(&mut conn)
+        .await;
 
     match result {
         Ok(user) => {
@@ -71,8 +80,30 @@ async fn get_self(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpRespo
     }
 }
 
+#[put("/position")]
+async fn update_user(pool: web::Data<DbPool>, position: web::Json<PositionRequest>, req: HttpRequest) -> Result<HttpResponse> {
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    match diesel::update(users::table.filter(users::id.eq(id_user)))
+        .set((
+            users::latitude.eq(position.latitude.clone()),
+            users::longitude.eq(position.longitude.clone()),
+        ))
+        .execute(&mut conn)
+        .await
+    {
+        Ok(_) => Ok(HttpResponse::Ok().json(json!({"message": "Position updated"}))),
+        Err(e) => Err(actix_web::error::ErrorInternalServerError(format!("Database error: {:?}", e))),
+    }
+}
+
 pub fn config_users(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/users").service(get_all_users).service(get_user));
+    cfg.service(web::scope("/users").service(get_all_users).service(get_user).service(update_user));
     cfg.service(web::scope("/self").service(get_self));
 }
 

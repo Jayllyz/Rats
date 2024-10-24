@@ -8,6 +8,9 @@ import java.io.IOException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 data class ApiResponse(val code: Int, val body: JsonObject?)
 
@@ -41,7 +44,7 @@ object ApiClient {
         }
     }
 
-    suspend fun postRequest(url: String, body: RequestBody, token: String? = null): ApiResponse {
+    suspend fun postRequest(url: String, body: JSONObject, token: String? = null): ApiResponse {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder()
                 .url(URL_START + url)
@@ -49,7 +52,7 @@ object ApiClient {
                 .apply {
                     token?.let { addHeader ("Authorization", "Bearer $token") }
                 }
-                .post(body)
+                .post(formatBody(body))
                 .build()
 
             try {
@@ -65,5 +68,35 @@ object ApiClient {
                 ApiResponse(500, null)
             }
         }
+    }
+
+    suspend fun putRequest(url: String, body: JSONObject, token: String? = null): ApiResponse {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder()
+                .url(URL_START + url)
+                .addHeader("Content-Type", "application/json")
+                .apply {
+                    token?.let { addHeader ("Authorization", "Bearer $token") }
+                }
+                .put(formatBody(body))
+                .build()
+
+            try {
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val bodyString = response.body?.string()
+                    val jsonObject = bodyString?.let { json.parseToJsonElement(it) }?.jsonObject
+                    ApiResponse(response.code, jsonObject)
+                } else {
+                    ApiResponse(response.code, null)
+                }
+            } catch (e: IOException) {
+                ApiResponse(500, null)
+            }
+        }
+    }
+
+    private fun formatBody(body: JSONObject): RequestBody {
+        return body.toString().toRequestBody("application/json".toMediaType())
     }
 }

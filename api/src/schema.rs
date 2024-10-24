@@ -18,6 +18,8 @@ diesel::table! {
         email -> Varchar,
         password -> Varchar,
         token -> Nullable<Varchar>,
+        latitude -> Nullable<Numeric>,
+        longitude -> Nullable<Numeric>,
     }
 }
 

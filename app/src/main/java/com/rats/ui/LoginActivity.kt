@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.rats.R
@@ -13,8 +12,6 @@ import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.jsonPrimitive
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 class LoginActivity: AppCompatActivity() {
@@ -32,10 +29,9 @@ class LoginActivity: AppCompatActivity() {
                     val email = emailEditText.text.toString()
                     val password = passwordEditText.text.toString()
 
-                    val jsonObject = JSONObject()
+                    val body = JSONObject()
                         .put("email", email)
                         .put("password", password)
-                    val body = jsonObject.toString().toRequestBody("application/json".toMediaType())
 
                     val response = ApiClient.postRequest("auth/login", body)
 

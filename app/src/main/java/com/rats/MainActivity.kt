@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 
         TokenManager.init(this)
 
+//        TokenManager.deleteToken()
+
         if (TokenManager.getToken() != null) {
             startActivity(Intent(this, HomeActivity::class.java))
         } else {

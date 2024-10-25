@@ -1,3 +1,4 @@
+use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use diesel::Selectable;
 use serde::{Deserialize, Serialize};
@@ -14,11 +15,25 @@ pub struct CreateUser {
 #[derive(Serialize, Selectable, Deserialize, Queryable)]
 #[diesel(table_name = crate::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
-pub struct UserResponse {
+pub struct FullUserResponse {
     pub id: i32,
     pub name: String,
     pub email: String,
     pub password: String,
+    pub latitude: Option<BigDecimal>,
+    pub longitude: Option<BigDecimal>,
+    pub token: Option<String>,
+}
+
+#[derive(Serialize, Selectable, Deserialize, Queryable)]
+#[diesel(table_name = crate::schema::users)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct UserResponse {
+    pub id: i32,
+    pub name: String,
+    pub email: String,
+    pub latitude: Option<BigDecimal>,
+    pub longitude: Option<BigDecimal>,
     pub token: Option<String>,
 }
 
@@ -45,4 +60,10 @@ pub struct SelfResponse {
     pub id: i32,
     pub name: String,
     pub email: String,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct PositionRequest {
+    pub latitude: BigDecimal,
+    pub longitude: BigDecimal,
 }

@@ -1,7 +1,7 @@
 use crate::api::utils;
 use crate::db::DbPool;
 use crate::models::users_models::{
-    CreateUser, LoginRequest, LoginResponse, SignupRequest, UserResponse,
+    CreateUser, FullUserResponse, LoginRequest, LoginResponse, SignupRequest, UserResponse,
 };
 use crate::schema::users;
 use actix_web::{post, web, HttpResponse, Result};
@@ -23,6 +23,7 @@ async fn signup(pool: web::Data<DbPool>, user: web::Json<SignupRequest>) -> Resu
 
     match diesel::insert_into(users::table)
         .values(&new_user)
+        .returning(UserResponse::as_select())
         .get_result::<UserResponse>(&mut conn)
         .await
     {
@@ -48,7 +49,8 @@ async fn login(
 
     let user = users::table
         .filter(users::email.eq(&credentials.email))
-        .first::<UserResponse>(&mut conn)
+        .select(FullUserResponse::as_select())
+        .first::<FullUserResponse>(&mut conn)
         .await
         .map_err(|e| match e {
             diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),

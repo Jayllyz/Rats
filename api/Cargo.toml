@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 actix-web = "4.9.0"
-diesel = { version = "2.2.4", features = ["chrono"] }
+diesel = { version = "2.2.4", features = ["chrono", "numeric"] }
 diesel-async = { version = "0.5.0", features = ["postgres", "deadpool"] }
 serde = { version = "1.0.210", features = ["derive"] }
 serde_json = "1.0.132"
@@ -16,6 +16,7 @@ password-auth = "1.0.0"
 argon2 = "0.5.3"
 jsonwebtoken = "9.3.0"
 chrono = { version = "0.4.38", features = ["serde"] }
+bigdecimal = {version = "0.4.5", features = ["serde"]}
 
 [profile.release]
 # Configurations explicitly listed here for clarity.

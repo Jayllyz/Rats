@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.rats.R
 import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
@@ -35,8 +34,10 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap : GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var userMarker: MarkerOptions
+    private lateinit var locationUpdateRunnable: Runnable
     private val handler = Handler(Looper.getMainLooper())
-    private var locationUpdateRunnable: Runnable? = null
+    private var firstLaunch: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -57,8 +58,7 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getUserLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Demande la permissions d'accès à la localisation
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
             return
@@ -77,11 +77,17 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
                 lifecycleScope.launch {
                     try {
                         ApiClient.putRequest("users/position", body, TokenManager.getToken()!!)
+                        userMarker = MarkerOptions().position(userLocation).title("You are here")
+                        mMap.clear()
+                        mMap.addMarker(userMarker)
                     } catch (e: Exception) {
                         Log.d("ERROR_LOCATION", "getUserLocation: ${e.message}")
                     }
                 }
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f))
+                if (firstLaunch) {
+                    firstLaunch = false
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f))
+                }
             } else {
                 Toast.makeText(this, "Unable to get current location.", Toast.LENGTH_LONG).show()
             }
@@ -96,6 +102,6 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        locationUpdateRunnable?.run()
+        locationUpdateRunnable.run()
     }
 }

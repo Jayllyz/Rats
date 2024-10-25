@@ -1,7 +1,7 @@
+use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use diesel::Selectable;
 use serde::{Deserialize, Serialize};
-use bigdecimal::BigDecimal;
 
 #[derive(Serialize, Deserialize, Insertable, Selectable)]
 #[diesel(table_name = crate::schema::users)]

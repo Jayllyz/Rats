@@ -1,7 +1,7 @@
 use crate::api::utils;
 use crate::db::DbPool;
 use crate::models::users_models::{
-    CreateUser, LoginRequest, LoginResponse, SignupRequest, UserResponse, FullUserResponse
+    CreateUser, FullUserResponse, LoginRequest, LoginResponse, SignupRequest, UserResponse,
 };
 use crate::schema::users;
 use actix_web::{post, web, HttpResponse, Result};

@@ -71,12 +71,10 @@ pub async fn user_exists(
         .select(UserResponse::as_select())
         .first::<UserResponse>(conn)
         .await
-        .map_err(|e| {
-        match e {
+        .map_err(|e| match e {
             diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
             _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
-        }
-    })?;
+        })?;
 
     Ok(())
 }
@@ -88,7 +86,10 @@ pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
     let d_lon = (lon2 - lon1).to_radians();
 
     let a = (d_lat / 2.0).sin() * (d_lat / 2.0).sin()
-        + lat1.to_radians().cos() * lat2.to_radians().cos() * (d_lon / 2.0).sin() * (d_lon / 2.0).sin();
+        + lat1.to_radians().cos()
+            * lat2.to_radians().cos()
+            * (d_lon / 2.0).sin()
+            * (d_lon / 2.0).sin();
 
     let c = 2.0 * a.sqrt().atan2((1.0 - a).sqrt());
 

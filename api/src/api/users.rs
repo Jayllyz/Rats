@@ -6,10 +6,10 @@ use crate::models::users_models::UserResponse;
 use crate::pagination::*;
 use crate::schema::users;
 use actix_web::{get, put, web, HttpRequest, HttpResponse, Result};
+use bigdecimal::ToPrimitive;
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 use serde_json::json;
-use bigdecimal::ToPrimitive;
 
 #[get("")]
 async fn get_all_users(
@@ -82,7 +82,11 @@ async fn get_self(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpRespo
 }
 
 #[put("/position")]
-async fn update_user(pool: web::Data<DbPool>, position: web::Json<PositionRequest>, req: HttpRequest) -> Result<HttpResponse> {
+async fn update_user(
+    pool: web::Data<DbPool>,
+    position: web::Json<PositionRequest>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
     let id_user = match utils::validate_token(&req) {
         Ok(claims) => claims.sub,
         Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
@@ -99,7 +103,9 @@ async fn update_user(pool: web::Data<DbPool>, position: web::Json<PositionReques
         .await
     {
         Ok(_) => Ok(HttpResponse::Ok().json(json!({"message": "Position updated"}))),
-        Err(e) => Err(actix_web::error::ErrorInternalServerError(format!("Database error: {:?}", e))),
+        Err(e) => {
+            Err(actix_web::error::ErrorInternalServerError(format!("Database error: {:?}", e)))
+        }
     }
 }
 
@@ -153,13 +159,14 @@ async fn get_nearby_user(pool: web::Data<DbPool>, req: HttpRequest) -> Result<Ht
 }
 
 pub fn config_users(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/users")
-        .service(get_all_users)
-        .service(get_nearby_user)
-        .service(get_user)
-        .service(update_user));
-    cfg.service(web::scope("/self")
-        .service(get_self));
+    cfg.service(
+        web::scope("/users")
+            .service(get_all_users)
+            .service(get_nearby_user)
+            .service(get_user)
+            .service(update_user),
+    );
+    cfg.service(web::scope("/self").service(get_self));
 }
 
 #[cfg(test)]

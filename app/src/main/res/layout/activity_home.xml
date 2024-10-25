@@ -17,41 +17,12 @@
         android:layout_weight="8.5"
         />
 
-    <LinearLayout
+    <fragment
+        android:id="@+id/fragment_bottom_navigation"
+        android:name="com.rats.ui.BottomNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <!-- Each TextView gets equal space using layout_weight -->
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/map" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/wagon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/placeholder" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/parameters" />
-    </LinearLayout>
+        />
 
 </LinearLayout>

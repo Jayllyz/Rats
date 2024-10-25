@@ -9,6 +9,7 @@ use actix_web::{get, put, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 use serde_json::json;
+use bigdecimal::ToPrimitive;
 
 #[get("")]
 async fn get_all_users(
@@ -102,9 +103,63 @@ async fn update_user(pool: web::Data<DbPool>, position: web::Json<PositionReques
     }
 }
 
+#[get("/nearby")]
+async fn get_nearby_user(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpResponse> {
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let user = users::table
+        .filter(users::id.eq(id_user))
+        .select(UserResponse::as_select())
+        .first::<UserResponse>(&mut conn)
+        .await
+        .map_err(|e| match e {
+            diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
+            _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
+        })?;
+
+    let nearby_users = users::table
+        .filter(users::id.ne(id_user))
+        .select(UserResponse::as_select())
+        .load::<UserResponse>(&mut conn)
+        .await
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying nearby users"))?;
+
+    let nearby_users = nearby_users
+        .into_iter()
+        .filter(|u| u.latitude.is_some() && u.longitude.is_some())
+        .filter(|u| {
+            let distance = utils::haversine_distance(
+                user.latitude.clone().unwrap().to_f64().unwrap(),
+                user.longitude.clone().unwrap().to_f64().unwrap(),
+                u.latitude.clone().unwrap().to_f64().unwrap(),
+                u.longitude.clone().unwrap().to_f64().unwrap(),
+            );
+
+            // println!(
+            //     "ID {}: {:} m",
+            //     u.id, distance
+            // );
+
+            distance <= 5.0
+        })
+        .collect::<Vec<UserResponse>>();
+
+    Ok(HttpResponse::Ok().json(nearby_users))
+}
+
 pub fn config_users(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/users").service(get_all_users).service(get_user).service(update_user));
-    cfg.service(web::scope("/self").service(get_self));
+    cfg.service(web::scope("/users")
+        .service(get_all_users)
+        .service(get_nearby_user)
+        .service(get_user)
+        .service(update_user));
+    cfg.service(web::scope("/self")
+        .service(get_self));
 }
 
 #[cfg(test)]

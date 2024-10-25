@@ -81,6 +81,20 @@ pub async fn user_exists(
     Ok(())
 }
 
+pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
+    const R: f64 = 6371000.0; // Rayon de la Terre en m
+
+    let d_lat = (lat2 - lat1).to_radians();
+    let d_lon = (lon2 - lon1).to_radians();
+
+    let a = (d_lat / 2.0).sin() * (d_lat / 2.0).sin()
+        + lat1.to_radians().cos() * lat2.to_radians().cos() * (d_lon / 2.0).sin() * (d_lon / 2.0).sin();
+
+    let c = 2.0 * a.sqrt().atan2((1.0 - a).sqrt());
+
+    R * c
+}
+
 #[allow(dead_code)] // Used in tests
 pub async fn user_id_by_email(
     conn: &mut deadpool::Object<AsyncPgConnection>,

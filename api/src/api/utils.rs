@@ -80,20 +80,20 @@ pub async fn user_exists(
 }
 
 pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
-    const R: f64 = 6371000.0; // Rayon de la Terre en m
+    const EARTH_RADIUS_METERS: f64 = 6_371_000.0;
 
     let d_lat = (lat2 - lat1).to_radians();
     let d_lon = (lon2 - lon1).to_radians();
 
-    let a = (d_lat / 2.0).sin() * (d_lat / 2.0).sin()
+    let angle = (d_lat / 2.0).sin() * (d_lat / 2.0).sin()
         + lat1.to_radians().cos()
             * lat2.to_radians().cos()
             * (d_lon / 2.0).sin()
             * (d_lon / 2.0).sin();
 
-    let c = 2.0 * a.sqrt().atan2((1.0 - a).sqrt());
+    let coords = 2.0 * angle.sqrt().atan2((1.0 - angle).sqrt());
 
-    R * c
+    EARTH_RADIUS_METERS * coords
 }
 
 #[allow(dead_code)] // Used in tests
@@ -112,4 +112,32 @@ pub async fn user_id_by_email(
         })?;
 
     Ok(user.id)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_same_point() {
+        let point_lattitude = 44.9;
+        let point_lontitude = 56.7;
+        assert_eq!(
+            haversine_distance(point_lattitude, point_lontitude, point_lattitude, point_lontitude),
+            0.0
+        );
+    }
+
+    #[test]
+    fn test_known_distance() {
+        // Paris to London coordinates
+        let paris_lat = 48.8566;
+        let paris_lon = 2.3522;
+        let london_lat = 51.5074;
+        let london_lon = -0.1278;
+
+        let expected_meters = 344_000.0;
+        let calculated = haversine_distance(paris_lat, paris_lon, london_lat, london_lon);
+
+        assert!((calculated - expected_meters).abs() < expected_meters * 0.05);
+    }
 }

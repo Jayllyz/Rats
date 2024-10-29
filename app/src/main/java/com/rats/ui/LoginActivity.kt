@@ -11,6 +11,7 @@ import com.rats.R
 import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.json.JSONObject
 
@@ -40,7 +41,7 @@ class LoginActivity: AppCompatActivity() {
                         return@launch
                     }
 
-                    val token = response.body?.get("token")?.jsonPrimitive?.content
+                    val token = response.body?.jsonObject?.get("token")?.jsonPrimitive?.content
                     TokenManager.saveToken(token!!)
 
                     val intent = Intent(this@LoginActivity, HomeActivity::class.java)

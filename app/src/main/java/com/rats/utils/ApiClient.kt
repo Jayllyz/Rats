@@ -1,6 +1,5 @@
 package com.rats.utils
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.*
@@ -37,7 +36,7 @@ object ApiClient {
                 } else {
                     ApiResponse(response.code, null)
                 }
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 ApiResponse(500, null)
             }
         }
@@ -63,7 +62,7 @@ object ApiClient {
                 } else {
                     ApiResponse(response.code, null)
                 }
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 ApiResponse(500, null)
             }
         }
@@ -89,7 +88,7 @@ object ApiClient {
                 } else {
                     ApiResponse(response.code, null)
                 }
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 ApiResponse(500, null)
             }
         }

@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/fragment_bottom_navigation"
-        android:name="com.rats.ui.BottomNavigationFragment"
+        android:name="com.rats.ui.fragments.BottomNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

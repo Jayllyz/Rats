@@ -6,13 +6,12 @@ import kotlinx.coroutines.withContext
 import okhttp3.*
 import java.io.IOException
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.JsonElement
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-data class ApiResponse(val code: Int, val body: JsonObject?)
+data class ApiResponse(val code: Int, val body: JsonElement?)
 
 object ApiClient {
     private val client = OkHttpClient()
@@ -33,8 +32,8 @@ object ApiClient {
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {
                     val bodyString = response.body?.string()
-                    val jsonObject = bodyString?.let { json.parseToJsonElement(it) }?.jsonObject
-                    ApiResponse(response.code, jsonObject)
+                    val jsonElement = bodyString?.let { json.parseToJsonElement(it) }
+                    ApiResponse(response.code, jsonElement)
                 } else {
                     ApiResponse(response.code, null)
                 }
@@ -59,8 +58,8 @@ object ApiClient {
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {
                     val bodyString = response.body?.string()
-                    val jsonObject = bodyString?.let { json.parseToJsonElement(it) }?.jsonObject
-                    ApiResponse(response.code, jsonObject)
+                    val jsonElement = bodyString?.let { json.parseToJsonElement(it) }
+                    ApiResponse(response.code, jsonElement)
                 } else {
                     ApiResponse(response.code, null)
                 }
@@ -85,8 +84,8 @@ object ApiClient {
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {
                     val bodyString = response.body?.string()
-                    val jsonObject = bodyString?.let { json.parseToJsonElement(it) }?.jsonObject
-                    ApiResponse(response.code, jsonObject)
+                    val jsonElement = bodyString?.let { json.parseToJsonElement(it) }
+                    ApiResponse(response.code, jsonElement)
                 } else {
                     ApiResponse(response.code, null)
                 }

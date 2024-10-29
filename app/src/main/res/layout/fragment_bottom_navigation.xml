@@ -4,36 +4,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
+    android:layout_height="match_parent"
     android:layout_weight="1"
     android:gravity="center"
     android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/tv_map"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:focusable="true"
         android:gravity="center"
-        android:text="@string/map" />
+        android:text="@string/map"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/tv_wagon"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/wagon"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"/>
 
     <TextView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:focusable="true"
         android:gravity="center"
-        android:text="@string/wagon" />
+        android:text="@string/placeholder"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"/>
 
     <TextView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:focusable="true"
         android:gravity="center"
-        android:text="@string/placeholder" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/parameters" />
+        android:text="@string/parameters"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"/>
 </LinearLayout>

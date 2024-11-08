@@ -10,4 +10,5 @@
     <string name="wagon">Mon wagon</string>
     <string name="parameters">Paramètres</string>
     <string name="placeholder">TODO</string>
+    <string name="activity_wagon_title">Mon wagon</string>
 </resources>

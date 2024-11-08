@@ -1,0 +1,78 @@
+use crate::api::utils;
+use crate::models::reports_models::{CreateReport, ReportResponse, CreateRequest};
+use crate::schema::reports;
+use crate::db::DbPool;
+use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
+use diesel::prelude::*;
+use diesel_async::RunQueryDsl;
+
+#[get("")]
+async fn get_reports(pool: web::Data<DbPool>) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let reports = reports::table
+        .select(ReportResponse::as_select())
+        .load::<ReportResponse>(&mut conn)
+        .await
+        .map_err(|e| actix_web::error::ErrorInternalServerError(e))?;
+
+    Ok(HttpResponse::Ok().json(reports))
+}
+
+#[get("/{id}")]
+async fn get_report(pool: web::Data<DbPool>, id_report: web::Path<i32>) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let result = reports::table
+        .filter(reports::id.eq(*id_report))
+        .select(ReportResponse::as_select())
+        .first::<ReportResponse>(&mut conn)
+        .await;
+
+    match result {
+        Ok(report) => Ok(HttpResponse::Ok().json(report)),
+        Err(diesel::result::Error::NotFound) => {
+            Ok(HttpResponse::NotFound().body("Report not found"))
+        }
+        Err(_) => Ok(HttpResponse::InternalServerError().finish()),
+    }
+}
+
+#[post("")]
+async fn create_report(
+    pool: web::Data<DbPool>,
+    report: web::Json<CreateRequest>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let report = CreateReport {
+        id_user,
+        title: report.title.clone(),
+        description: report.description.clone(),
+        report_type: report.report_type.clone(),
+        latitude: report.latitude.clone(),
+        longitude: report.longitude.clone(),
+    };
+
+    diesel::insert_into(reports::table)
+        .values(&report)
+        .execute(&mut conn)
+        .await
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Error inserting report"))?;
+
+    Ok(HttpResponse::Created().finish())
+}
+
+pub fn config_reports(cfg: &mut web::ServiceConfig) {
+    cfg.service(web::scope("/reports")
+        .service(get_reports)
+        .service(get_report)
+        .service(create_report)
+    );
+}

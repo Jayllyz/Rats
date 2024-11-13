@@ -22,14 +22,20 @@ class BottomNavigationFragment: Fragment() {
         val mapTextView: TextView = view.findViewById<TextView>(R.id.tv_map)
         val wagonTextView: TextView = view.findViewById<TextView>(R.id.tv_wagon)
 
-        mapTextView.setOnClickListener{
-            val intent = Intent(activity, HomeActivity::class.java)
-            startActivity(intent)
+        mapTextView.setOnClickListener {
+            if (activity !is HomeActivity) {
+                val intent = Intent(activity, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
         }
 
-        wagonTextView.setOnClickListener{
-            val intent = Intent(activity, MyWagonActivity::class.java)
-            startActivity(intent)
+        wagonTextView.setOnClickListener {
+            if (activity !is MyWagonActivity) {
+                val intent = Intent(activity, MyWagonActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
         }
 
         return view

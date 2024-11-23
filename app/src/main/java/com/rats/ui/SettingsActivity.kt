@@ -30,7 +30,7 @@ class SettingsActivity : AppCompatActivity() {
         notificationSwitch = findViewById(R.id.notificationSwitch)
         securityModeSwitch = findViewById(R.id.securityModeSwitch)
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MON WAGON"
+        android:text="@string/mon_wagon"
         android:gravity="center"
         android:layout_weight="0.5"
         android:background="@color/quantum_bluegrey500"
@@ -23,7 +23,7 @@
         android:layout_height="0dp"
         android:layout_weight="8.5"/>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_bottom_navigation"
         android:name="com.rats.ui.fragments.BottomNavigationFragment"
         android:layout_width="match_parent"

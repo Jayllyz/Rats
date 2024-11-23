@@ -32,7 +32,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -61,4 +62,5 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.play.services.maps)
     implementation(libs.places)
+    implementation(libs.androidx.preference)
 }

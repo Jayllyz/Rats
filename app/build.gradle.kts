@@ -62,4 +62,5 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.play.services.maps)
     implementation(libs.places)
+    implementation(libs.androidx.preference)
 }

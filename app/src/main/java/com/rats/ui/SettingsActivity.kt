@@ -1,9 +1,9 @@
 package com.rats.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.preference.PreferenceManager
 import com.rats.R
@@ -54,8 +54,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun loadSettings() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val isSystemInDarkMode = resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        val isSystemInDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
 
         notificationSwitch.isChecked = prefs.getBoolean(PREF_NOTIFICATIONS, false)
         securityModeSwitch.isChecked = prefs.getBoolean(PREF_SECURITY_MODE, false)
@@ -77,9 +76,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun saveDarkModeSettings(enabled: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .edit()
-            .putBoolean(ENABLE_DARK_MODE, enabled)
-            .apply()
+        AppCompatDelegate.setDefaultNightMode(
+            if (enabled) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
     }
 }

@@ -15,7 +15,7 @@
     <string name="notifications_title">Notifications</string>
     <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>
     <string name="dark_mode_title">Mode sombre</string>
-    <string name="dark_mode_subtitle">Activer le mode sombre</string>
+        <string name="dark_mode_subtitle">Activer le mode sombre</string>
     <string name="personal_data_title">Données personnelles</string>
     <string name="back_button">Retour</string>
     <string name="next_button">Suivant</string>

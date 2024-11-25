@@ -1,11 +1,11 @@
 use crate::api::utils;
-use crate::models::reports_models::{CreateReport, ReportResponse, CreateRequest};
-use crate::schema::reports;
 use crate::db::DbPool;
+use crate::models::reports_models::{CreateReport, CreateRequest, ReportResponse};
+use crate::schema::reports;
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
+use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
-use bigdecimal::BigDecimal;
 
 #[get("")]
 async fn get_reports(pool: web::Data<DbPool>) -> Result<HttpResponse> {
@@ -75,14 +75,12 @@ async fn create_report(
             _ => {
                 Err(actix_web::error::ErrorInternalServerError(format!("Database error: {:?}", e)))
             }
-        }
+        },
     }
 }
 
 pub fn config_reports(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/reports")
-        .service(get_reports)
-        .service(get_report)
-        .service(create_report)
+    cfg.service(
+        web::scope("/reports").service(get_reports).service(get_report).service(create_report),
     );
 }

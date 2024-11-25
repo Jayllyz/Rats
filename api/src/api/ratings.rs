@@ -1,7 +1,7 @@
 use crate::api::utils;
-use crate::models::ratings_models::{CreateRating, RatingResponse, RatingRequest};
-use crate::schema::ratings;
 use crate::db::DbPool;
+use crate::models::ratings_models::{CreateRating, RatingRequest, RatingResponse};
+use crate::schema::ratings;
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;

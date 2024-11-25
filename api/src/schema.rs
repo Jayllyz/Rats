@@ -38,8 +38,4 @@ diesel::table! {
 
 diesel::joinable!(reports -> users (id_user));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    ratings,
-    reports,
-    users,
-);
+diesel::allow_tables_to_appear_in_same_query!(ratings, reports, users,);

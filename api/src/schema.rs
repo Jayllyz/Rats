@@ -1,11 +1,5 @@
 // @generated automatically by Diesel CLI.
 
-pub mod sql_types {
-    #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
-    #[diesel(postgres_type(name = "report_type"))]
-    pub struct ReportType;
-}
-
 diesel::table! {
     ratings (id) {
         id -> Int4,
@@ -18,13 +12,10 @@ diesel::table! {
 }
 
 diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::ReportType;
-
     reports (id) {
         id -> Int4,
         id_user -> Int4,
-        report_type -> ReportType,
+        report_type -> Text,
         title -> Text,
         description -> Text,
         longitude -> Numeric,

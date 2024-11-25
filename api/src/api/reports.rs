@@ -5,6 +5,7 @@ use crate::db::DbPool;
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
+use bigdecimal::BigDecimal;
 
 #[get("")]
 async fn get_reports(pool: web::Data<DbPool>) -> Result<HttpResponse> {
@@ -51,22 +52,31 @@ async fn create_report(
         Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
     };
 
-    let report = CreateReport {
+    let new_report = CreateReport {
         id_user,
         title: report.title.clone(),
         description: report.description.clone(),
         report_type: report.report_type.clone(),
-        latitude: report.latitude.clone(),
-        longitude: report.longitude.clone(),
+        latitude: report.latitude.clone() as BigDecimal,
+        longitude: report.longitude.clone() as BigDecimal,
     };
 
-    diesel::insert_into(reports::table)
-        .values(&report)
-        .execute(&mut conn)
+    match diesel::insert_into(reports::table)
+        .values(&new_report)
+        .get_result::<ReportResponse>(&mut conn)
         .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Error inserting report"))?;
-
-    Ok(HttpResponse::Created().finish())
+    {
+        Ok(report) => Ok(HttpResponse::Created().json(report)),
+        Err(e) => match e {
+            diesel::result::Error::DatabaseError(
+                diesel::result::DatabaseErrorKind::ForeignKeyViolation,
+                _,
+            ) => Err(actix_web::error::ErrorBadRequest("User not found")),
+            _ => {
+                Err(actix_web::error::ErrorInternalServerError(format!("Database error: {:?}", e)))
+            }
+        }
+    }
 }
 
 pub fn config_reports(cfg: &mut web::ServiceConfig) {

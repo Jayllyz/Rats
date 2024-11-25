@@ -10,7 +10,7 @@
     <string name="wagon">Mon wagon</string>
     <string name="parameters">Paramètres</string>
     <string name="placeholder">TODO</string>
-    <string name="mon_wagon">Mon wagon</string>
+    <string name="activity_wagon_title">Mon wagon</string>
     <!-- Settings sections -->
     <string name="notifications_title">Notifications</string>
     <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>

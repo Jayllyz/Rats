@@ -15,7 +15,7 @@ async fn get_reports(pool: web::Data<DbPool>) -> Result<HttpResponse> {
         .select(ReportResponse::as_select())
         .load::<ReportResponse>(&mut conn)
         .await
-        .map_err(|e| actix_web::error::ErrorInternalServerError(e))?;
+        .map_err(actix_web::error::ErrorInternalServerError)?;
 
     Ok(HttpResponse::Ok().json(reports))
 }

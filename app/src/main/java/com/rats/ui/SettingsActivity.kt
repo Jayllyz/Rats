@@ -1,5 +1,6 @@
 package com.rats.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +12,12 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var notificationSwitch: SwitchCompat
     private lateinit var securityModeSwitch: SwitchCompat
+    private lateinit var darkModeSwitch: SwitchCompat
 
     companion object {
         private const val PREF_NOTIFICATIONS = "pref_notifications"
         private const val PREF_SECURITY_MODE = "pref_security_mode"
+        private const val ENABLE_DARK_MODE = "enable_dark_mode"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +32,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun initializeViews() {
         notificationSwitch = findViewById(R.id.notificationSwitch)
         securityModeSwitch = findViewById(R.id.securityModeSwitch)
+        darkModeSwitch = findViewById(R.id.darkModeSwitch)
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -42,12 +46,20 @@ class SettingsActivity : AppCompatActivity() {
         securityModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             saveSecurityModeSettings(isChecked)
         }
+
+        darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            saveDarkModeSettings(isChecked)
+        }
     }
 
     private fun loadSettings() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val isSystemInDarkMode = resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
         notificationSwitch.isChecked = prefs.getBoolean(PREF_NOTIFICATIONS, false)
         securityModeSwitch.isChecked = prefs.getBoolean(PREF_SECURITY_MODE, false)
+        darkModeSwitch.isChecked = prefs.getBoolean(ENABLE_DARK_MODE, isSystemInDarkMode)
     }
 
     private fun saveNotificationSettings(enabled: Boolean) {
@@ -61,6 +73,13 @@ class SettingsActivity : AppCompatActivity() {
         PreferenceManager.getDefaultSharedPreferences(this)
             .edit()
             .putBoolean(PREF_SECURITY_MODE, enabled)
+            .apply()
+    }
+
+    private fun saveDarkModeSettings(enabled: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .edit()
+            .putBoolean(ENABLE_DARK_MODE, enabled)
             .apply()
     }
 }

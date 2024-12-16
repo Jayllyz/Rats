@@ -34,7 +34,7 @@
         android:text="@string/login_incorrect"
         android:textSize="18sp"
         android:textColor="@color/md_theme_error"
-
+        android:visibility="invisible"
         />
 
     <LinearLayout android:layout_height="wrap_content"

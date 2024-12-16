@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:orientation="vertical"
+    android:orientationy="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -16,13 +16,5 @@
         android:layout_weight="8.5"
         />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_bottom_navigation"
-        android:name="com.rats.ui.fragments.BottomNavigationFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:layout="@layout/fragment_bottom_navigation"
-        />
 
 </LinearLayout>

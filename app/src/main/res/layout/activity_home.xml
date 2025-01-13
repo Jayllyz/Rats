@@ -16,13 +16,4 @@
         android:layout_weight="8.5"
         />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_bottom_navigation"
-        android:name="com.rats.ui.fragments.BottomNavigationFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:layout="@layout/fragment_bottom_navigation"
-        />
-
 </LinearLayout>

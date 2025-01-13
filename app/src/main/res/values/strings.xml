@@ -15,11 +15,17 @@
     <string name="notifications_title">Notifications</string>
     <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>
     <string name="dark_mode_title">Mode sombre</string>
-    <string name="dark_mode_subtitle">Activer le mode sombre</string>
+        <string name="dark_mode_subtitle">Activer le mode sombre</string>
     <string name="personal_data_title">Données personnelles</string>
     <string name="back_button">Retour</string>
     <string name="next_button">Suivant</string>
     <string name="personal_data_subtitle">Gérer les autorisations et la confidentialité</string>
     <string name="security_mode_title">Mode sécurité renforcé</string>
     <string name="security_mode_subtitle">Activez les alertes de sécurité dans votre zone</string>
+    <string name="connexion_btn_text">Se connecter</string>
+    <string name="no_account">Vous n\'avez pas de compte ?</string>
+    <string name="signup">S\'inscrire</string>
+    <string name="login_headline">Votre sécurité est notre drogue!</string>
+    <string name="login_welcome">Bienvenue RATP.</string>
+    <string name="login_incorrect">Vos identifiants sont inccorects</string>
 </resources>

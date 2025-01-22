@@ -9,6 +9,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN cargo build --release --bin api
+RUN cargo build --release --bin rats_api
 
-CMD ["./target/release/api"]
+CMD ["./target/release/rats_api"]

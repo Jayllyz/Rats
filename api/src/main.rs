@@ -4,6 +4,7 @@ mod models;
 mod pagination;
 mod schema;
 
+use actix_cors::Cors;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use api::auth::config_auth;
 use api::ratings::config_ratings;
@@ -19,7 +20,14 @@ pub struct Response {
 
 #[get("/health")]
 async fn healthcheck() -> impl Responder {
-    HttpResponse::Ok().json(Response { message: "OK".to_string() })
+    let pool = establish_connection();
+
+    match pool.get().await {
+        Ok(_) => HttpResponse::Ok().json(Response { message: "Healthy".to_string() }),
+        Err(_) => {
+            HttpResponse::InternalServerError().json(Response { message: "Unhealthy".to_string() })
+        }
+    }
 }
 
 async fn not_found() -> impl Responder {
@@ -29,7 +37,13 @@ async fn not_found() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let db_pool = establish_connection();
+    println!("Server running at http://localhost:8000/");
     HttpServer::new(move || {
+        let cors = Cors::default()
+            .allowed_methods(vec!["GET", "POST", "PATCH", "PUT", "DELETE"])
+            .allow_any_header()
+            .allow_any_origin()
+            .max_age(3600);
         App::new()
             .app_data(web::Data::new(db_pool.clone()))
             .service(healthcheck)
@@ -38,6 +52,7 @@ async fn main() -> std::io::Result<()> {
             .configure(config_ratings)
             .configure(config_reports)
             .default_service(web::route().to(not_found))
+            .wrap(cors)
             .wrap(actix_web::middleware::Logger::default())
     })
     .bind(("127.0.0.1", 8000))?

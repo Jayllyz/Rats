@@ -66,8 +66,9 @@ pub async fn user_exists(
     conn: &mut deadpool::Object<AsyncPgConnection>,
     id_user: i32,
 ) -> Result<(), actix_web::Error> {
-    let _user = users::table
+    users::table
         .filter(users::id.eq(id_user))
+        .select(UserResponse::as_select())
         .first::<UserResponse>(conn)
         .await
         .map_err(|e| match e {
@@ -76,4 +77,67 @@ pub async fn user_exists(
         })?;
 
     Ok(())
+}
+
+pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
+    const EARTH_RADIUS_METERS: f64 = 6_371_000.0;
+
+    let d_lat = (lat2 - lat1).to_radians();
+    let d_lon = (lon2 - lon1).to_radians();
+
+    let angle = (d_lat / 2.0).sin() * (d_lat / 2.0).sin()
+        + lat1.to_radians().cos()
+            * lat2.to_radians().cos()
+            * (d_lon / 2.0).sin()
+            * (d_lon / 2.0).sin();
+
+    let coords = 2.0 * angle.sqrt().atan2((1.0 - angle).sqrt());
+
+    EARTH_RADIUS_METERS * coords
+}
+
+#[allow(dead_code)] // Used in tests
+pub async fn user_id_by_email(
+    conn: &mut deadpool::Object<AsyncPgConnection>,
+    email: &str,
+) -> Result<i32, actix_web::Error> {
+    let user = users::table
+        .filter(users::email.eq(email))
+        .select(UserResponse::as_select())
+        .first::<UserResponse>(conn)
+        .await
+        .map_err(|e| match e {
+            diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
+            _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
+        })?;
+
+    Ok(user.id)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_same_point() {
+        let point_lattitude = 44.9;
+        let point_lontitude = 56.7;
+        assert_eq!(
+            haversine_distance(point_lattitude, point_lontitude, point_lattitude, point_lontitude),
+            0.0
+        );
+    }
+
+    #[test]
+    fn test_known_distance() {
+        // Paris to London coordinates
+        let paris_lat = 48.8566;
+        let paris_lon = 2.3522;
+        let london_lat = 51.5074;
+        let london_lon = -0.1278;
+
+        let expected_meters = 344_000.0;
+        let calculated = haversine_distance(paris_lat, paris_lon, london_lat, london_lon);
+
+        assert!((calculated - expected_meters).abs() < expected_meters * 0.05);
+    }
 }

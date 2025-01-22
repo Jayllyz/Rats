@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_wagon_title"
+        android:textAllCaps="true"
+        android:gravity="center"
+        android:layout_weight="0.5"
+        android:background="@color/quantum_bluegrey500"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_wagon"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8.5"
+        tools:listitem="@layout/item_wagon_user"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_bottom_navigation"
+        android:name="com.rats.ui.fragments.BottomNavigationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_bottom_navigation"
+        />
+
+</LinearLayout>

@@ -12,13 +12,30 @@ diesel::table! {
 }
 
 diesel::table! {
+    reports (id) {
+        id -> Int4,
+        id_user -> Int4,
+        report_type -> Text,
+        title -> Text,
+        description -> Text,
+        longitude -> Numeric,
+        latitude -> Numeric,
+        created_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         name -> Varchar,
         email -> Varchar,
         password -> Varchar,
         token -> Nullable<Varchar>,
+        latitude -> Nullable<Numeric>,
+        longitude -> Nullable<Numeric>,
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(ratings, users,);
+diesel::joinable!(reports -> users (id_user));
+
+diesel::allow_tables_to_appear_in_same_query!(ratings, reports, users,);

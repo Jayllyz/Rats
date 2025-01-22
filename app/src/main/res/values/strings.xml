@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Rats</string>
+    <string name="activity_login_title">Connexion</string>
+    <string name="email">Email</string>
+    <string name="email_hint">Entrez votre email</string>
+    <string name="password">Mot de passe</string>
+    <string name="password_hint">Entrez votre mot de passe</string>
+    <string name="validate">Valider</string>
+    <string name="map">Carte</string>
+    <string name="wagon">Mon wagon</string>
+    <string name="parameters">Paramètres</string>
+    <string name="placeholder">TODO</string>
+    <string name="activity_wagon_title">Mon wagon</string>
+    <!-- Settings sections -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>
+    <string name="dark_mode_title">Mode sombre</string>
+        <string name="dark_mode_subtitle">Activer le mode sombre</string>
+    <string name="personal_data_title">Données personnelles</string>
+    <string name="back_button">Retour</string>
+    <string name="next_button">Suivant</string>
+    <string name="personal_data_subtitle">Gérer les autorisations et la confidentialité</string>
+    <string name="security_mode_title">Mode sécurité renforcé</string>
+    <string name="security_mode_subtitle">Activez les alertes de sécurité dans votre zone</string>
+    <string name="connexion_btn_text">Se connecter</string>
+    <string name="no_account">Vous n\'avez pas de compte ?</string>
+    <string name="signup">S\'inscrire</string>
+    <string name="login_headline">Votre sécurité est notre drogue!</string>
+    <string name="login_welcome">Bienvenue RATP.</string>
+    <string name="login_incorrect">Vos identifiants sont inccorects</string>
 </resources>

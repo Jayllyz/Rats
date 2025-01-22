@@ -7,22 +7,36 @@ edition = "2021"
 
 [dependencies]
 actix-web = "4.9.0"
-diesel = { version = "2.2.4", features = ["chrono"] }
-diesel-async = { version = "0.5.0", features = ["postgres", "deadpool"] }
-serde = { version = "1.0.210", features = ["derive"] }
-serde_json = "1.0.128"
+diesel = { version = "2.2.6", features = ["chrono", "numeric"] }
+diesel-async = { version = "0.5.2", features = ["postgres", "deadpool"] }
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
 dotenvy = "0.15.7"
 password-auth = "1.0.0"
 argon2 = "0.5.3"
 jsonwebtoken = "9.3.0"
-chrono = { version = "0.4", features = ["serde"] }
+chrono = { version = "0.4.39", features = ["serde"] }
+bigdecimal = {version = "0.4.7", features = ["serde"]}
 
 [profile.release]
-lto = true
+# Configurations explicitly listed here for clarity.
+# Using the best options for performance.
 opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = "symbols" # Set to `false` for debug information
+debug = false # Set to `true` for debug information
+panic = "abort" # Let it crash and force ourselves to write safe Rust
+
+[profile.release-with-debug]
+inherits = "release"
+strip = false # Keep debug information in binary
+debug = true # Include maximum amount of debug information
 
 [profile.dev]
-opt-level = "s"
+# Disabling debug info speeds up local and CI builds,
+# and we don't rely on it for debugging that much.
+debug = false
 
 [workspace.lints.clippy]
 all = { level = "warn", priority = -1 }

@@ -3,14 +3,14 @@ name: CI Rust
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
     paths:
-      - api/**
-      - rust-toolchain.toml
+    - api/**
+    - rust-toolchain.toml
   pull_request:
     paths:
-      - api/**
-      - rust-toolchain.toml
+    - api/**
+    - rust-toolchain.toml
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
@@ -33,23 +33,24 @@ jobs:
     name: Code Quality
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: api
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        sparse-checkout: api
 
-      - name: Install Rust toolchain
-        uses: moonrepo/setup-rust@v1
-        with:
-          components: clippy,rustfmt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Rust toolchain
+      uses: moonrepo/setup-rust@v1
+      with:
+        components: clippy,rustfmt
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check formatting
-        run: cargo fmt --all --check
+    - name: Check formatting
+      run: cargo fmt --all --check
 
-      - name: Run Clippy
-        run: cargo clippy
+    - name: Run Clippy
+      run: cargo clippy
 
   test:
     name: Test
@@ -60,36 +61,34 @@ jobs:
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
-          - 5432:5432
+        - 5432:5432
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: api
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        sparse-checkout: api
 
-      - name: Install Rust toolchain
-        uses: moonrepo/setup-rust@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Rust toolchain
+      uses: moonrepo/setup-rust@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check
-        run: cargo check
+    - name: Check
+      run: cargo check
 
-      - uses: baptiste0928/cargo-install@v3
-        with:
-          crate: diesel_cli
-          features: postgres
-          args: "--no-default-features"
+    - uses: baptiste0928/cargo-install@v3
+      with:
+        crate: diesel_cli
+        features: postgres
+        args: "--no-default-features"
 
-      - name: Setup database
-        run: |
-          diesel setup
-          diesel migration run
+    - name: Setup database
+      run: |
+        diesel setup
+        diesel migration run
 
-      - name: Run tests
-        run: cargo test
+    - name: Run tests
+      run: cargo test

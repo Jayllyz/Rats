@@ -5,15 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingVertical="48dp"
-    android:layout_marginHorizontal="25dp"
-    >
+    android:layout_marginHorizontal="25dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="34dp"
-        >
+        android:layout_marginBottom="34dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,17 +26,9 @@
             android:textSize="40sp" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:text="@string/login_incorrect"
-        android:textSize="18sp"
-        android:textColor="@color/md_theme_error"
-        android:visibility="invisible"
-        />
-
-    <LinearLayout android:layout_height="wrap_content"
-         android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_marginBottom="16dp">
         <TextView
@@ -47,8 +37,7 @@
             android:textSize="20sp"
             android:text="@string/email"
             android:textColor="@color/text_primary"
-            android:layout_marginVertical="8dp"
-            />
+            android:layout_marginVertical="8dp"/>
 
         <EditText
             android:id="@+id/et_email"
@@ -59,11 +48,11 @@
             android:hint="@string/email_hint"
             android:background="@drawable/rounded_border"
             android:paddingHorizontal="16dp"
-            android:minHeight="60dp"
-            />
+            android:minHeight="60dp"/>
     </LinearLayout>
 
-    <LinearLayout android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical">
         <TextView
@@ -72,8 +61,7 @@
             android:textSize="20sp"
             android:text="@string/password"
             android:textColor="@color/text_primary"
-            android:layout_marginVertical="8dp"
-            />
+            android:layout_marginVertical="8dp"/>
 
         <EditText
             android:id="@+id/et_password"
@@ -84,17 +72,29 @@
             android:hint="@string/password_hint"
             android:background="@drawable/rounded_border"
             android:paddingHorizontal="16dp"
-            android:minHeight="60dp"
-            />
+            android:minHeight="60dp"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/login_error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_incorrect_credentials"
+        android:textSize="18sp"
+        android:textColor="@color/md_theme_error"
+        android:visibility="invisible"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/error_background"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:paddingVertical="24dp"
         android:orientation="vertical"
-        android:gravity="bottom"
-        >
+        android:gravity="bottom">
         <Button
             android:id="@+id/btn_validate"
             android:layout_width="match_parent"
@@ -104,8 +104,7 @@
             android:text="@string/connexion_btn_text"
             android:background="@drawable/rounded_button"
             android:layout_gravity="center"
-            android:paddingHorizontal="30dp"
-            />
+            android:paddingHorizontal="30dp"/>
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -116,17 +115,14 @@
                 android:textColor="@color/text_primary"
                 android:textSize="20sp"
                 android:text="@string/no_account"
-                android:layout_marginEnd="4dp">
-
-            </TextView>
+                android:layout_marginEnd="4dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:text="@string/signup"
                 android:textStyle="bold"
-                android:textColor="@color/md_theme_tertiary">
-            </TextView>
+                android:textColor="@color/md_theme_tertiary"/>
         </LinearLayout>
     </LinearLayout>
 

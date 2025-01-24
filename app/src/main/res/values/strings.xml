@@ -25,7 +25,11 @@
     <string name="connexion_btn_text">Se connecter</string>
     <string name="no_account">Vous n\'avez pas de compte ?</string>
     <string name="signup">S\'inscrire</string>
-    <string name="login_headline">Votre sécurité est notre drogue!</string>
+    <string name="login_headline">Votre sécurité est notre objectif!</string>
     <string name="login_welcome">Bienvenue RATP.</string>
-    <string name="login_incorrect">Vos identifiants sont inccorects</string>
+    <string name="login_incorrect_credentials">Vos identifiants sont inccorects</string>
+    <string name="login_fields_required">Tous les champs sont requis</string>
+    <string name="login_server_error">Erreur serveur. Veuillez réessayer plus tard</string>
+    <string name="login_network_error">Erreur réseau. Veuillez vérifier votre connexion</string>
+    <string name="loading">Chargement...</string>
 </resources>

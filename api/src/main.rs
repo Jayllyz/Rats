@@ -37,7 +37,8 @@ async fn not_found() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let db_pool = establish_connection();
-    println!("Server running at http://localhost:8000/");
+    let port = std::env::var("PORT").unwrap_or_else(|_| "8000".to_string());
+    println!("Server running at http://localhost:{}", port);
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_methods(vec!["GET", "POST", "PATCH", "PUT", "DELETE"])
@@ -55,7 +56,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .wrap(actix_web::middleware::Logger::default())
     })
-    .bind(("127.0.0.1", 8000))?
+    .bind(("0.0.0.0", port.parse().expect("Can't parse PORT env var")))?
     .run()
     .await
 }

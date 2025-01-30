@@ -1,4 +1,4 @@
-package com.rats.ui
+package com.rats.ui.activities
 
 import android.Manifest
 import android.content.pm.PackageManager

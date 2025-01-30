@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.rats.R
-import com.rats.ui.HomeActivity
-import com.rats.ui.MyWagonActivity
-import com.rats.ui.SettingsActivity
+import com.rats.ui.activities.HomeActivity
+import com.rats.ui.activities.MyWagonActivity
+import com.rats.ui.activities.SettingsActivity
 
 class BottomNavigationFragment: Fragment() {
     override fun onCreateView(

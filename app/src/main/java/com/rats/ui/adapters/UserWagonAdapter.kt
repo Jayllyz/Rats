@@ -1,12 +1,11 @@
 package com.rats.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.rats.R
-import com.rats.ui.models.UserWagonModel
-import com.rats.ui.views.UserWagonViewHolder
+import com.rats.models.UserWagonModel
+import com.rats.ui.viewHolders.UserWagonViewHolder
 
 class UserWagonAdapter(private val users: List<UserWagonModel>): RecyclerView.Adapter<UserWagonViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserWagonViewHolder {

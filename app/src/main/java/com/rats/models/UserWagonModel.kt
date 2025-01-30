@@ -1,4 +1,4 @@
-package com.rats.ui.models
+package com.rats.models
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.InternalSerializationApi

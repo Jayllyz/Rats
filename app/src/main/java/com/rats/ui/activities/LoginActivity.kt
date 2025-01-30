@@ -1,4 +1,4 @@
-package com.rats.ui
+package com.rats.ui.activities
 
 import android.content.Intent
 import android.os.Bundle

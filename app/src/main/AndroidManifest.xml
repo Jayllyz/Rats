@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".RatsApp"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,10 +23,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.MyWagonActivity" />
-        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".ui.activities.HomeActivity" />
+        <activity android:name=".ui.activities.MyWagonActivity" />
+        <activity android:name=".ui.activities.SettingsActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

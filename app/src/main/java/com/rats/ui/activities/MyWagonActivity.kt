@@ -1,9 +1,9 @@
 package com.rats.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rats.R
@@ -12,7 +12,7 @@ import com.rats.factories.MyWagonViewModelFactory
 import com.rats.ui.adapters.UserWagonAdapter
 import com.rats.viewModels.MyWagonViewModel
 
-class MyWagonActivity: AppCompatActivity() {
+class MyWagonActivity : AppCompatActivity() {
     private val myWagonViewModel: MyWagonViewModel by viewModels {
         MyWagonViewModelFactory((application as RatsApp).userRepository)
     }

@@ -1,8 +1,8 @@
 package com.rats.factories
 
 import androidx.lifecycle.ViewModel
-import com.rats.data.repositories.UserRepository
 import androidx.lifecycle.ViewModelProvider
+import com.rats.data.repositories.UserRepository
 import com.rats.viewModels.MyWagonViewModel
 
 class MyWagonViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {

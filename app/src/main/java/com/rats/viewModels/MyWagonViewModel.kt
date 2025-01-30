@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rats.models.User
 import com.rats.data.repositories.UserRepository
+import com.rats.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MyWagonViewModel(private val userRepository: UserRepository): ViewModel() {
+class MyWagonViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>> = _users
 
@@ -22,7 +22,7 @@ class MyWagonViewModel(private val userRepository: UserRepository): ViewModel() 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun fetchUsers(){
+    fun fetchUsers()  {
         viewModelScope.launch {
             _isLoading.value = true
             try {

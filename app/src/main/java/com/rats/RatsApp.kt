@@ -6,10 +6,10 @@ import com.rats.data.repositories.UserRepository
 import com.rats.data.repositories.UserRepositoryImpl
 import com.rats.utils.ApiClient
 
-class RatsApp: Application() {
+class RatsApp : Application() {
     val userRepository: UserRepository by lazy {
         UserRepositoryImpl(
-            UserDaoImpl(ApiClient)
+            UserDaoImpl(ApiClient),
         )
     }
 }

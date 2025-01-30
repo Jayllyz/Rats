@@ -1,6 +1,5 @@
 package com.rats.data.dao
 
-import android.util.Log
 import com.rats.data.dto.UserDTO
 import com.rats.data.mapper.UserMapper.toModel
 import com.rats.models.User

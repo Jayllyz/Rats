@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rats.R
@@ -15,7 +14,7 @@ import com.rats.viewModels.MyWagonViewModel
 
 class MyWagonActivity: AppCompatActivity() {
     private val myWagonViewModel: MyWagonViewModel by viewModels {
-        MyWagonViewModelFactory((application as RatsApp).myWagonRepository)
+        MyWagonViewModelFactory((application as RatsApp).userRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,13 +24,13 @@ class MyWagonActivity: AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rv_wagon)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        myWagonViewModel.users.observe(this, Observer { user ->
+        myWagonViewModel.users.observe(this) { user ->
             recyclerView.adapter = UserWagonAdapter(user)
-        })
+        }
 
-        myWagonViewModel.error.observe(this, Observer { error ->
+        myWagonViewModel.error.observe(this) { error ->
             Log.d("wagon error", "Error: $error")
-        })
+        }
 
         myWagonViewModel.fetchUsers()
     }

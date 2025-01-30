@@ -1,7 +1,7 @@
 package com.rats.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +13,7 @@ import com.rats.utils.TokenManager
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-class MyWagonActivity: AppCompatActivity() {
+class MyWagonActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wagon)
@@ -21,7 +21,7 @@ class MyWagonActivity: AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rv_wagon)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        lifecycleScope.launch{
+        lifecycleScope.launch {
             val usersJson = ApiClient.getRequest("users/nearby", TokenManager.getToken())
             val body = usersJson.body
             val json = Json { ignoreUnknownKeys = true }

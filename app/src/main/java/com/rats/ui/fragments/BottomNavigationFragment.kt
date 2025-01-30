@@ -12,11 +12,11 @@ import com.rats.ui.HomeActivity
 import com.rats.ui.MyWagonActivity
 import com.rats.ui.SettingsActivity
 
-class BottomNavigationFragment: Fragment() {
+class BottomNavigationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstance: Bundle?
+        savedInstance: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bottom_navigation, container, false)
 

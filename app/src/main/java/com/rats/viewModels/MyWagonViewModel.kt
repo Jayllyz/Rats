@@ -22,7 +22,7 @@ class MyWagonViewModel(private val userRepository: UserRepository) : ViewModel()
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun fetchUsers()  {
+    fun fetchUsers() {
         viewModelScope.launch {
             _isLoading.value = true
             try {

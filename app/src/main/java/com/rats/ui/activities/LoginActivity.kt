@@ -18,8 +18,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.json.JSONObject
 
-class LoginActivity: AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?){
+class LoginActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
@@ -28,7 +28,7 @@ class LoginActivity: AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.btn_validate)
         val errorTextView = findViewById<TextView>(R.id.login_error_text)
 
-        loginButton.setOnClickListener{
+        loginButton.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     val email = emailEditText.text.toString()
@@ -42,9 +42,10 @@ class LoginActivity: AppCompatActivity() {
                     loginButton.isEnabled = false
                     loginButton.text = getString(R.string.loading)
 
-                    val body = JSONObject()
-                        .put("email", email)
-                        .put("password", password)
+                    val body =
+                        JSONObject()
+                            .put("email", email)
+                            .put("password", password)
 
                     val response = ApiClient.postRequest("auth/login", body)
 
@@ -72,26 +73,55 @@ class LoginActivity: AppCompatActivity() {
             }
         }
 
-        emailEditText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        emailEditText.addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                errorTextView.visibility = View.INVISIBLE
-            }
-        })
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {}
 
-        passwordEditText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {
+                    errorTextView.visibility = View.INVISIBLE
+                }
+            },
+        )
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                errorTextView.visibility = View.INVISIBLE
-            }
-        })
+        passwordEditText.addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {}
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {
+                    errorTextView.visibility = View.INVISIBLE
+                }
+            },
+        )
     }
 
-    private fun showError(errorTextView: TextView, message: String) {
+    private fun showError(
+        errorTextView: TextView,
+        message: String,
+    ) {
         errorTextView.text = message
         errorTextView.visibility = View.VISIBLE
     }

@@ -17,7 +17,10 @@ class UserWagonAdapter(private val users: List<User>): RecyclerView.Adapter<User
         return users.size
     }
 
-    override fun onBindViewHolder(holder: UserWagonViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: UserWagonViewHolder,
+        position: Int,
+    ) {
         val user = users[position]
         holder.name.text = user.name
         holder.email.text = user.email

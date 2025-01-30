@@ -9,7 +9,6 @@ import androidx.preference.PreferenceManager
 import com.rats.R
 
 class SettingsActivity : AppCompatActivity() {
-
     private lateinit var notificationSwitch: SwitchCompat
     private lateinit var securityModeSwitch: SwitchCompat
     private lateinit var darkModeSwitch: SwitchCompat
@@ -77,8 +76,11 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun saveDarkModeSettings(enabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
-            if (enabled) AppCompatDelegate.MODE_NIGHT_YES
-            else AppCompatDelegate.MODE_NIGHT_NO
+            if (enabled) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            },
         )
     }
 }

@@ -26,20 +26,20 @@ import com.rats.utils.TokenManager
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
+class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val UPDATE_INTERVAL = 5000L // 5 secondes
     }
 
-    private lateinit var mMap : GoogleMap
+    private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userMarker: MarkerOptions
     private lateinit var locationUpdateRunnable: Runnable
     private val handler = Handler(Looper.getMainLooper())
     private var firstLaunch: Boolean = true
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
@@ -60,7 +60,11 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
     private fun getUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Demande la permissions d'accès à la localisation
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE,
+            )
             return
         }
 
@@ -70,9 +74,10 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
 //                val userLocation = LatLng(location.latitude, location.longitude)
                 // Paris
                 val userLocation = LatLng(48.8566, 2.3522)
-                val body = JSONObject()
-                    .put("latitude", userLocation.latitude)
-                    .put("longitude", userLocation.longitude)
+                val body =
+                    JSONObject()
+                        .put("latitude", userLocation.latitude)
+                        .put("longitude", userLocation.longitude)
 
                 lifecycleScope.launch {
                     try {
@@ -95,12 +100,13 @@ class HomeActivity: AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun startLocationUpdates() {
-        locationUpdateRunnable = object : Runnable {
-            override fun run() {
-                getUserLocation()
-                handler.postDelayed(this, UPDATE_INTERVAL)
+        locationUpdateRunnable =
+            object : Runnable {
+                override fun run() {
+                    getUserLocation()
+                    handler.postDelayed(this, UPDATE_INTERVAL)
+                }
             }
-        }
 
         locationUpdateRunnable.run()
     }

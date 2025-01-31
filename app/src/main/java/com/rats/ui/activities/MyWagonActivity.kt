@@ -29,7 +29,7 @@ class MyWagonActivity : AppCompatActivity() {
         }
 
         myWagonViewModel.error.observe(this) { error ->
-            Log.d("wagon error", "Error: $error")
+            Log.e("wagon error", "Error: $error")
         }
 
         myWagonViewModel.fetchUsers()

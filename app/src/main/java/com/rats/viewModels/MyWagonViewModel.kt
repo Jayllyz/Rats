@@ -29,7 +29,7 @@ class MyWagonViewModel(private val userRepository: UserRepository) : ViewModel()
                 val users = userRepository.getWagonUsers()
                 _users.value = users
             } catch (e: Exception) {
-                Log.d("Error wagon", "Error: ${e.message}")
+                Log.e("Error wagon", "Error: ${e.message}")
                 _error.value = e.message
             } finally {
                 _isLoading.value = false

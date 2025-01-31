@@ -1,19 +1,18 @@
 package com.rats.ui.activities
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.location.Location
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -21,93 +20,107 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rats.R
-import com.rats.utils.ApiClient
-import com.rats.utils.TokenManager
-import kotlinx.coroutines.launch
-import org.json.JSONObject
+import com.rats.services.LocationService
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val UPDATE_INTERVAL = 5000L // 5 secondes
     }
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userMarker: MarkerOptions
-    private lateinit var locationUpdateRunnable: Runnable
-    private val handler = Handler(Looper.getMainLooper())
     private var firstLaunch: Boolean = true
+
+    private val locationReceiver = object: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if(intent?.action == "LOCATION_UPDATE") {
+                val latitude = intent.getDoubleExtra("latitude", 0.0)
+                val longitude = intent.getDoubleExtra("longitude", 0.0)
+                updateMapWithLocation(latitude, longitude)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val filter = IntentFilter("LOCATION_UPDATE")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                locationReceiver,
+                IntentFilter("LOCATION_UPDATE"),
+                RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            registerReceiver(locationReceiver, IntentFilter("LOCATION_UPDATE"))
+        }
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        checkLocationPermissions()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
-
-        startLocationUpdates()
     }
 
-    private fun getUserLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Demande la permissions d'accès à la localisation
+    private fun checkLocationPermissions(){
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE,
+                LOCATION_PERMISSION_REQUEST_CODE
             )
-            return
+        } else {
+            startLocationService()
         }
+    }
 
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location != null) {
-                // ca me met a Los Angeles mdr
-//                val userLocation = LatLng(location.latitude, location.longitude)
-                // Paris
-                val userLocation = LatLng(48.8566, 2.3522)
-                val body =
-                    JSONObject()
-                        .put("latitude", userLocation.latitude)
-                        .put("longitude", userLocation.longitude)
-
-                lifecycleScope.launch {
-                    try {
-                        ApiClient.putRequest("users/position", body, TokenManager.getToken()!!)
-                        userMarker = MarkerOptions().position(userLocation).title("You are here")
-                        mMap.clear()
-                        mMap.addMarker(userMarker)
-                    } catch (e: Exception) {
-                        Log.d("ERROR_LOCATION", "getUserLocation: ${e.message}")
-                    }
-                }
-                if (firstLaunch) {
-                    firstLaunch = false
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f))
-                }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                startLocationService()
             } else {
-                Toast.makeText(this, "Unable to get current location.", Toast.LENGTH_LONG).show()
+                Log.e("HomeActivity", "Refus droit location")
             }
         }
     }
 
-    private fun startLocationUpdates() {
-        locationUpdateRunnable =
-            object : Runnable {
-                override fun run() {
-                    getUserLocation()
-                    handler.postDelayed(this, UPDATE_INTERVAL)
-                }
-            }
+    private fun startLocationService() {
+        val serviceIntent = Intent(this, LocationService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent)
+        } else {
+            startService(serviceIntent)
+//            si on veut l'arreter
+//            stopService(serviceIntent)
+        }
+    }
 
-        locationUpdateRunnable.run()
+    private fun updateMapWithLocation(latitude: Double, longitude: Double) {
+        if (::mMap.isInitialized) {
+            mMap.clear()
+            val userLocation = LatLng(latitude, longitude)
+            userMarker = MarkerOptions().position(userLocation)
+            mMap.addMarker(userMarker)
+            if(firstLaunch) {
+                mMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+                firstLaunch = false
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(locationReceiver)
     }
 }

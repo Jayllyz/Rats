@@ -12,7 +12,11 @@ import org.json.JSONObject
 
 interface UserDao {
     suspend fun getNearbyUsers(): List<User>
-    suspend fun updateUserLocation(latitude: Double, longitude: Double)
+
+    suspend fun updateUserLocation(
+        latitude: Double,
+        longitude: Double,
+    )
 }
 
 class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
@@ -29,8 +33,12 @@ class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
         }
     }
 
-    override suspend fun updateUserLocation(latitude: Double, longitude: Double) {
-        val body = JSONObject()
+    override suspend fun updateUserLocation(
+        latitude: Double,
+        longitude: Double,
+    ) {
+        val body =
+            JSONObject()
                 .put("latitude", latitude)
                 .put("longitude", longitude)
         Log.d("wtf", "$token")

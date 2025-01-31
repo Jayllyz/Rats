@@ -2,8 +2,6 @@ package com.rats.services
 
 import android.Manifest
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -23,7 +21,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class LocationService: Service() {
+class LocationService : Service() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var handler: Handler
     private lateinit var locationUpdateRunnable: Runnable
@@ -45,19 +43,20 @@ class LocationService: Service() {
     }
 
     private fun startLocationUpdates() {
-        locationUpdateRunnable = object : Runnable {
-            override fun run() {
-                fetchUserLocation()
-                handler.postDelayed(this, updateInterval)
+        locationUpdateRunnable =
+            object : Runnable {
+                override fun run() {
+                    fetchUserLocation()
+                    handler.postDelayed(this, updateInterval)
+                }
             }
-        }
         handler.post(locationUpdateRunnable)
     }
 
     private fun fetchUserLocation() {
         if (ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             stopSelf()
@@ -86,10 +85,11 @@ class LocationService: Service() {
     }
 
     private fun sendLocationBroadcast(location: UserLocationDTO) {
-        val intent = Intent("LOCATION_UPDATE").apply{
-            putExtra("latitude", location.latitude)
-            putExtra("longitude", location.longitude)
-        }
+        val intent =
+            Intent("LOCATION_UPDATE").apply {
+                putExtra("latitude", location.latitude)
+                putExtra("longitude", location.longitude)
+            }
         sendBroadcast(intent)
     }
 

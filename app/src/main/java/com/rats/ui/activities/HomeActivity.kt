@@ -1,6 +1,7 @@
 package com.rats.ui.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,7 +10,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -32,26 +32,30 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var userMarker: MarkerOptions
     private var firstLaunch: Boolean = true
 
-    private val locationReceiver = object: BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if(intent?.action == "LOCATION_UPDATE") {
-                val latitude = intent.getDoubleExtra("latitude", 0.0)
-                val longitude = intent.getDoubleExtra("longitude", 0.0)
-                updateMapWithLocation(latitude, longitude)
+    private val locationReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                if (intent?.action == "LOCATION_UPDATE") {
+                    val latitude = intent.getDoubleExtra("latitude", 0.0)
+                    val longitude = intent.getDoubleExtra("longitude", 0.0)
+                    updateMapWithLocation(latitude, longitude)
+                }
             }
         }
-    }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val filter = IntentFilter("LOCATION_UPDATE")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 locationReceiver,
                 IntentFilter("LOCATION_UPDATE"),
-                RECEIVER_NOT_EXPORTED
+                RECEIVER_EXPORTED,
             )
         } else {
             registerReceiver(locationReceiver, IntentFilter("LOCATION_UPDATE"))
@@ -68,26 +72,30 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
     }
 
-    private fun checkLocationPermissions(){
+    private fun checkLocationPermissions() {
         if (ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
+                LOCATION_PERMISSION_REQUEST_CODE,
             )
         } else {
             startLocationService()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationService()
             } else {
                 Log.e("HomeActivity", "Refus droit location")
@@ -106,13 +114,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun updateMapWithLocation(latitude: Double, longitude: Double) {
+    private fun updateMapWithLocation(
+        latitude: Double,
+        longitude: Double,
+    ) {
         if (::mMap.isInitialized) {
             mMap.clear()
             val userLocation = LatLng(latitude, longitude)
             userMarker = MarkerOptions().position(userLocation)
             mMap.addMarker(userMarker)
-            if(firstLaunch) {
+            if (firstLaunch) {
                 mMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
                 firstLaunch = false
             }

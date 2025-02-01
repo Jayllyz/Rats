@@ -1,9 +1,9 @@
 package com.rats.data.dao
 
-import android.util.Log
 import com.rats.data.dto.UserDTO
 import com.rats.data.mapper.UserMapper.toModel
 import com.rats.models.User
+import com.rats.models.UserToken
 import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
 import kotlinx.serialization.json.Json
@@ -17,6 +17,11 @@ interface UserDao {
         latitude: Double,
         longitude: Double,
     )
+
+    suspend fun userLogin(
+        email: String,
+        password: String,
+    ): UserToken
 }
 
 class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
@@ -41,11 +46,27 @@ class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
             JSONObject()
                 .put("latitude", latitude)
                 .put("longitude", longitude)
-        Log.d("wtf", "$token")
         val response = apiClient.putRequest("users/position", body, token)
-        Log.d("wtf", "${response.code}")
         if (response.code != 200) {
             throw Exception("Failed to update user location")
+        }
+    }
+
+    override suspend fun userLogin(
+        email: String,
+        password: String,
+    ): UserToken {
+        val body =
+            JSONObject()
+                .put("email", email)
+                .put("password", password)
+        val response = apiClient.postRequest("auth/login", body)
+        return if (response.code == 200 && response.body != null) {
+            val token = json.decodeFromJsonElement<UserToken>(response.body)
+            TokenManager.saveToken(token.token)
+            token
+        } else {
+            throw Exception("Failed to authenticate user")
         }
     }
 }

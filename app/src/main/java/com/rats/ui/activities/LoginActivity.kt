@@ -1,4 +1,4 @@
-package com.rats.ui
+package com.rats.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,17 +8,20 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.rats.R
-import com.rats.utils.ApiClient
-import com.rats.utils.TokenManager
+import com.rats.RatsApp
+import com.rats.factories.LoginViewModelFactory
+import com.rats.viewModels.LoginViewModel
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
+    private val loginViewModel: LoginViewModel by viewModels {
+        LoginViewModelFactory((application as RatsApp).userRepository)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -28,48 +31,42 @@ class LoginActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.btn_validate)
         val errorTextView = findViewById<TextView>(R.id.login_error_text)
 
-        loginButton.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    val email = emailEditText.text.toString()
-                    val password = passwordEditText.text.toString()
-
-                    if (email.isBlank() || password.isBlank()) {
-                        showError(errorTextView, getString(R.string.login_fields_required))
-                        return@launch
+        lifecycleScope.launch {
+            try {
+                loginViewModel.isLoading.collect { isLoading ->
+                    if (isLoading) {
+                        loginButton.isEnabled = false
+                        loginButton.text = getString(R.string.loading)
+                    } else {
+                        loginButton.isEnabled = true
+                        loginButton.text = getString(R.string.connexion_btn_text)
                     }
-
-                    loginButton.isEnabled = false
-                    loginButton.text = getString(R.string.loading)
-
-                    val body =
-                        JSONObject()
-                            .put("email", email)
-                            .put("password", password)
-
-                    val response = ApiClient.postRequest("auth/login", body)
-
-                    when (response.code) {
-                        200 -> {
-                            val token = response.body?.jsonObject?.get("token")?.jsonPrimitive?.content
-                            if (token != null) {
-                                TokenManager.saveToken(token)
-                                startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-                                finish()
-                            } else {
-                                showError(errorTextView, getString(R.string.login_server_error))
-                            }
-                        }
-                        401 -> showError(errorTextView, getString(R.string.login_incorrect_credentials))
-                        404 -> showError(errorTextView, getString(R.string.login_incorrect_credentials))
-                        else -> showError(errorTextView, getString(R.string.login_server_error))
-                    }
-                } catch (e: Exception) {
-                    showError(errorTextView, getString(R.string.login_network_error))
-                } finally {
-                    loginButton.isEnabled = true
-                    loginButton.text = getString(R.string.connexion_btn_text)
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        loginViewModel.error.observe(this) { error ->
+            showError(errorTextView, error)
+        }
+
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            if (email.isBlank() || password.isBlank()) {
+                showError(errorTextView, getString(R.string.login_fields_required))
+                return@setOnClickListener
+            }
+
+            loginViewModel.userLogin(email, password)
+        }
+
+        loginViewModel.success.observe(this) { success ->
+            if (success) {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
             }
         }
 

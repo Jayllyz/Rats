@@ -1,4 +1,4 @@
-package com.rats.ui
+package com.rats.ui.activities
 
 import android.os.Bundle
 import android.widget.ImageButton

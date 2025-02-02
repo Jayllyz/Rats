@@ -37,4 +37,11 @@
     <string name="passenger_profile_image">passenger_profile_image</string>
     <string name="wagon_name_template">Rer B, Wagon 4</string>
     <string name="alert_in_train_template">5 alertes dans ce train</string>
+    <string name="passenger_name_sample">John Doe</string>
+    <string name="passenger_seat_sample">Seat: 12A</string>
+    <string name="passenger_rating_sample">Rating: 4.5/5</string>
+    <string name="passenger_comments_title">Comments</string>
+    <string name="passenger_number_ratings">422 users rates</string>
+    <string name="report_passenger_button_content">Report Passenger</string>
+    <string name="rate_passenger_button_content">Give Note</string>
 </resources>

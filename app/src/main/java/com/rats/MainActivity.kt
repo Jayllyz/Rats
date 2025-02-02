@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.rats.ui.HomeActivity
-import com.rats.ui.LoginActivity
+import com.rats.ui.activities.HomeActivity
+import com.rats.ui.activities.LoginActivity
 import com.rats.utils.TokenManager
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         TokenManager.init(this)
 
-        TokenManager.deleteToken()
+//        TokenManager.deleteToken()
 
         if (TokenManager.getToken() != null) {
             startActivity(Intent(this, HomeActivity::class.java))

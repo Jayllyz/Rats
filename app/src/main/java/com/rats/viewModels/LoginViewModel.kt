@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rats.data.dto.UserLoginDTO
 import com.rats.data.repositories.UserRepository
 import com.rats.utils.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,14 +22,11 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun userLogin(
-        email: String,
-        password: String,
-    ) {
+    fun userLogin(userLoginDTO: UserLoginDTO) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val userToken = userRepository.userLogin(email, password)
+                val userToken = userRepository.userLogin(userLoginDTO)
                 TokenManager.saveToken(userToken.token)
                 _success.value = true
             } catch (e: Exception) {

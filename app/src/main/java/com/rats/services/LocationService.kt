@@ -77,7 +77,8 @@ class LocationService : Service() {
     private fun sendLocationToServer(location: UserLocationDTO) {
         serviceScope.launch {
             try {
-                userRepository.updateUserLocation(location.latitude, location.longitude)
+                val userLocation = UserLocationDTO(location.latitude, location.longitude)
+                userRepository.updateUserLocation(userLocation)
             } catch (e: Exception) {
                 Log.e("LocationService", "Failed to update user location", e)
             }

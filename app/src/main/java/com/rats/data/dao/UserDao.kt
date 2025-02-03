@@ -1,6 +1,8 @@
 package com.rats.data.dao
 
 import com.rats.data.dto.UserDTO
+import com.rats.data.dto.UserLocationDTO
+import com.rats.data.dto.UserLoginDTO
 import com.rats.data.mapper.UserMapper.toModel
 import com.rats.models.User
 import com.rats.models.UserToken
@@ -13,15 +15,9 @@ import org.json.JSONObject
 interface UserDao {
     suspend fun getNearbyUsers(): List<User>
 
-    suspend fun updateUserLocation(
-        latitude: Double,
-        longitude: Double,
-    )
+    suspend fun updateUserLocation(userLocationDTO: UserLocationDTO)
 
-    suspend fun userLogin(
-        email: String,
-        password: String,
-    ): UserToken
+    suspend fun userLogin(userLoginDTO: UserLoginDTO): UserToken
 }
 
 class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
@@ -38,28 +34,22 @@ class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
         }
     }
 
-    override suspend fun updateUserLocation(
-        latitude: Double,
-        longitude: Double,
-    ) {
+    override suspend fun updateUserLocation(userLocationDTO: UserLocationDTO) {
         val body =
             JSONObject()
-                .put("latitude", latitude)
-                .put("longitude", longitude)
+                .put("latitude", userLocationDTO.latitude)
+                .put("longitude", userLocationDTO.longitude)
         val response = apiClient.putRequest("users/position", body, token)
         if (response.code != 200) {
             throw Exception("Failed to update user location")
         }
     }
 
-    override suspend fun userLogin(
-        email: String,
-        password: String,
-    ): UserToken {
+    override suspend fun userLogin(userLoginDTO: UserLoginDTO): UserToken {
         val body =
             JSONObject()
-                .put("email", email)
-                .put("password", password)
+                .put("email", userLoginDTO.email)
+                .put("password", userLoginDTO.password)
         val response = apiClient.postRequest("auth/login", body)
         return if (response.code == 200 && response.body != null) {
             val token = json.decodeFromJsonElement<UserToken>(response.body)

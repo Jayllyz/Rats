@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.rats.R
 import com.rats.RatsApp
+import com.rats.data.dto.UserLoginDTO
 import com.rats.factories.LoginViewModelFactory
 import com.rats.viewModels.LoginViewModel
 import kotlinx.coroutines.launch
@@ -60,7 +61,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            loginViewModel.userLogin(email, password)
+            val userLogins = UserLoginDTO(email, password)
+            loginViewModel.userLogin(userLogins)
         }
 
         loginViewModel.success.observe(this) { success ->

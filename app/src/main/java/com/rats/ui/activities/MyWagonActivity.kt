@@ -25,7 +25,7 @@ class MyWagonActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         myWagonViewModel.users.observe(this) { user ->
-            recyclerView.adapter = UserWagonAdapter(user)
+            recyclerView.adapter = UserWagonAdapter(user, this)
         }
 
         myWagonViewModel.error.observe(this) { error ->

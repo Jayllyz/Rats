@@ -29,7 +29,7 @@ class PassengerViewModel(private val ratingRepository: RatingRepository) : ViewM
                 val users = ratingRepository.getUserRatings(id)
                 _ratings.value = users
             } catch (e: Exception) {
-                Log.e("Error wagon", "Error: ${e.message}")
+                Log.e("Error fetchRatings", "Error: ${e.message}")
                 _error.value = e.message
             } finally {
                 _isLoading.value = false

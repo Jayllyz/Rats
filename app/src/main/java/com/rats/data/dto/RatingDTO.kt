@@ -1,9 +1,8 @@
 package com.rats.data.dto
-import android.annotation.SuppressLint
 import com.rats.models.User
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class RatingDTO(
     val id: Int,
@@ -11,5 +10,6 @@ data class RatingDTO(
     val sender: User,
     val stars: Int,
     val comment: String,
+    @SerialName("created_at")
     val createdAt: String,
 )

@@ -28,6 +28,6 @@ class PassengerCommentsAdapter(private val ratings: List<Rating>) : RecyclerView
         holder.name.text = rating.sender.name
         holder.stars.text = rating.stars.toChar().toString()
         holder.comment.text = rating.comment
-        holder.date.text = rating.createdAt.toString()
+        holder.date.text = rating.createdAt
     }
 }

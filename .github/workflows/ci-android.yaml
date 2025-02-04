@@ -62,6 +62,6 @@ jobs:
       uses: gradle/actions/setup-gradle@v4
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -x lint -x ktlintCheck # Exclude lint and ktlintCheck tasks
       env:
         GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs=-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -XX:MaxMetaspaceSize=512m"

@@ -1,0 +1,174 @@
+<!-- res/layout/activity_main.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main Content -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_menu" />
+
+    <!-- Bottom Menu -->
+    <LinearLayout
+        android:id="@+id/bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:background="@drawable/bottom_menu_background"
+        android:elevation="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <!-- Home Menu Item -->
+        <LinearLayout
+            android:id="@+id/menu_report"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/menu_report_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu_report_icon_text"
+                android:src="@drawable/camera_icon"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/menu_report_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_report_text"
+                android:textSize="12sp"
+                android:textColor="@color/bottom_menu_text_color" />
+        </LinearLayout>
+
+        <!-- Search Menu Item -->
+        <LinearLayout
+            android:id="@+id/menu_map"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/menu_map_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu_map_icon_text"
+                android:src="@drawable/stations_icon"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/menu_map_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_map_text"
+                android:textSize="12sp"
+                android:textColor="@color/bottom_menu_text_color" />
+        </LinearLayout>
+
+        <!-- Profile Menu Item -->
+        <LinearLayout
+            android:id="@+id/menu_wagon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/menu_wagon_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu_wagon_icon"
+                android:src="@drawable/wagon_icon"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/menu_wagon_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_wagon_text"
+                android:textSize="12sp"
+                android:textColor="@color/bottom_menu_text_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_chat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/menu_chat_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu_chat_icon"
+                android:src="@drawable/chat"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/menu_chat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_chat_text"
+                android:textSize="12sp"
+                android:textColor="@color/bottom_menu_text_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_more"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/menu_more_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/menu_more_icon_text"
+                android:src="@drawable/burger_menu"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/menu_more_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_more_text"
+                android:textSize="12sp"
+                android:textColor="@color/bottom_menu_text_color" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

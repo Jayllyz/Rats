@@ -12,7 +12,7 @@ class UserWagonAdapter(private val users: List<User>) : RecyclerView.Adapter<Use
         parent: ViewGroup,
         viewType: Int,
     ): UserWagonViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_wagon_user, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_wagon_view_holder, parent, false)
         return UserWagonViewHolder(view)
     }
 

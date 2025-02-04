@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_camera"
+        android:icon="@drawable/camera_icon"
+        android:title="@string/menu_report" />
+    <item
+        android:id="@+id/nav_map"
+        android:icon="@drawable/map_icon"
+        android:title="@string/menu_map" />
+    <item
+        android:id="@+id/nav_wagon"
+        android:icon="@drawable/wagon_icon"
+        android:title="@string/menu_wagon" />
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/chat"
+        android:title="@string/menu_chat" />
+    <item
+        android:id="@+id/nav_plus_menu"
+        android:icon="@drawable/burger_menu"
+        android:title="@string/menu_plus" />
+</menu>

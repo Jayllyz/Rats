@@ -6,32 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.rats.R
 import com.rats.ui.activities.HomeActivity
 import com.rats.ui.activities.MyWagonActivity
-import com.rats.ui.activities.SettingsActivity
 
-class BottomMenuFragment: Fragment() {
+class BottomMenuFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstance: Bundle?
+        savedInstance: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bottom_menu, container, false)
 
-        val report_layout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_report);
-        val map_layout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_map);
-        val wagon_layout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_wagon);
-        val chat_layout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_chat);
-        val more_layout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_more);
+        val reportLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_report)
+        val mapLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_map)
+        val wagonLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_wagon)
+        val chatLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_chat)
+        val moreLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.menu_more)
 
-        report_layout.setOnClickListener {
+        reportLayout.setOnClickListener {
             println("cliced on report")
         }
 
-        map_layout.setOnClickListener {
+        mapLayout.setOnClickListener {
             if (activity !is HomeActivity) {
                 val intent = Intent(activity, HomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -39,7 +37,7 @@ class BottomMenuFragment: Fragment() {
             }
         }
 
-        wagon_layout.setOnClickListener {
+        wagonLayout.setOnClickListener {
             if (activity !is MyWagonActivity) {
                 val intent = Intent(activity, MyWagonActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -47,11 +45,11 @@ class BottomMenuFragment: Fragment() {
             }
         }
 
-        chat_layout.setOnClickListener {
+        chatLayout.setOnClickListener {
             println("clicked chat")
         }
 
-        more_layout.setOnClickListener {
+        moreLayout.setOnClickListener {
             println("more clicked")
         }
 

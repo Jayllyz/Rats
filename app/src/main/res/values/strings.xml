@@ -15,7 +15,7 @@
     <string name="notifications_title">Notifications</string>
     <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>
     <string name="dark_mode_title">Mode sombre</string>
-        <string name="dark_mode_subtitle">Activer le mode sombre</string>
+    <string name="dark_mode_subtitle">Activer le mode sombre</string>
     <string name="personal_data_title">Données personnelles</string>
     <string name="back_button">Retour</string>
     <string name="next_button">Suivant</string>
@@ -44,4 +44,20 @@
     <string name="passenger_number_ratings">422 users rates</string>
     <string name="report_passenger_button_content">Report Passenger</string>
     <string name="rate_passenger_button_content">Give Note</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_plus">Plus</string>
+    <string name="menu_chat">Chat</string>
+    <string name="menu_wagon">Mon wagon</string>
+    <string name="menu_map">Carte</string>
+    <string name="menu_report">Signaler</string>
+    <string name="menu_more_text">Plus</string>
+    <string name="menu_more_icon_text">menu more icon</string>
+    <string name="menu_chat_text">Chat</string>
+    <string name="menu_chat_icon">menu chat icon</string>
+    <string name="menu_wagon_text">Mon Wagon</string>
+    <string name="menu_wagon_icon">menu wagon icon</string>
+    <string name="menu_map_text">Carte</string>
+    <string name="menu_map_icon_text">menu map icon</string>
+    <string name="menu_report_text">Signaler</string>
+    <string name="menu_report_icon_text">menu report icon</string>
 </resources>

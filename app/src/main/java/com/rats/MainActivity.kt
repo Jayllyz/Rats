@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.rats.ui.activities.HomeActivity
 import com.rats.ui.activities.LoginActivity
+import com.rats.ui.activities.MyWagonActivity
 import com.rats.utils.TokenManager
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         if (TokenManager.getToken() != null) {
             startActivity(Intent(this, HomeActivity::class.java))
         } else {
-            startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
         }
         finish()
     }

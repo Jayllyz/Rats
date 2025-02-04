@@ -1,7 +1,10 @@
 use crate::api::utils;
 use crate::db::DbPool;
-use crate::models::ratings_models::{CreateRating, RatingRequest, RatingResponse};
+use crate::models::ratings_models::{
+    CreateRating, RatingRequest, RatingResponse, RatingResponseJson, User,
+};
 use crate::schema::ratings;
+use crate::schema::users;
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
@@ -15,7 +18,33 @@ async fn get_ratings(pool: web::Data<DbPool>) -> Result<HttpResponse> {
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying ratings"))?;
 
-    Ok(HttpResponse::Ok().json(ratings))
+    let mut rating_responses = Vec::new();
+    for rating in ratings {
+        let sender = users::table
+            .filter(users::id.eq(rating.id_sender))
+            .select((users::id, users::name, users::email))
+            .first::<User>(&mut conn)
+            .await
+            .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying sender"))?;
+
+        let receiver = users::table
+            .filter(users::id.eq(rating.id_receiver))
+            .select((users::id, users::name, users::email))
+            .first::<User>(&mut conn)
+            .await
+            .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying receiver"))?;
+
+        rating_responses.push(RatingResponseJson {
+            id: rating.id,
+            sender,
+            receiver,
+            stars: rating.stars,
+            comment: rating.comment,
+            created_at: rating.created_at,
+        });
+    }
+
+    Ok(HttpResponse::Ok().json(rating_responses))
 }
 
 #[get("/{id}")]
@@ -26,7 +55,34 @@ async fn get_rating(pool: web::Data<DbPool>, id_rating: web::Path<i32>) -> Resul
         ratings::table.filter(ratings::id.eq(*id_rating)).first::<RatingResponse>(&mut conn).await;
 
     match result {
-        Ok(rating) => Ok(HttpResponse::Ok().json(rating)),
+        Ok(rating) => {
+            let sender = users::table
+                .filter(users::id.eq(rating.id_sender))
+                .select((users::id, users::name, users::email))
+                .first::<User>(&mut conn)
+                .await
+                .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying sender"))?;
+
+            let receiver = users::table
+                .filter(users::id.eq(rating.id_receiver))
+                .select((users::id, users::name, users::email))
+                .first::<User>(&mut conn)
+                .await
+                .map_err(|_| {
+                    actix_web::error::ErrorInternalServerError("Error querying receiver")
+                })?;
+
+            let rating_response = RatingResponseJson {
+                id: rating.id,
+                sender,
+                receiver,
+                stars: rating.stars,
+                comment: rating.comment,
+                created_at: rating.created_at,
+            };
+
+            Ok(HttpResponse::Ok().json(rating_response))
+        }
         Err(diesel::result::Error::NotFound) => {
             Ok(HttpResponse::NotFound().body("Rating not found"))
         }
@@ -52,7 +108,33 @@ async fn get_ratings_by_sender(
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying ratings"))?;
 
-    Ok(HttpResponse::Ok().json(ratings))
+    let mut rating_responses = Vec::new();
+    for rating in ratings {
+        let sender = users::table
+            .filter(users::id.eq(rating.id_sender))
+            .select((users::id, users::name, users::email))
+            .first::<User>(&mut conn)
+            .await
+            .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying sender"))?;
+
+        let receiver = users::table
+            .filter(users::id.eq(rating.id_receiver))
+            .select((users::id, users::name, users::email))
+            .first::<User>(&mut conn)
+            .await
+            .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying receiver"))?;
+
+        rating_responses.push(RatingResponseJson {
+            id: rating.id,
+            sender,
+            receiver,
+            stars: rating.stars,
+            comment: rating.comment,
+            created_at: rating.created_at,
+        });
+    }
+
+    Ok(HttpResponse::Ok().json(rating_responses))
 }
 
 #[get("/receiver/{id}")]
@@ -73,7 +155,33 @@ async fn get_ratings_by_receiver(
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying ratings"))?;
 
-    Ok(HttpResponse::Ok().json(ratings))
+    let mut rating_responses = Vec::new();
+    for rating in ratings {
+        let sender = users::table
+            .filter(users::id.eq(rating.id_sender))
+            .select((users::id, users::name, users::email))
+            .first::<User>(&mut conn)
+            .await
+            .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying sender"))?;
+
+        let receiver = users::table
+            .filter(users::id.eq(rating.id_receiver))
+            .select((users::id, users::name, users::email))
+            .first::<User>(&mut conn)
+            .await
+            .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying receiver"))?;
+
+        rating_responses.push(RatingResponseJson {
+            id: rating.id,
+            sender,
+            receiver,
+            stars: rating.stars,
+            comment: rating.comment,
+            created_at: rating.created_at,
+        });
+    }
+
+    Ok(HttpResponse::Ok().json(rating_responses))
 }
 
 #[post("/{id}")]

@@ -32,7 +32,11 @@ class UserWagonAdapter(private val users: List<User>, private val context: Conte
         holder.email.text = user.email
 
         holder.rootView.setOnClickListener {
-            val intent = Intent(context, PassengerActivity::class.java).apply { putExtra("id", user.id) }
+            val intent =
+                Intent(context, PassengerActivity::class.java).apply {
+                    putExtra("id", user.id)
+                    putExtra("name", user.name)
+                }
             context.startActivity(intent)
         }
     }

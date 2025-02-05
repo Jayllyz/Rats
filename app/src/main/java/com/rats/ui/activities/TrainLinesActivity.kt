@@ -11,25 +11,31 @@ import com.rats.RatsApp
 import com.rats.factories.TrainLinesViewModelFactory
 import com.rats.ui.adapters.TrainLinesAdapter
 import com.rats.viewModels.TrainLinesViewModel
-import kotlin.getValue
 
 class TrainLinesActivity : AppCompatActivity() {
     private val trainLinesViewModel: TrainLinesViewModel by viewModels {
         TrainLinesViewModelFactory((application as RatsApp).trainLinesRepository)
     }
 
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_transport_lines)
-
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
+        setupViews()
+        setupStateObservers()
         trainLinesViewModel.fetchTrainLines()
+    }
 
-        trainLinesViewModel.lines.observe(this) { trainLines ->
-            recyclerView.adapter = TrainLinesAdapter(trainLines)
+    private fun setupViews() {
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun setupStateObservers() {
+        trainLinesViewModel.lines.observe(this) { trainLineStates ->
+            recyclerView.adapter = TrainLinesAdapter(trainLineStates)
         }
     }
 }

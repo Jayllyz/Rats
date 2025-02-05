@@ -1,5 +1,6 @@
 package com.rats.data.dao
 
+import android.util.Log
 import com.rats.data.dto.TrainLinesDTO
 import com.rats.data.mapper.TrainLinesMapper.toModel
 import com.rats.models.TrainLines
@@ -22,6 +23,7 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
             val trainLineDtos = json.decodeFromJsonElement<List<TrainLinesDTO>>(response.body)
             trainLineDtos.map { it.toModel() }
         } else {
+            Log.e("error", "Error: ${response.code}")
             emptyList()
         }
     }

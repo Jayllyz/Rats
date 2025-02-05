@@ -6,5 +6,5 @@ data class LineInformationDTO(
     val id: Int,
     val name: String,
     val status: String,
-    val reports: List<Report>
+    val reports: List<Report>,
 )

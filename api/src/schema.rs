@@ -14,13 +14,22 @@ diesel::table! {
 diesel::table! {
     reports (id) {
         id -> Int4,
-        id_user -> Int4,
+        id_user -> Nullable<Int4>,
         report_type -> Text,
         title -> Text,
         description -> Text,
         longitude -> Numeric,
         latitude -> Numeric,
         created_at -> Nullable<Timestamp>,
+        id_train_line -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
+    train_lines (id) {
+        id -> Int4,
+        name -> Text,
+        status -> Text,
     }
 }
 
@@ -36,6 +45,12 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(reports -> train_lines (id_train_line));
 diesel::joinable!(reports -> users (id_user));
 
-diesel::allow_tables_to_appear_in_same_query!(ratings, reports, users,);
+diesel::allow_tables_to_appear_in_same_query!(
+    ratings,
+    reports,
+    train_lines,
+    users,
+);

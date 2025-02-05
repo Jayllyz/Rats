@@ -63,7 +63,8 @@ async fn create_report(
 
     match diesel::insert_into(reports::table)
         .values(&new_report)
-        .get_result::<ReportResponse>(&mut conn)
+        .returning(ReportResponse::as_select())
+        .get_result(&mut conn)
         .await
     {
         Ok(report) => Ok(HttpResponse::Created().json(report)),

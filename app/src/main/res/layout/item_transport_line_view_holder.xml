@@ -1,0 +1,69 @@
+<!-- res/layout/item_train_line.xml -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <!-- Train Line Icon -->
+    <ImageView
+        android:id="@+id/trainIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@mipmap/train_icon_sample"
+        android:contentDescription="@string/train_icon_desc"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Warning/Safe Icon (Top-Right Corner of Train Icon) -->
+    <ImageView
+        android:id="@+id/warningIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/warning_notification"
+        android:contentDescription="@string/warning_icon_desc"
+        app:layout_constraintTop_toTopOf="@id/trainIcon"
+        app:layout_constraintEnd_toEndOf="@id/trainIcon"/>
+
+    <!-- Train Name -->
+    <TextView
+        android:id="@+id/trainName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/train_line_name_sample"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/trainIcon"
+        app:layout_constraintStart_toEndOf="@id/trainIcon"
+        app:layout_constraintEnd_toStartOf="@id/arrowIcon"
+        android:layout_marginStart="16dp" />
+
+    <!-- Number of Alerts -->
+    <TextView
+        android:id="@+id/alertCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/alert_count"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        app:layout_constraintTop_toBottomOf="@id/trainName"
+        app:layout_constraintStart_toStartOf="@id/trainName"
+        app:layout_constraintEnd_toEndOf="@id/trainName"
+        android:layout_marginTop="4dp" />
+
+    <!-- Arrow Icon -->
+    <ImageView
+        android:id="@+id/arrowIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/right_arrow_icon"
+        android:contentDescription="@string/arrow_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

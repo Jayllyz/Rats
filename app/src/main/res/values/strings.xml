@@ -116,4 +116,7 @@
     <string name="alert_count">2 alerts</string>
     <string name="arrow_icon">Arrow Icon</string>
     <string name="transport_line_page_title">Transport lines</string>
+    <string name="filter_dangerous">Dangereux</string>
+    <string name="filter_safe">Sûr</string>
+    <string name="filter_incident">Incident</string>
 </resources>

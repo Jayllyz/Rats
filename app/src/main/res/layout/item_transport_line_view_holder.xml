@@ -1,4 +1,3 @@
-<!-- res/layout/item_train_line.xml -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,16 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Warning/Safe Icon (Top-Right Corner of Train Icon) -->
-    <ImageView
-        android:id="@+id/warningIcon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/warning_notification"
-        android:contentDescription="@string/warning_icon_desc"
-        app:layout_constraintTop_toTopOf="@id/trainIcon"
-        app:layout_constraintEnd_toEndOf="@id/trainIcon"/>
-
     <!-- Train Name -->
     <TextView
         android:id="@+id/trainName"
@@ -36,11 +25,11 @@
         android:layout_height="wrap_content"
         android:text="@string/train_line_name_sample"
         android:textSize="16sp"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/md_theme_onSurface"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/trainIcon"
         app:layout_constraintStart_toEndOf="@id/trainIcon"
-        app:layout_constraintEnd_toStartOf="@id/arrowIcon"
+        app:layout_constraintEnd_toStartOf="@id/warningIcon"
         android:layout_marginStart="16dp" />
 
     <!-- Number of Alerts -->
@@ -50,11 +39,23 @@
         android:layout_height="wrap_content"
         android:text="@string/alert_count"
         android:textSize="14sp"
-        android:textColor="@color/text_secondary"
+        android:textColor="@color/md_theme_tertiary"
         app:layout_constraintTop_toBottomOf="@id/trainName"
         app:layout_constraintStart_toStartOf="@id/trainName"
         app:layout_constraintEnd_toEndOf="@id/trainName"
         android:layout_marginTop="4dp" />
+
+    <!-- Warning Icon (now placed to the left of the Arrow Icon) -->
+    <ImageView
+        android:id="@+id/warningIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/warning_notification"
+        android:contentDescription="@string/warning_icon_desc"
+        app:layout_constraintEnd_toStartOf="@id/arrowIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp" />
 
     <!-- Arrow Icon -->
     <ImageView

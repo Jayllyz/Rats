@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import com.rats.MoreMenuActivity
 import com.rats.R
 import com.rats.ui.activities.HomeActivity
+import com.rats.ui.activities.MoreMenuActivity
 import com.rats.ui.activities.MyWagonActivity
 
 class BottomMenuFragment : Fragment() {

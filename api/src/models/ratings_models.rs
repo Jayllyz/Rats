@@ -1,3 +1,4 @@
+use crate::schema::users;
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use diesel::Selectable;
@@ -13,6 +14,23 @@ pub struct RatingResponse {
     pub stars: i32,
     pub comment: Option<String>,
     pub created_at: Option<NaiveDateTime>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RatingResponseJson {
+    pub id: i32,
+    pub receiver: User,
+    pub sender: User,
+    pub stars: i32,
+    pub comment: Option<String>,
+    pub created_at: Option<NaiveDateTime>,
+}
+
+#[derive(Serialize, Deserialize, Queryable, Selectable, QueryableByName)]
+pub struct User {
+    pub id: i32,
+    pub name: String,
+    pub email: String,
 }
 
 #[derive(Deserialize, Serialize)]

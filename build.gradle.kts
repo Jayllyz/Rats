@@ -2,8 +2,7 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-    kotlin("jvm") version "2.1.0"
-    alias(libs.plugins.kotlin.compose) apply false
+    kotlin("jvm") version "2.1.10"
 }
 
 buildscript {

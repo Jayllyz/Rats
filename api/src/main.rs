@@ -9,6 +9,7 @@ use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use api::auth::config_auth;
 use api::ratings::config_ratings;
 use api::reports::config_reports;
+use api::train_lines::config_train_lines;
 use api::users::config_users;
 use db::establish_connection;
 use serde::Serialize;
@@ -52,6 +53,7 @@ async fn main() -> std::io::Result<()> {
             .configure(config_auth)
             .configure(config_ratings)
             .configure(config_reports)
+            .configure(config_train_lines)
             .default_service(web::route().to(not_found))
             .wrap(cors)
             .wrap(actix_web::middleware::Logger::default())

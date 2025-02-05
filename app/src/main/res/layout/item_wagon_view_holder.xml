@@ -45,7 +45,7 @@
             android:text="@string/passenger_name_template"/>
 
         <TextView
-            android:id="@+id/tv_user_email"
+            android:id="@+id/tv_star"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"

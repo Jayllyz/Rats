@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.rats.R
 import com.rats.ui.activities.HomeActivity
+import com.rats.ui.activities.MoreMenuActivity
 import com.rats.ui.activities.MyWagonActivity
 
 class BottomMenuFragment : Fragment() {
@@ -50,7 +51,11 @@ class BottomMenuFragment : Fragment() {
         }
 
         moreLayout.setOnClickListener {
-            println("more clicked")
+            if (activity !is MoreMenuActivity) {
+                val intent = Intent(activity, MoreMenuActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
         }
 
         return view

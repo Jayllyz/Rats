@@ -48,9 +48,4 @@ diesel::table! {
 diesel::joinable!(reports -> train_lines (id_train_line));
 diesel::joinable!(reports -> users (id_user));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    ratings,
-    reports,
-    train_lines,
-    users,
-);
+diesel::allow_tables_to_appear_in_same_query!(ratings, reports, train_lines, users,);

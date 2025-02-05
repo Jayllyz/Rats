@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         if (TokenManager.getToken() != null) {
             startActivity(Intent(this, HomeActivity::class.java))
         } else {
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }
         finish()
     }

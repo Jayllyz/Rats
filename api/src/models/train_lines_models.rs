@@ -29,3 +29,14 @@ pub struct Report {
     pub report_type: String,
     pub created_at: Option<NaiveDateTime>,
 }
+
+#[derive(Serialize, Deserialize, Queryable)]
+pub struct SelfReport {
+    pub id_line: i32,
+    pub line_name: String,
+    pub id_report: i32,
+    pub title: String,
+    pub description: String,
+    pub report_type: String,
+    pub created_at: Option<NaiveDateTime>,
+}

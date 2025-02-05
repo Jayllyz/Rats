@@ -45,7 +45,22 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    users_lines (id_user, id_line) {
+        id_user -> Int4,
+        id_line -> Int4,
+    }
+}
+
 diesel::joinable!(reports -> train_lines (id_train_line));
 diesel::joinable!(reports -> users (id_user));
+diesel::joinable!(users_lines -> train_lines (id_line));
+diesel::joinable!(users_lines -> users (id_user));
 
-diesel::allow_tables_to_appear_in_same_query!(ratings, reports, train_lines, users,);
+diesel::allow_tables_to_appear_in_same_query!(
+    ratings,
+    reports,
+    train_lines,
+    users,
+    users_lines,
+);

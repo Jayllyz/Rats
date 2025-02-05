@@ -1,8 +1,12 @@
+use crate::api::utils;
 use crate::db::DbPool;
-use crate::models::train_lines_models::{Report, TrainLinesReports, TrainLinesResponse};
+use crate::models::train_lines_models::{
+    Report, SelfReport, TrainLinesReports, TrainLinesResponse,
+};
 use crate::schema::reports;
 use crate::schema::train_lines;
-use actix_web::{get, web, HttpResponse, Result};
+use crate::schema::users_lines;
+use actix_web::{delete, get, post, web, HttpRequest, HttpResponse, Result};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
@@ -20,14 +24,11 @@ async fn get_train_lines(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 }
 
 #[get("/{id}")]
-async fn get_train_line(
-    pool: web::Data<DbPool>,
-    id_report: web::Path<i32>,
-) -> Result<HttpResponse> {
+async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let result = train_lines::table
-        .filter(train_lines::id.eq(*id_report))
+        .filter(train_lines::id.eq(*id_line))
         .select(TrainLinesResponse::as_select())
         .first::<TrainLinesResponse>(&mut conn)
         .await;
@@ -35,7 +36,7 @@ async fn get_train_line(
     match result {
         Ok(report) => {
             let reports = reports::table
-                .filter(reports::id_train_line.eq(*id_report))
+                .filter(reports::id_train_line.eq(*id_line))
                 .select((
                     reports::id,
                     reports::title,
@@ -61,6 +62,100 @@ async fn get_train_line(
     }
 }
 
+#[post("/subscribe/{id}")]
+async fn subscribe_to_train_line(
+    pool: web::Data<DbPool>,
+    id_line: web::Path<i32>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let result = diesel::insert_into(users_lines::table)
+        .values((users_lines::id_user.eq(id_user), users_lines::id_line.eq(*id_line)))
+        .execute(&mut conn)
+        .await;
+
+    match result {
+        Ok(_) => Ok(HttpResponse::Ok().json("Subscribed")),
+        Err(diesel::result::Error::DatabaseError(
+            diesel::result::DatabaseErrorKind::UniqueViolation,
+            _,
+        )) => Ok(HttpResponse::Conflict().json("Already subscribed")),
+        Err(_) => Ok(HttpResponse::InternalServerError().json("Error subscribing")),
+    }
+}
+
+#[delete("/unsubscribe/{id}")]
+async fn unsubscribe_to_train_line(
+    pool: web::Data<DbPool>,
+    id_line: web::Path<i32>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let result = diesel::delete(
+        users_lines::table
+            .filter(users_lines::id_user.eq(id_user).and(users_lines::id_line.eq(*id_line))),
+    )
+    .execute(&mut conn)
+    .await;
+
+    match result {
+        Ok(_) => Ok(HttpResponse::Ok().json("Unsubscribed")),
+        Err(diesel::result::Error::DatabaseError(
+            diesel::result::DatabaseErrorKind::UniqueViolation,
+            _,
+        )) => Ok(HttpResponse::Conflict().json("Not subscribed")),
+        Err(_) => Ok(HttpResponse::InternalServerError().json("Error unsubscribing")),
+    }
+}
+
+#[get("/self")]
+async fn get_self_alerts(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpResponse> {
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
+
+    let reports = reports::table
+        .inner_join(train_lines::table)
+        .inner_join(users_lines::table.on(users_lines::id_line.eq(train_lines::id)))
+        .filter(users_lines::id_user.eq(id_user))
+        .select((
+            train_lines::id,
+            train_lines::name,
+            reports::id,
+            reports::title,
+            reports::description,
+            reports::report_type,
+            reports::created_at,
+        ))
+        .load::<SelfReport>(&mut conn)
+        .await
+        .map_err(actix_web::error::ErrorInternalServerError)?;
+
+    Ok(HttpResponse::Ok().json(reports))
+}
+
 pub fn config_train_lines(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/train_lines").service(get_train_lines).service(get_train_line));
+    cfg.service(
+        web::scope("/train_lines")
+            .service(get_self_alerts)
+            .service(subscribe_to_train_line)
+            .service(get_train_lines)
+            .service(get_train_line)
+            .service(unsubscribe_to_train_line),
+    );
 }

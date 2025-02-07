@@ -13,11 +13,15 @@ import java.io.IOException
 data class ApiResponse(val code: Int, val body: JsonElement?)
 
 object ApiClient {
-    private val client = OkHttpClient()
+    internal var client = OkHttpClient()
     private val json = Json { ignoreUnknownKeys = true }
 
     // NOTE Simon: A modifer avec la vraie adresse IP pour la prod
     private const val URL_START = "http://10.0.2.2:8000/"
+
+    fun setClient(client: OkHttpClient) {
+        this.client = client
+    }
 
     suspend fun getRequest(
         url: String,

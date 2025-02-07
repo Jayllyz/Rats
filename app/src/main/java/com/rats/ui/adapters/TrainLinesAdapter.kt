@@ -1,6 +1,5 @@
 package com.rats.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,13 +31,10 @@ class TrainLinesAdapter(
         holder.name.text = trainLineState.name
         holder.warningIconView.setImageResource(
             if (trainLineState.status == "safe") {
-                Log.d("test", "ici: $trainLineState")
                 R.drawable.safe_notification
             } else if (trainLineState.status == "danger") {
-                Log.d("test", "la: $trainLineState")
                 R.drawable.warning_notification
             } else {
-                Log.d("test", "oeu: $trainLineState")
                 R.drawable.warning_notification
             },
         )

@@ -1,6 +1,5 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>Jayllyz/renovate-config"],
-    "ignoreDeps": ["androidx.core:core-ktx", "androidx.activity:activity"],
     "automerge": false
 }

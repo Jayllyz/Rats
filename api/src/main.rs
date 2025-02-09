@@ -7,6 +7,7 @@ mod schema;
 use actix_cors::Cors;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use api::auth::config_auth;
+use api::messages::config_messages;
 use api::ratings::config_ratings;
 use api::reports::config_reports;
 use api::train_lines::config_train_lines;
@@ -54,6 +55,7 @@ async fn main() -> std::io::Result<()> {
             .configure(config_ratings)
             .configure(config_reports)
             .configure(config_train_lines)
+            .configure(config_messages)
             .default_service(web::route().to(not_found))
             .wrap(cors)
             .wrap(actix_web::middleware::Logger::default())

@@ -1,7 +1,7 @@
 use crate::api::utils;
 use crate::db::DbPool;
 use crate::models::train_lines_models::{
-    Report, SelfReport, TrainLinesReports, TrainLinesResponse,
+    QueryParams, Report, SelfReport, TrainLinesReports, TrainLinesResponse,
 };
 use crate::schema::reports;
 use crate::schema::train_lines;
@@ -11,10 +11,19 @@ use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
 #[get("")]
-async fn get_train_lines(pool: web::Data<DbPool>) -> Result<HttpResponse> {
+async fn get_train_lines(
+    pool: web::Data<DbPool>,
+    query_params: web::Query<QueryParams>,
+) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let train_lines = train_lines::table
+    let mut query = train_lines::table.into_boxed();
+
+    if let Some(ref status) = query_params.status {
+        query = query.filter(train_lines::status.eq(status));
+    }
+
+    let train_lines = query
         .select(TrainLinesResponse::as_select())
         .load::<TrainLinesResponse>(&mut conn)
         .await
@@ -121,7 +130,11 @@ async fn unsubscribe_to_train_line(
 }
 
 #[get("/self")]
-async fn get_self_alerts(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpResponse> {
+async fn get_self_alerts(
+    pool: web::Data<DbPool>,
+    query_params: web::Query<QueryParams>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let id_user = match utils::validate_token(&req) {
@@ -129,10 +142,17 @@ async fn get_self_alerts(pool: web::Data<DbPool>, req: HttpRequest) -> Result<Ht
         Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
     };
 
-    let reports = reports::table
+    let mut query = reports::table
         .inner_join(train_lines::table)
         .inner_join(users_lines::table.on(users_lines::id_line.eq(train_lines::id)))
         .filter(users_lines::id_user.eq(id_user))
+        .into_boxed();
+
+    if let Some(ref status) = query_params.status {
+        query = query.filter(train_lines::status.eq(status));
+    }
+
+    let reports = query
         .select((
             train_lines::id,
             train_lines::name,
@@ -158,4 +178,42 @@ pub fn config_train_lines(cfg: &mut web::ServiceConfig) {
             .service(get_train_line)
             .service(unsubscribe_to_train_line),
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::{
+        http::StatusCode,
+        test::{self, TestRequest},
+        App,
+    };
+
+    #[actix_web::test]
+    async fn test_get_train_lines() {
+        let pool = crate::db::establish_connection();
+        let app = test::init_service(
+            App::new().app_data(web::Data::new(pool)).configure(config_train_lines),
+        )
+        .await;
+
+        let req = TestRequest::get().uri("/train_lines?status=safe").to_request();
+        let resp = test::call_service(&app, req).await;
+
+        assert_eq!(resp.status(), StatusCode::OK);
+    }
+
+    #[actix_web::test]
+    async fn test_get_train_line() {
+        let pool = crate::db::establish_connection();
+        let app = test::init_service(
+            App::new().app_data(web::Data::new(pool)).configure(config_train_lines),
+        )
+        .await;
+
+        let req = TestRequest::get().uri("/train_lines/1").to_request();
+        let resp = test::call_service(&app, req).await;
+
+        assert_eq!(resp.status(), StatusCode::OK);
+    }
 }

@@ -12,6 +12,11 @@ pub struct TrainLinesResponse {
     pub status: String,
 }
 
+#[derive(Deserialize)]
+pub struct QueryParams {
+    pub status: Option<String>,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct TrainLinesReports {
     pub id: i32,

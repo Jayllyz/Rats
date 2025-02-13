@@ -38,7 +38,7 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
             trainLineDtos.map { it.toModel() }
         } else {
             Log.e("error", "Error: ${response.code}")
-            emptyList()
+            throw Exception("Veuillez vérifier votre connexion internet")
         }
     }
 }

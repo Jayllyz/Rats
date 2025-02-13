@@ -46,20 +46,26 @@ tools:context=".ui.activities.TrainLinesActivity">
     </LinearLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         tools:listitem="@layout/item_transport_line_view_holder"
         android:padding="16dp" />
 
-        <!-- Bottom Navigation - Fixed Height -->
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_bottom_navigation"
-            android:name="com.rats.ui.fragments.BottomMenuFragment"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/loadingErrorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/fragment_loading_error" />
+
+    <!-- Bottom Navigation - Fixed Height -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_bottom_navigation"
+        android:name="com.rats.ui.fragments.BottomMenuFragment"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
         tools:layout="@layout/fragment_bottom_menu" />
 
 </LinearLayout>

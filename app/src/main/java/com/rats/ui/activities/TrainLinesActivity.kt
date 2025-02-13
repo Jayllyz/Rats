@@ -15,6 +15,7 @@ import com.rats.R
 import com.rats.RatsApp
 import com.rats.factories.TrainLinesViewModelFactory
 import com.rats.ui.adapters.TrainLinesAdapter
+import com.rats.ui.fragments.LoadingErrorFragment
 import com.rats.viewModels.TrainLinesUiState
 import com.rats.viewModels.TrainLinesViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -28,6 +29,7 @@ class TrainLinesActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var filterSpinner: Spinner
     private lateinit var searchBar: SearchView
+    private lateinit var loadingErrorFragment: LoadingErrorFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,17 @@ class TrainLinesActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
+        loadingErrorFragment = LoadingErrorFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.loadingErrorFragment, loadingErrorFragment)
+            .runOnCommit {
+                initializeViews()
+                setupStateObservers()
+            }
+            .commit()
+    }
+
+    private fun initializeViews() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -78,13 +91,22 @@ class TrainLinesActivity : AppCompatActivity() {
     private fun setupStateObservers() {
         lifecycleScope.launch {
             trainLinesViewModel.uiState.collectLatest { state ->
+                if (!loadingErrorFragment.isAdded) {
+                    return@collectLatest
+                }
+
                 when (state) {
                     is TrainLinesUiState.Loading -> {
+                        loadingErrorFragment.showLoading()
                     }
                     is TrainLinesUiState.Success -> {
+                        loadingErrorFragment.hideLoading()
+                        loadingErrorFragment.hideError()
                         recyclerView.adapter = TrainLinesAdapter(state.lines)
                     }
                     is TrainLinesUiState.Error -> {
+                        loadingErrorFragment.hideLoading()
+                        loadingErrorFragment.showError(state.message)
                     }
                 }
             }

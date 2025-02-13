@@ -39,8 +39,6 @@ object ApiClient {
 
             val finalUrl = httpUrlBuilder.build().toString()
 
-            Log.d("wtf", "getRequest: $finalUrl")
-
             val request =
                 Request.Builder()
                     .url(finalUrl)

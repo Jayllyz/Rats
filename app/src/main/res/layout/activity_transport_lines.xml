@@ -5,7 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_height="match_parent"
 android:fitsSystemWindows="true"
 android:orientation="vertical"
-tools:context=".ui.activities.TransportLinesActivity">
+tools:context=".ui.activities.TrainLinesActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@ tools:context=".ui.activities.TransportLinesActivity">
         android:padding="16dp">
 
         <!-- Search View -->
-        <androidx.appcompat.widget.SearchView
+        <SearchView
             android:id="@+id/searchTrainLine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

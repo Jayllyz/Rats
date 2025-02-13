@@ -4,9 +4,15 @@ import com.rats.data.dao.TrainLinesDao
 import com.rats.models.TrainLines
 
 interface TrainLinesRepository {
-    suspend fun getTrainLines(): List<TrainLines>
+    suspend fun getTrainLines(
+        filter: String?,
+        search: String?,
+    ): List<TrainLines>
 }
 
 class TrainLinesRepositoryImpl(private val trainLinesDao: TrainLinesDao) : TrainLinesRepository {
-    override suspend fun getTrainLines(): List<TrainLines> = trainLinesDao.getTrainLines()
+    override suspend fun getTrainLines(
+        filter: String?,
+        search: String?,
+    ): List<TrainLines> = trainLinesDao.getTrainLines(filter, search)
 }

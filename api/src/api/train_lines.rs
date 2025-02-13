@@ -23,6 +23,10 @@ async fn get_train_lines(
         query = query.filter(train_lines::status.eq(status));
     }
 
+    if let Some(ref search) = query_params.search {
+        query = query.filter(train_lines::name.ilike(format!("%{}%", search)));
+    }
+
     let train_lines = query
         .select(TrainLinesResponse::as_select())
         .load::<TrainLinesResponse>(&mut conn)

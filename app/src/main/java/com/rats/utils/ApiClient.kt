@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
@@ -26,16 +27,24 @@ object ApiClient {
     suspend fun getRequest(
         url: String,
         token: String? = null,
+        queryParams: Map<String, String?>? = null,
     ): ApiResponse {
         return withContext(Dispatchers.IO) {
+            val httpUrlBuilder = (URL_START + url).toHttpUrlOrNull()?.newBuilder() ?: throw IllegalArgumentException("Invalid URL")
+
+            queryParams?.forEach { (key, value) ->
+                httpUrlBuilder.addQueryParameter(key, value)
+            }
+
+            val finalUrl = httpUrlBuilder.build().toString()
+
             val request =
                 Request.Builder()
-                    .url(URL_START + url)
+                    .url(finalUrl)
                     .apply {
                         token?.let { addHeader("Authorization", "Bearer $token") }
                     }
                     .build()
-
             try {
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {

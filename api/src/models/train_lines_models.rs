@@ -3,7 +3,7 @@ use diesel::prelude::*;
 use diesel::Selectable;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Selectable, Deserialize, Queryable)]
+#[derive(Serialize, Selectable, Deserialize, Queryable, Debug)]
 #[diesel(table_name = crate::schema::train_lines)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct TrainLinesResponse {
@@ -15,6 +15,7 @@ pub struct TrainLinesResponse {
 #[derive(Deserialize)]
 pub struct QueryParams {
     pub status: Option<String>,
+    pub search: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]

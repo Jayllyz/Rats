@@ -13,10 +13,16 @@ class MoreMenuActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         setContentView(R.layout.activity_more_menu)
-        val transportLineLayout: LinearLayout = findViewById<LinearLayout>(R.id.transport_line_button)
+        val transportLineLayout: LinearLayout = findViewById(R.id.transport_line_button)
+        val settingsLayout: LinearLayout = findViewById(R.id.settings_button)
 
         transportLineLayout.setOnClickListener {
             val intent = Intent(this, TrainLinesActivity::class.java)
+            startActivity(intent)
+        }
+
+        settingsLayout.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }

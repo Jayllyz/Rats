@@ -15,7 +15,7 @@ tools:context=".ui.activities.TrainLinesActivity">
         android:textAllCaps="true"
         android:gravity="center"
         android:textColor="@color/md_theme_onSurface"
-        android:textSize="14sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:letterSpacing="0.1"/>
 

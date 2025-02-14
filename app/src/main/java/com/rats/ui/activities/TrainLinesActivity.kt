@@ -18,6 +18,7 @@ import com.rats.ui.adapters.TrainLinesAdapter
 import com.rats.ui.fragments.LoadingErrorFragment
 import com.rats.viewModels.TrainLinesUiState
 import com.rats.viewModels.TrainLinesViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -107,6 +108,8 @@ class TrainLinesActivity : AppCompatActivity() {
                     is TrainLinesUiState.Error -> {
                         loadingErrorFragment.hideLoading()
                         loadingErrorFragment.showError(state.message)
+                        delay(5000)
+                        trainLinesViewModel.fetchTrainLines()
                     }
                 }
             }

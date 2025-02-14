@@ -61,10 +61,18 @@ async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Res
                 .await
                 .map_err(actix_web::error::ErrorInternalServerError)?;
 
+            let subscribed = users_lines::table
+                .filter(users_lines::id_line.eq(*id_line))
+                .count()
+                .get_result::<i64>(&mut conn)
+                .await
+                .map_err(actix_web::error::ErrorInternalServerError)?;
+
             Ok(HttpResponse::Ok().json(TrainLinesReports {
                 id: report.id,
                 name: report.name,
                 status: report.status,
+                subscribed: subscribed > 0,
                 reports,
             }))
         }

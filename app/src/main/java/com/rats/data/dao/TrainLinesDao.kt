@@ -1,8 +1,10 @@
 package com.rats.data.dao
 
 import android.util.Log
+import com.rats.data.dto.TrainLineDetailDTO
 import com.rats.data.dto.TrainLinesDTO
 import com.rats.data.mapper.TrainLinesMapper.toModel
+import com.rats.models.TrainLineDetail
 import com.rats.models.TrainLines
 import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
@@ -14,6 +16,8 @@ interface TrainLinesDao {
         filter: String?,
         search: String?,
     ): List<TrainLines>
+
+    suspend fun getTrainLineById(id: Int): TrainLineDetail
 }
 
 class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
@@ -36,6 +40,17 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
         return if (response.code == 200 && response.body != null) {
             val trainLineDtos = json.decodeFromJsonElement<List<TrainLinesDTO>>(response.body)
             trainLineDtos.map { it.toModel() }
+        } else {
+            Log.e("error", "Error: ${response.code}")
+            throw Exception("Veuillez vérifier votre connexion internet")
+        }
+    }
+
+    override suspend fun getTrainLineById(id: Int): TrainLineDetail {
+        val response = apiClient.getRequest("train_lines/$id", token)
+        return if (response.code == 200 && response.body != null) {
+            val trainLineDetailDto = json.decodeFromJsonElement<TrainLineDetailDTO>(response.body)
+            trainLineDetailDto.toModel()
         } else {
             Log.e("error", "Error: ${response.code}")
             throw Exception("Veuillez vérifier votre connexion internet")

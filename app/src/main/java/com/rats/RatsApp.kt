@@ -11,6 +11,7 @@ import com.rats.data.repositories.TrainLinesRepositoryImpl
 import com.rats.data.repositories.UserRepository
 import com.rats.data.repositories.UserRepositoryImpl
 import com.rats.utils.ApiClient
+import com.rats.viewModels.TrainLineDetailViewModel
 
 class RatsApp : Application() {
     val userRepository: UserRepository by lazy {

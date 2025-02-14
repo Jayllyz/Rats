@@ -103,7 +103,7 @@ class TrainLinesActivity : AppCompatActivity() {
                     is TrainLinesUiState.Success -> {
                         loadingErrorFragment.hideLoading()
                         loadingErrorFragment.hideError()
-                        recyclerView.adapter = TrainLinesAdapter(state.lines)
+                        recyclerView.adapter = TrainLinesAdapter(state.lines, this@TrainLinesActivity)
                     }
                     is TrainLinesUiState.Error -> {
                         loadingErrorFragment.hideLoading()

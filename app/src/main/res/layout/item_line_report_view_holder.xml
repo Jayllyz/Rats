@@ -9,7 +9,7 @@
     android:foreground="?attr/selectableItemBackground">
 
     <TextView
-        android:id="@+id/reportTitle"
+        android:id="@+id/tv_report_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"
@@ -18,7 +18,7 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/tv_report_date"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -26,17 +26,17 @@
         />
 
     <TextView
-        android:id="@+id/reportType"
+        android:id="@+id/tv_report_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"
         android:textColor="@color/md_theme_tertiary"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/reportTitle"
-        app:layout_constraintTop_toBottomOf="@+id/reportTitle"/>
+        app:layout_constraintStart_toStartOf="@id/tv_report_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_report_title"/>
 
     <TextView
-        android:id="@+id/reportDate"
+        android:id="@+id/tv_report_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"
@@ -44,23 +44,22 @@
         android:layout_marginEnd="16sp"
         android:textColor="@color/md_theme_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/reportTitle" />
+        app:layout_constraintTop_toTopOf="@id/tv_report_title" />
 
     <TextView
-        android:id="@+id/reportContent"
+        android:id="@+id/tv_report_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"
         android:textSize="14sp"
         android:textColor="@color/md_theme_tertiary"
-        app:layout_constraintTop_toBottomOf="@id/reportType"
-        app:layout_constraintStart_toStartOf="@+id/reportTitle"
+        app:layout_constraintTop_toBottomOf="@id/tv_report_type"
+        app:layout_constraintStart_toStartOf="@+id/tv_report_title"
         android:layout_marginHorizontal="32dp"
         android:paddingBottom="16dp"
         android:layout_marginTop="4dp" />
 
     <View
-        android:id="@+id/bottomBorder"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/md_theme_outline"

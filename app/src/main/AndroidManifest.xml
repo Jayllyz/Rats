@@ -31,6 +31,7 @@
         <activity android:name=".ui.activities.MyWagonActivity" />
         <activity android:name=".ui.activities.SettingsActivity" />
         <activity android:name=".ui.activities.PassengerActivity" />
+        <activity android:name=".ui.activities.TrainLineDetailActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >

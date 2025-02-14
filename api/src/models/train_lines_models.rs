@@ -23,6 +23,7 @@ pub struct TrainLinesReports {
     pub id: i32,
     pub name: String,
     pub status: String,
+    pub subscribed: bool,
     pub reports: Vec<Report>,
 }
 

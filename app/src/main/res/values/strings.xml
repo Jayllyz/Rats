@@ -84,4 +84,5 @@
     <string name="filter_incident">Incident</string>
     <string name="comment_date">28-08-4222</string>
     <string name="error_message">Une erreur est survenue. Veuillez réessayer.</string>
+    <string name="subscribe_icon_desc">Subscribe Icon</string>
 </resources>

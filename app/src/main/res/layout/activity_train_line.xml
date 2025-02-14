@@ -46,9 +46,9 @@
 
         <ImageView
             android:id="@+id/subscribeIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/safe_notification"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/bookmark_transparent_icon"
             android:contentDescription="@string/subscribe_icon_desc"
             android:layout_marginEnd="4dp"
             app:layout_constraintEnd_toEndOf="parent"

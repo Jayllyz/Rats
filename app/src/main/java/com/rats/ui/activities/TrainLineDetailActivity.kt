@@ -48,11 +48,10 @@ class TrainLineDetailActivity : AppCompatActivity() {
         }
 
         trainLineDetailViewModel.subscribed.observe(this) { status ->
-            // TODO: changer avec les vrai icones
             if (status) {
-                subscribeIcon.setImageResource(R.drawable.safe_notification)
+                subscribeIcon.setImageResource(R.drawable.bookmark_filled_icon)
             } else {
-                subscribeIcon.setImageResource(R.drawable.warning_notification)
+                subscribeIcon.setImageResource(R.drawable.bookmark_transparent_icon)
             }
         }
 

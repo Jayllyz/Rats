@@ -57,6 +57,7 @@ async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Res
                     reports::report_type,
                     reports::created_at,
                 ))
+                .order_by(reports::created_at.desc())
                 .load::<Report>(&mut conn)
                 .await
                 .map_err(actix_web::error::ErrorInternalServerError)?;
@@ -83,7 +84,7 @@ async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Res
     }
 }
 
-#[post("/subscribe/{id}")]
+#[post("/{id}/subscribe")]
 async fn subscribe_to_train_line(
     pool: web::Data<DbPool>,
     id_line: web::Path<i32>,
@@ -111,7 +112,7 @@ async fn subscribe_to_train_line(
     }
 }
 
-#[delete("/unsubscribe/{id}")]
+#[delete("/{id}/unsubscribe")]
 async fn unsubscribe_to_train_line(
     pool: web::Data<DbPool>,
     id_line: web::Path<i32>,
@@ -174,6 +175,7 @@ async fn get_self_alerts(
             reports::report_type,
             reports::created_at,
         ))
+        .order_by(reports::created_at.desc())
         .load::<SelfReport>(&mut conn)
         .await
         .map_err(actix_web::error::ErrorInternalServerError)?;

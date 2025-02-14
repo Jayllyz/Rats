@@ -33,16 +33,29 @@ class TrainLineDetailViewModel(private val trainLinesRepository: TrainLinesRepos
             _isLoading.value = true
             try {
                 val detail = trainLinesRepository.getTrainLineById(id)
-                Log.d("wtf", "Detail: $detail")
                 _title.value = detail.name
                 _status.value = detail.status
                 _subscribed.value = detail.subscribed
                 _reports.value = detail.reports
             } catch (e: Exception) {
-                Log.d("wtf", "Error: ${e.message}")
                 _error.value = e.message
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    fun toggleSubscription(id: Int) {
+        viewModelScope.launch {
+            try {
+                if (_subscribed.value == true) {
+                    trainLinesRepository.unsubscribeToTrainLine(id)
+                } else {
+                    trainLinesRepository.subscribeToTrainLine(id)
+                }
+                _subscribed.value = !_subscribed.value!!
+            } catch (e: Exception) {
+                _error.value = e.message
             }
         }
     }

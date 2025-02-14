@@ -122,6 +122,35 @@ object ApiClient {
         }
     }
 
+    suspend fun deleteRequest(
+        url: String,
+        token: String? = null,
+    ): ApiResponse {
+        return withContext(Dispatchers.IO) {
+            val request =
+                Request.Builder()
+                    .url(URL_START + url)
+                    .apply {
+                        token?.let { addHeader("Authorization", "Bearer $token") }
+                    }
+                    .delete()
+                    .build()
+
+            try {
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val bodyString = response.body?.string()
+                    val jsonElement = bodyString?.let { json.parseToJsonElement(it) }
+                    ApiResponse(response.code, jsonElement)
+                } else {
+                    ApiResponse(response.code, null)
+                }
+            } catch (_: IOException) {
+                ApiResponse(500, null)
+            }
+        }
+    }
+
     private fun formatBody(body: JSONObject): RequestBody {
         return body.toString().toRequestBody("application/json".toMediaType())
     }

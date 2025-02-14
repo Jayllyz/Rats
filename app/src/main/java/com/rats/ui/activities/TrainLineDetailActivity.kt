@@ -2,6 +2,7 @@ package com.rats.ui.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -25,6 +26,7 @@ class TrainLineDetailActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var trainLineName: TextView
+    private lateinit var subscribeIcon: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class TrainLineDetailActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         trainLineName = findViewById(R.id.tv_train_line_name)
+        subscribeIcon = findViewById(R.id.subscribeIcon)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -44,7 +47,19 @@ class TrainLineDetailActivity : AppCompatActivity() {
             trainLineName.text = title
         }
 
+        trainLineDetailViewModel.subscribed.observe(this) { status ->
+            // TODO: changer avec les vrai icones
+            if (status) {
+                subscribeIcon.setImageResource(R.drawable.safe_notification)
+            } else {
+                subscribeIcon.setImageResource(R.drawable.warning_notification)
+            }
+        }
+
         val lineId = intent.getIntExtra("id", -1)
+        subscribeIcon.setOnClickListener {
+            trainLineDetailViewModel.toggleSubscription(lineId)
+        }
         trainLineDetailViewModel.fetchTrainLineById(lineId)
     }
 }

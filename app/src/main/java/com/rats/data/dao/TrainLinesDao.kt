@@ -19,7 +19,9 @@ interface TrainLinesDao {
     ): List<TrainLines>
 
     suspend fun getTrainLineById(id: Int): TrainLineDetail
+
     suspend fun subscribeToTrainLine(id: Int)
+
     suspend fun unsubscribeToTrainLine(id: Int)
 }
 
@@ -62,7 +64,7 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
 
     override suspend fun subscribeToTrainLine(id: Int) {
         try {
-            val response = apiClient.postRequest("train_lines/$id/subscribe",JSONObject(), token)
+            val response = apiClient.postRequest("train_lines/$id/subscribe", JSONObject(), token)
             if (response.code != 200) {
                 Log.e("error", "Error: ${response.code}")
                 throw Exception("Veuillez vérifier votre connexion internet")

@@ -1,23 +1,18 @@
 package com.rats.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rats.R
 import com.rats.RatsApp
 import com.rats.factories.TrainLineDetailViewModelFactory
-import com.rats.factories.TrainLinesViewModelFactory
 import com.rats.ui.adapters.TrainLineReportAdapter
 import com.rats.viewModels.TrainLineDetailViewModel
-import com.rats.viewModels.TrainLinesViewModel
 
 class TrainLineDetailActivity : AppCompatActivity() {
     private val trainLineDetailViewModel: TrainLineDetailViewModel by viewModels {

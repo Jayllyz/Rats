@@ -8,4 +8,3 @@ data class TrainLinesDTO(
     val name: String,
     val status: String,
 )
-

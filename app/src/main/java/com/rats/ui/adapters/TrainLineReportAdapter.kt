@@ -8,8 +8,8 @@ import com.rats.models.Report
 import com.rats.ui.viewHolders.TrainLineReportViewHolder
 
 class TrainLineReportAdapter(
-    private val reports: List<Report>
-): RecyclerView.Adapter<TrainLineReportViewHolder>() {
+    private val reports: List<Report>,
+) : RecyclerView.Adapter<TrainLineReportViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -32,15 +32,16 @@ class TrainLineReportAdapter(
         val day = report.createdAt.split("T")[0].split("-")[2]
         val hour = report.createdAt.split("T")[1].split(":")[0]
         val minute = report.createdAt.split("T")[1].split(":")[1]
-        val date = buildString {
-            append(day)
-            append("/")
-            append(month)
-            append(" à ")
-            append(hour)
-            append(":")
-            append(minute)
-        }
+        val date =
+            buildString {
+                append(day)
+                append("/")
+                append(month)
+                append(" à ")
+                append(hour)
+                append(":")
+                append(minute)
+            }
 
         holder.title.text = report.title
         holder.type.text = report.reportType

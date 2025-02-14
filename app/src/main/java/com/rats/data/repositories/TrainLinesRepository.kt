@@ -9,8 +9,11 @@ interface TrainLinesRepository {
         filter: String?,
         search: String?,
     ): List<TrainLines>
+
     suspend fun getTrainLineById(id: Int): TrainLineDetail
+
     suspend fun subscribeToTrainLine(id: Int)
+
     suspend fun unsubscribeToTrainLine(id: Int)
 }
 

@@ -12,11 +12,11 @@ class TrainLineDetailViewModel(private val trainLinesRepository: TrainLinesRepos
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String> = _status
+    private val _status = MutableLiveData<String?>()
+    val status: LiveData<String?> = _status
 
-    private val _subscribed = MutableLiveData<Boolean>()
-    val subscribed: LiveData<Boolean> = _subscribed
+    private val _subscribed = MutableLiveData<Boolean?>()
+    val subscribed: LiveData<Boolean?> = _subscribed
 
     private val _reports = MutableLiveData<List<Report>>()
     val reports: LiveData<List<Report>> = _reports
@@ -36,6 +36,22 @@ class TrainLineDetailViewModel(private val trainLinesRepository: TrainLinesRepos
                 _status.value = detail.status
                 _subscribed.value = detail.subscribed
                 _reports.value = detail.reports
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun fetchSubscribedReports() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                _reports.value = trainLinesRepository.getSubscribedReports()
+                _title.value = "Vos newsletters"
+                _status.value = null
+                _subscribed.value = null
             } catch (e: Exception) {
                 _error.value = e.message
             } finally {

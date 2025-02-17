@@ -1,9 +1,12 @@
 package com.rats.data.dao
 
 import android.util.Log
+import com.rats.data.dto.SubscribedReportDTO
 import com.rats.data.dto.TrainLineDetailDTO
 import com.rats.data.dto.TrainLinesDTO
+import com.rats.data.mapper.ReportMapper.toModel
 import com.rats.data.mapper.TrainLinesMapper.toModel
+import com.rats.models.Report
 import com.rats.models.TrainLineDetail
 import com.rats.models.TrainLines
 import com.rats.utils.ApiClient
@@ -23,6 +26,8 @@ interface TrainLinesDao {
     suspend fun subscribeToTrainLine(id: Int)
 
     suspend fun unsubscribeToTrainLine(id: Int)
+
+    suspend fun getSubscribedReports(): List<Report>
 }
 
 class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
@@ -85,6 +90,17 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
         } catch (e: Exception) {
             Log.e("error", "Error: ${e.message}")
             throw Exception("Il y a eu une erreur lors du désabonnement")
+        }
+    }
+
+    override suspend fun getSubscribedReports(): List<Report> {
+        val response = apiClient.getRequest("train_lines/subscribed", token)
+        return if (response.code == 200 && response.body != null) {
+            val subscribedReportDTOs = json.decodeFromJsonElement<List<SubscribedReportDTO>>(response.body)
+            subscribedReportDTOs.map { it.toModel() }
+        } else {
+            Log.e("error", "Error: ${response.code}")
+            throw Exception("Veuillez vérifier votre connexion internet")
         }
     }
 }

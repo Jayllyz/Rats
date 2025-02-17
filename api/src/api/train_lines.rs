@@ -142,8 +142,8 @@ async fn unsubscribe_to_train_line(
     }
 }
 
-#[get("/self")]
-async fn get_self_alerts(
+#[get("/subscribed")]
+async fn get_subscribed_alerts(
     pool: web::Data<DbPool>,
     query_params: web::Query<QueryParams>,
     req: HttpRequest,
@@ -186,7 +186,7 @@ async fn get_self_alerts(
 pub fn config_train_lines(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/train_lines")
-            .service(get_self_alerts)
+            .service(get_subscribed_alerts)
             .service(subscribe_to_train_line)
             .service(get_train_lines)
             .service(get_train_line)

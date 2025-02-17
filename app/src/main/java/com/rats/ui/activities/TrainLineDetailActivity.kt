@@ -1,6 +1,7 @@
 package com.rats.ui.activities
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -22,6 +23,7 @@ class TrainLineDetailActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var trainLineName: TextView
     private lateinit var subscribeIcon: ImageView
+    private lateinit var statusIcon: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,8 @@ class TrainLineDetailActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         trainLineName = findViewById(R.id.tv_train_line_name)
-        subscribeIcon = findViewById(R.id.subscribeIcon)
+        subscribeIcon = findViewById(R.id.subscribe_icon)
+        statusIcon = findViewById(R.id.status_icon)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -43,10 +46,27 @@ class TrainLineDetailActivity : AppCompatActivity() {
         }
 
         trainLineDetailViewModel.subscribed.observe(this) { status ->
-            if (status) {
+            subscribeIcon.visibility = View.VISIBLE
+            if (status == true) {
                 subscribeIcon.setImageResource(R.drawable.bookmark_filled_icon)
-            } else {
+            } else if (status == false) {
                 subscribeIcon.setImageResource(R.drawable.bookmark_transparent_icon)
+            } else {
+                subscribeIcon.visibility = View.GONE
+            }
+        }
+
+        // TODO: mettre la vrai icone pour incident
+        trainLineDetailViewModel.status.observe(this) { status ->
+            subscribeIcon.visibility = View.VISIBLE
+            if (status == "Sûr") {
+                statusIcon.setImageResource(R.drawable.safe_notification)
+            } else if (status == "Incident") {
+                statusIcon.setImageResource(R.drawable.warning_notification)
+            } else if (status == "Dangereux") {
+                statusIcon.setImageResource(R.drawable.warning_notification)
+            } else {
+                statusIcon.visibility = View.GONE
             }
         }
 
@@ -54,6 +74,10 @@ class TrainLineDetailActivity : AppCompatActivity() {
         subscribeIcon.setOnClickListener {
             trainLineDetailViewModel.toggleSubscription(lineId)
         }
-        trainLineDetailViewModel.fetchTrainLineById(lineId)
+        if (lineId != -1) {
+            trainLineDetailViewModel.fetchTrainLineById(lineId)
+        } else {
+            trainLineDetailViewModel.fetchSubscribedReports()
+        }
     }
 }

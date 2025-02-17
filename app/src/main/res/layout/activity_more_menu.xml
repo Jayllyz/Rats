@@ -81,6 +81,7 @@
                 android:src="@drawable/right_arrow_icon"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/newsletter_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

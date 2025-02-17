@@ -83,4 +83,14 @@
     <string name="filter_safe">Sûr</string>
     <string name="filter_incident">Incident</string>
     <string name="comment_date">28-08-4222</string>
+    <string name="alert_title_sample">Hippopotame Dangereux</string>
+    <string name="alert_date_sample">12 mai 2024</string>
+    <string name="alert_category_sample">Danger imminent</string>
+    <string name="alert_description_sample">Attention un hippopotame s\'est échappé du zoo de vincenne et est rentré dans un wagon</string>
+    <string name="train_icon">train icon</string>
+    <string name="train_name_sample_alert">RER B</string>
+    <string name="icon_alert">icon alert</string>
+    <string name="line_status_sample">Le traffic est sûr</string>
+    <string name="alerts_title_sample">Alertes</string>
+    <string name="follow_icon">follow icon</string>
 </resources>

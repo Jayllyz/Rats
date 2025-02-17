@@ -28,7 +28,7 @@
             android:text="@string/parameters"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/md_theme_background"/>
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
@@ -56,14 +56,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/notifications_title"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/md_theme_onSurface"
                         android:textSize="16sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/notifications_subtitle"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@color/md_theme_tertiary"
                         android:textSize="14sp"/>
                 </LinearLayout>
 
@@ -92,14 +92,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/dark_mode_title"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/md_theme_onSurface"
                         android:textSize="16sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/dark_mode_subtitle"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@color/md_theme_tertiary"
                         android:textSize="14sp"/>
                 </LinearLayout>
 
@@ -126,14 +126,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/security_mode_title"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/md_theme_onSurface"
                         android:textSize="16sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/security_mode_subtitle"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@color/md_theme_tertiary"
                         android:textSize="14sp"/>
                 </LinearLayout>
 
@@ -171,14 +171,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/personal_data_title"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/md_theme_onSurface"
                         android:textSize="16sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/personal_data_subtitle"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@color/md_theme_tertiary"
                         android:textSize="14sp"/>
                 </LinearLayout>
 

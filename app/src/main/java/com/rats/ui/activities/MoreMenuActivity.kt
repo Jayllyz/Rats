@@ -14,9 +14,15 @@ class MoreMenuActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_more_menu)
         val transportLineLayout: LinearLayout = findViewById<LinearLayout>(R.id.transport_line_button)
+        val settingsLayout: LinearLayout = findViewById<LinearLayout>(R.id.settings_button)
 
         transportLineLayout.setOnClickListener {
             val intent = Intent(this, TransportLinesActivity::class.java)
+            startActivity(intent)
+        }
+
+        settingsLayout.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }

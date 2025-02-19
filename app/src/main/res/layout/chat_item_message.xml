@@ -7,7 +7,6 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <!-- Profile Picture -->
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="40dp"
@@ -18,7 +17,6 @@
         android:contentDescription="@string/user_image_alt_sample"
         android:layout_marginEnd="8dp"/>
 
-    <!-- Message Bubble (Container for Username and Message Content) -->
     <LinearLayout
         android:id="@+id/message_bubble"
         android:layout_width="0dp"
@@ -31,7 +29,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="8dp">
 
-        <!-- User Name (Inside Bubble) -->
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
@@ -42,7 +39,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
 
-        <!-- Message Content -->
         <TextView
             android:id="@+id/message_content"
             android:layout_width="wrap_content"
@@ -52,7 +48,6 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
-    <!-- Message Date (Below Bubble) -->
     <TextView
         android:id="@+id/message_date"
         android:layout_width="wrap_content"

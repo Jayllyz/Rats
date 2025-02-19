@@ -100,4 +100,7 @@
     <string name="john_doe">John Doe</string>
     <string name="sample_message_textview">This is a sample message.</string>
     <string name="sample_message_text_date">10:00 AM</string>
+    <string name="chat_wagon_name_sample">Chat du RER B</string>
+    <string name="enter_message_input">Enter Message</string>
+    <string name="text_send_sample">Send</string>
 </resources>

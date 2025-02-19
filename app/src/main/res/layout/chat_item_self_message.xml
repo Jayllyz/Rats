@@ -24,7 +24,7 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You"
+            android:text="@string/myself_message_username"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -35,7 +35,7 @@
             android:id="@+id/message_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is my message."
+            android:text="@string/sample_message_myself"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
     </LinearLayout>
@@ -45,7 +45,7 @@
         android:id="@+id/message_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10:00 AM"
+        android:text="@string/myself_message_date"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="12sp"
         app:layout_constraintTop_toBottomOf="@id/message_bubble"

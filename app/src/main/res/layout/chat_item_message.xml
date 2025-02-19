@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
@@ -14,7 +15,7 @@
         android:src="@drawable/roblox"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="user desc"
+        android:contentDescription="@string/user_image_alt_sample"
         android:layout_marginEnd="8dp"/>
 
     <!-- Message Bubble (Container for Username and Message Content) -->
@@ -35,7 +36,7 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User Name"
+            android:text="@string/john_doe"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -46,7 +47,7 @@
             android:id="@+id/message_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is a sample message."
+            android:text="@string/sample_message_textview"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
     </LinearLayout>
@@ -56,11 +57,12 @@
         android:id="@+id/message_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10:00 AM"
+        android:text="@string/sample_message_text_date"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="10sp"
         app:layout_constraintTop_toBottomOf="@id/message_bubble"
         app:layout_constraintStart_toStartOf="@id/message_bubble"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp"
+        tools:ignore="SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

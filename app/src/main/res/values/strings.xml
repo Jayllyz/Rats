@@ -93,4 +93,11 @@
     <string name="line_status_sample">Le traffic est sûr</string>
     <string name="alerts_title_sample">Alertes</string>
     <string name="follow_icon">follow icon</string>
+    <string name="myself_message_username">You</string>
+    <string name="sample_message_myself">This is my message.</string>
+    <string name="myself_message_date">10:00 AM</string>
+    <string name="user_image_alt_sample">user image alt</string>
+    <string name="john_doe">John Doe</string>
+    <string name="sample_message_textview">This is a sample message.</string>
+    <string name="sample_message_text_date">10:00 AM</string>
 </resources>

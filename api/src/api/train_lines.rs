@@ -6,7 +6,7 @@ use crate::models::train_lines_models::{
 use crate::schema::reports;
 use crate::schema::train_lines;
 use crate::schema::users_lines;
-use actix_web::{delete, get, post, web, HttpRequest, HttpResponse, Result};
+use actix_web::{HttpRequest, HttpResponse, Result, delete, get, post, web};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
@@ -198,9 +198,9 @@ pub fn config_train_lines(cfg: &mut web::ServiceConfig) {
 mod tests {
     use super::*;
     use actix_web::{
+        App,
         http::StatusCode,
         test::{self, TestRequest},
-        App,
     };
 
     #[actix_web::test]

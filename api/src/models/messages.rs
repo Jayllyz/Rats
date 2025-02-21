@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use diesel::{prelude::*, Selectable};
+use diesel::{Selectable, prelude::*};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Selectable, Deserialize, Queryable)]

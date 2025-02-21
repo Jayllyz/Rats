@@ -2,7 +2,7 @@ use crate::api::utils;
 use crate::db::DbPool;
 use crate::models::reports_models::{CreateReport, CreateRequest, ReportResponse};
 use crate::schema::reports;
-use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
+use actix_web::{HttpRequest, HttpResponse, Result, get, post, web};
 use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;

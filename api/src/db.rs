@@ -1,5 +1,5 @@
 use diesel_async::pooled_connection::deadpool::Pool;
-use diesel_async::{pooled_connection::AsyncDieselConnectionManager, AsyncPgConnection};
+use diesel_async::{AsyncPgConnection, pooled_connection::AsyncDieselConnectionManager};
 use dotenvy::dotenv;
 use std::env;
 

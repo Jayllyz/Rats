@@ -5,7 +5,7 @@ mod pagination;
 mod schema;
 
 use actix_cors::Cors;
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{App, HttpResponse, HttpServer, Responder, get, web};
 use api::auth::config_auth;
 use api::messages::config_messages;
 use api::ratings::config_ratings;

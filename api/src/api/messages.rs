@@ -2,7 +2,7 @@ use crate::api::utils;
 use crate::db::DbPool;
 use crate::models::messages::{CreateMessage, MessageResponse, PaginationQuery};
 use crate::schema::messages;
-use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
+use actix_web::{HttpRequest, HttpResponse, Result, get, post, web};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
@@ -78,9 +78,9 @@ pub fn config_messages(cfg: &mut web::ServiceConfig) {
 mod tests {
     use super::*;
     use actix_web::{
+        App,
         http::StatusCode,
         test::{self, TestRequest},
-        App,
     };
 
     #[actix_web::test]

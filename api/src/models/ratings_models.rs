@@ -1,7 +1,7 @@
 use crate::schema::users;
 use chrono::NaiveDateTime;
-use diesel::prelude::*;
 use diesel::Selectable;
+use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Selectable, Deserialize, Queryable)]

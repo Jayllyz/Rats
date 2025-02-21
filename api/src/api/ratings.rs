@@ -5,7 +5,7 @@ use crate::models::ratings_models::{
 };
 use crate::schema::ratings;
 use crate::schema::users;
-use actix_web::{get, post, web, HttpRequest, HttpResponse, Result};
+use actix_web::{HttpRequest, HttpResponse, Result, get, post, web};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
@@ -238,7 +238,7 @@ pub fn config_ratings(cfg: &mut web::ServiceConfig) {
 mod tests {
     use super::*;
     use crate::{api::auth::config_auth, api::utils::user_id_by_email, db};
-    use actix_web::{http, test, App};
+    use actix_web::{App, http, test};
     use db::establish_connection;
     use diesel_async::RunQueryDsl;
 

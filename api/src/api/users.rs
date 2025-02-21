@@ -5,7 +5,7 @@ use crate::models::users_models::SelfResponse;
 use crate::models::users_models::UserResponse;
 use crate::pagination::*;
 use crate::schema::users;
-use actix_web::{get, put, web, HttpRequest, HttpResponse, Result};
+use actix_web::{HttpRequest, HttpResponse, Result, get, put, web};
 use bigdecimal::ToPrimitive;
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
@@ -172,7 +172,7 @@ pub fn config_users(cfg: &mut web::ServiceConfig) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use actix_web::{http, test, App};
+    use actix_web::{App, http, test};
 
     #[actix_web::test]
     async fn get_all_users() {

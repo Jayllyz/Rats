@@ -32,8 +32,8 @@ class LocationService : Service() {
     private lateinit var handler: Handler
     private lateinit var locationUpdateRunnable: Runnable
     private lateinit var userRepository: UserRepository
-    private val normalUpdateInterval = 5000L // 5 seconds
-    private val lowBatteryUpdateInterval = 15000L // 15 seconds
+    private val normalUpdateInterval = 15000L // 15 seconds
+    private val lowBatteryUpdateInterval = 60000L // 1 min
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {

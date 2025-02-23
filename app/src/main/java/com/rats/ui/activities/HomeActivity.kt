@@ -12,14 +12,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rats.R
 import com.rats.services.LocationService
+import com.rats.utils.ApiClient
+import com.rats.utils.TokenManager
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
@@ -29,6 +38,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var userMarker: MarkerOptions
     private var firstLaunch: Boolean = true
+    private val token = TokenManager.getToken()
 
     private val locationReceiver =
         object : BroadcastReceiver() {
@@ -40,6 +50,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                     val latitude = intent.getDoubleExtra("latitude", 0.0)
                     val longitude = intent.getDoubleExtra("longitude", 0.0)
                     updateMapWithLocation(latitude, longitude)
+                    fetchNearbyUsers()
                 }
             }
         }
@@ -107,8 +118,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             startForegroundService(serviceIntent)
         } else {
             startService(serviceIntent)
-//            si on veut l'arreter
-//            stopService(serviceIntent)
         }
     }
 
@@ -128,8 +137,47 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun fetchNearbyUsers() {
+        lifecycleScope.launch {
+            val response = ApiClient.getRequest("users/nearby", token)
+            if (response.code == 200) {
+                response.body?.let { jsonElement ->
+                    val users = parseUsersFromJson(jsonElement)
+                    updateMapWithNearbyUsers(users)
+                }
+            } else {
+                Log.e("HomeActivityCall", "Failed to fetch nearby users")
+            }
+        }
+    }
+
+    private fun parseUsersFromJson(jsonElement: JsonElement): List<User> {
+        val users = mutableListOf<User>()
+        val jsonArray = jsonElement.jsonArray
+        for (item in jsonArray) {
+            val jsonObject = item.jsonObject
+            val id = jsonObject["id"]?.jsonPrimitive?.content ?: ""
+            val name = jsonObject["name"]?.jsonPrimitive?.content ?: ""
+            val userLatitude = jsonObject["latitude"]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
+            val userLongitude = jsonObject["longitude"]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
+            users.add(User(id, userLatitude, userLongitude, name))
+        }
+        return users
+    }
+
+    private fun updateMapWithNearbyUsers(users: List<User>) {
+        if (::mMap.isInitialized) {
+            for (user in users) {
+                val userLocation = LatLng(user.latitude, user.longitude)
+                mMap.addMarker(MarkerOptions().position(userLocation).title(user.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)))
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(locationReceiver)
     }
+
+    data class User(val id: String, val latitude: Double, val longitude: Double, val name: String)
 }

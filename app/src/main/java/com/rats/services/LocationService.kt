@@ -3,8 +3,10 @@ package com.rats.services
 import android.Manifest
 import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.BatteryManager
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -26,7 +28,8 @@ class LocationService : Service() {
     private lateinit var handler: Handler
     private lateinit var locationUpdateRunnable: Runnable
     private lateinit var userRepository: UserRepository
-    private val updateInterval = 5000L // 5 secondes
+    private val normalUpdateInterval = 5000L // 5 seconds
+    private val lowBatteryUpdateInterval = 15000L // 15 seconds
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onCreate() {
@@ -35,22 +38,30 @@ class LocationService : Service() {
         handler = Handler(Looper.getMainLooper())
         val app = applicationContext as RatsApp
         userRepository = app.userRepository
+
         startLocationUpdates()
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 
     private fun startLocationUpdates() {
         locationUpdateRunnable =
             object : Runnable {
                 override fun run() {
                     fetchUserLocation()
-                    handler.postDelayed(this, updateInterval)
+                    val interval = if (isBatteryLow()) lowBatteryUpdateInterval else normalUpdateInterval
+                    handler.postDelayed(this, interval)
                 }
             }
         handler.post(locationUpdateRunnable)
+    }
+
+    private fun isBatteryLow(): Boolean {
+        val batteryStatus = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        val level = batteryStatus?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val scale = batteryStatus?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+        val batteryPct = level * 100 / scale.toFloat()
+        return batteryPct <= 30
     }
 
     private fun fetchUserLocation() {
@@ -67,7 +78,7 @@ class LocationService : Service() {
             location?.let {
                 // Paris
                 val userLocation = UserLocationDTO(48.8566, 2.3522)
-//                val userLocation = UserLocationDTO(it.latitude, it.longitude)
+                // val userLocation = UserLocationDTO(it.latitude, it.longitude)
                 sendLocationToServer(userLocation)
                 sendLocationBroadcast(userLocation)
             }

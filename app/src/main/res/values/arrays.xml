@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="filter_options">
+        <item />
         <item>@string/filter_safe</item>
         <item>@string/filter_dangerous</item>
         <item>@string/filter_incident</item>

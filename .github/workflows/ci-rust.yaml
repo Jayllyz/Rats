@@ -25,7 +25,7 @@ env:
   CARGO_TERM_COLOR: always
   RUST_LOG: info
   RUST_BACKTRACE: 1
-  RUSTFLAGS: "-Dwarnings"
+  RUSTFLAGS: "-Dwarnings -C debuginfo=0"
   DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
 
 jobs:
@@ -50,7 +50,7 @@ jobs:
       run: cargo fmt --all --check
 
     - name: Run Clippy
-      run: cargo clippy
+      run: cargo clippy --all-targets --all-features
 
   test:
     name: Test

@@ -49,7 +49,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (intent?.action == "LOCATION_UPDATE") {
                     val latitude = intent.getDoubleExtra("latitude", 0.0)
                     val longitude = intent.getDoubleExtra("longitude", 0.0)
-                    Log.d("HomeActivity", "Updating map with location: $latitude, $longitude")
                     updateMapWithLocation(latitude, longitude)
                     fetchNearbyUsers()
                 }
@@ -94,7 +93,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                 LOCATION_PERMISSION_REQUEST_CODE,
             )
         } else {
-            Log.d("HomeActivity", "Starting location service")
             startLocationService()
         }
     }

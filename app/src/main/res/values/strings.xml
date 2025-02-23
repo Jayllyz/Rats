@@ -68,7 +68,6 @@
     <string name="right_arrow_desc">right arrow desc</string>
     <string name="map_icon_more_desc">map_icon_more_desc</string>
     <string name="alert_icon_more_desc">alert_icon_more_desc</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -85,4 +84,5 @@
     <string name="comment_date">28-08-4222</string>
     <string name="error_message">Une erreur est survenue. Veuillez réessayer.</string>
     <string name="subscribe_icon_desc">Subscribe Icon</string>
+    <string name="wagon_image_desc">Image de votre wagon</string>
 </resources>

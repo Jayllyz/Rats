@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Title TextView -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
@@ -22,7 +21,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.5" />
 
-    <!-- Alert LinearLayout -->
     <LinearLayout
         android:id="@+id/alertLayout"
         android:layout_width="0dp"
@@ -39,6 +37,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/warning_icon_desc"
             android:src="@drawable/baseline_warning_amber_24"
             android:layout_margin="8dp" />
 
@@ -48,7 +47,6 @@
             android:text="@string/alert_in_train_template" />
     </LinearLayout>
 
-    <!-- Wagon Name TextView -->
     <TextView
         android:id="@+id/wagonNameTextView"
         android:layout_width="0dp"
@@ -62,11 +60,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- ImageView -->
     <ImageView
         android:id="@+id/wagonImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/wagon_image_desc"
         android:minHeight="200dp"
         android:maxHeight="200dp"
         android:adjustViewBounds="true"
@@ -76,7 +74,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_wagon"
         android:layout_width="0dp"
@@ -87,7 +84,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Bottom Navigation FragmentContainerView -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_bottom_navigation"
         android:name="com.rats.ui.fragments.BottomMenuFragment"

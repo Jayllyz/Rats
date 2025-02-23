@@ -1,17 +1,21 @@
 package com.rats.services
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.BatteryManager
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.rats.RatsApp
@@ -32,6 +36,11 @@ class LocationService : Service() {
     private val lowBatteryUpdateInterval = 15000L // 15 seconds
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    companion object {
+        private const val NOTIFICATION_CHANNEL_ID = "location_service_channel"
+        private const val NOTIFICATION_ID = 1
+    }
+
     override fun onCreate() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -39,7 +48,34 @@ class LocationService : Service() {
         val app = applicationContext as RatsApp
         userRepository = app.userRepository
 
+        startForeground()
         startLocationUpdates()
+    }
+
+    private fun startForeground() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel =
+                NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    "Background Service",
+                    NotificationManager.IMPORTANCE_NONE,
+                ).apply {
+                    setShowBadge(false)
+                }
+
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification =
+            NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                .setOngoing(true)
+                .setSilent(true)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .build()
+
+        startForeground(NOTIFICATION_ID, notification)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -76,9 +112,8 @@ class LocationService : Service() {
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
-                // Paris
-                val userLocation = UserLocationDTO(48.8566, 2.3522)
                 // val userLocation = UserLocationDTO(it.latitude, it.longitude)
+                val userLocation = UserLocationDTO(48.8566, 2.3522)
                 sendLocationToServer(userLocation)
                 sendLocationBroadcast(userLocation)
             }
@@ -88,8 +123,7 @@ class LocationService : Service() {
     private fun sendLocationToServer(location: UserLocationDTO) {
         serviceScope.launch {
             try {
-                val userLocation = UserLocationDTO(location.latitude, location.longitude)
-                userRepository.updateUserLocation(userLocation)
+                userRepository.updateUserLocation(location)
             } catch (e: Exception) {
                 Log.e("LocationService", "Failed to update user location", e)
             }

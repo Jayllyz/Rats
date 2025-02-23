@@ -27,10 +27,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToAppropriateScreen() {
-        val intent = when (TokenManager.getToken() != null) {
-            true -> Intent(this, HomeActivity::class.java)
-            false -> Intent(this, LoginActivity::class.java)
-        }
+        val intent =
+            when (TokenManager.getToken() != null) {
+                true -> Intent(this, HomeActivity::class.java)
+                false -> Intent(this, LoginActivity::class.java)
+            }
 
         startActivity(intent)
         finish()

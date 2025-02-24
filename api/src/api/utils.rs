@@ -80,7 +80,7 @@ pub async fn user_exists(
 }
 
 pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
-    const EARTH_RADIUS_METERS: f64 = 6_371_000.0;
+    const EARTH_RADIUS_KM: f64 = 6_371.0;
 
     let d_lat = (lat2 - lat1).to_radians();
     let d_lon = (lon2 - lon1).to_radians();
@@ -93,7 +93,7 @@ pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
 
     let coords = 2.0 * angle.sqrt().atan2((1.0 - angle).sqrt());
 
-    EARTH_RADIUS_METERS * coords
+    EARTH_RADIUS_KM * coords
 }
 
 #[allow(dead_code)] // Used in tests
@@ -135,9 +135,9 @@ mod tests {
         let london_lat = 51.5074;
         let london_lon = -0.1278;
 
-        let expected_meters = 344_000.0;
+        let expected_km = 343.0;
         let calculated = haversine_distance(paris_lat, paris_lon, london_lat, london_lon);
 
-        assert!((calculated - expected_meters).abs() < expected_meters * 0.05);
+        assert!((calculated - expected_km).abs() < expected_km * 0.05);
     }
 }

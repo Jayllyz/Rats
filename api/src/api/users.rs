@@ -117,14 +117,7 @@ async fn get_nearby_user(pool: web::Data<DbPool>, req: HttpRequest) -> Result<Ht
         Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
     };
 
-    let mut conn = match pool.get().await {
-        Ok(conn) => conn,
-        Err(_) => {
-            return Err(actix_web::error::ErrorInternalServerError(
-                "Couldn't get db connection from pool",
-            ));
-        }
-    };
+    let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let user = match users::table
         .filter(users::id.eq(id_user))
@@ -167,7 +160,7 @@ async fn get_nearby_user(pool: web::Data<DbPool>, req: HttpRequest) -> Result<Ht
                     u_lat.to_f64().unwrap(),
                     u_lon.to_f64().unwrap(),
                 );
-                distance <= 2.0 // 2 km
+                distance <= 5.0 // 5 km
             } else {
                 false
             }

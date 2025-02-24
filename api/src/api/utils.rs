@@ -135,9 +135,9 @@ mod tests {
         let london_lat = 51.5074;
         let london_lon = -0.1278;
 
-        let expected_meters = 344_000.0;
+        let expected_km = 343.0;
         let calculated = haversine_distance(paris_lat, paris_lon, london_lat, london_lon);
 
-        assert!((calculated - expected_meters).abs() < expected_meters * 0.05);
+        assert!((calculated - expected_km).abs() < expected_km * 0.05);
     }
 }

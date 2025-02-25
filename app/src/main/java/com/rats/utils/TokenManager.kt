@@ -2,13 +2,13 @@ package com.rats.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.days
 
 object TokenManager {
     private const val PREFS_NAME = "app_prefs"
     private const val TOKEN_KEY = "token"
     private const val TOKEN_TIMESTAMP_KEY = "token_timestamp"
-    private val TOKEN_EXPIRATION_DURATION = 24.hours.inWholeMilliseconds
+    private val TOKEN_EXPIRATION_DURATION = 7.days.inWholeMilliseconds
 
     private var sharedPreferences: SharedPreferences? = null
 

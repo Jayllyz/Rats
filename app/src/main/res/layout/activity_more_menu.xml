@@ -113,6 +113,40 @@
                 android:contentDescription="@string/right_arrow_desc"
                 android:src="@drawable/right_arrow_icon"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/menu_item_rounded"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/logout_icon_desc"
+                android:src="@drawable/logout_svg"
+                android:layout_marginEnd="16dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/menu_more_logout"
+                android:textSize="16sp"
+                android:textColor="@color/md_theme_error"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/right_arrow_desc"
+                android:src="@drawable/right_arrow_icon"/>
+        </LinearLayout>
     </LinearLayout>
 
 

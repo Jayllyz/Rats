@@ -21,7 +21,7 @@ pub struct Claims {
 pub fn create_token(user_id: &i32) -> Result<String, jsonwebtoken::errors::Error> {
     let expiration =
         SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards").as_secs()
-            + 24 * 60 * 60; // 24 hours from now
+            + 7 * 24 * 60 * 60; // 1 week from now
 
     let claims = Claims { sub: *user_id, exp: expiration };
     dotenvy::dotenv().ok();

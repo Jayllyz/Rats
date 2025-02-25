@@ -56,13 +56,12 @@ class TrainLineDetailActivity : AppCompatActivity() {
             }
         }
 
-        // TODO: mettre la vrai icone pour incident
         trainLineDetailViewModel.status.observe(this) { status ->
             subscribeIcon.visibility = View.VISIBLE
             if (status == "Sûr") {
                 statusIcon.setImageResource(R.drawable.safe_notification)
             } else if (status == "Incident") {
-                statusIcon.setImageResource(R.drawable.warning_notification)
+                statusIcon.setImageResource(R.drawable.warning_icon)
             } else if (status == "Dangereux") {
                 statusIcon.setImageResource(R.drawable.warning_notification)
             } else {

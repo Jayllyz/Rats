@@ -1,16 +1,25 @@
--- Your SQL goes here
 INSERT INTO train_lines (name, status) VALUES
-('Ligne 1', 'safe'),
-('Ligne 2', 'safe'),
-('Ligne 3', 'safe'),
-('Ligne 4', 'safe'),
-('Ligne 5', 'safe'),
-('Ligne 6', 'safe'),
-('Ligne 7', 'safe'),
-('Ligne 8', 'safe'),
-('Ligne 9', 'safe'),
-('Ligne 10', 'safe'),
-('Ligne 11', 'safe'),
-('Ligne 12', 'safe'),
-('Ligne 13', 'safe'),
-('Ligne 14', 'safe');
+-- Métro
+('Métro 1', 'safe'),
+('Métro 2', 'safe'),
+('Métro 3', 'safe'),
+('Métro 3bis', 'safe'),
+('Métro 4', 'danger'),
+('Métro 5', 'safe'),
+('Métro 6', 'warning'),
+('Métro 7', 'safe'),
+('Métro 7bis', 'safe'),
+('Métro 8', 'warning'),
+('Métro 9', 'safe'),
+('Métro 10', 'safe'),
+('Métro 11', 'danger'),
+('Métro 12', 'safe'),
+('Métro 13', 'danger'),
+('Métro 14', 'safe'),
+
+-- RER
+('RER A', 'warning'),
+('RER B', 'danger'),
+('RER C', 'warning'),
+('RER D', 'danger'),
+('RER E', 'safe');

@@ -11,7 +11,6 @@
     <string name="parameters">Paramètres</string>
     <string name="placeholder">TODO</string>
     <string name="activity_wagon_title">Mon wagon</string>
-    <!-- Settings sections -->
     <string name="notifications_title">Notifications</string>
     <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>
     <string name="dark_mode_title">Mode sombre</string>
@@ -85,4 +84,10 @@
     <string name="error_message">Une erreur est survenue. Veuillez réessayer.</string>
     <string name="subscribe_icon_desc">Subscribe Icon</string>
     <string name="wagon_image_desc">Image de votre wagon</string>
+    <string name="menu_more_logout">Déconnexion</string>
+    <string name="logout_icon_desc">Déconnexion bouton</string>
+    <string name="logout_dialog_title">Déconnexion</string>
+    <string name="logout_dialog_message">Voulez-vous vraiment vous déconnecter ?</string>
+    <string name="logout_dialog_confirm">Confirmer</string>
+    <string name="logout_dialog_cancel">Annuler</string>
 </resources>

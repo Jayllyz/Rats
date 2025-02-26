@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <application
         android:name=".RatsApp"
@@ -40,6 +41,7 @@
         <activity android:name=".ui.activities.SettingsActivity" />
         <activity android:name=".ui.activities.PassengerActivity" />
         <activity android:name=".ui.activities.TrainLineDetailActivity" />
+        <activity android:name=".ui.activities.RatingActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >
@@ -50,7 +52,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.LocationService" />
+        <service
+            android:name=".services.LocationService"
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>

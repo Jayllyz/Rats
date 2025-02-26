@@ -11,7 +11,6 @@
     <string name="parameters">Paramètres</string>
     <string name="placeholder">TODO</string>
     <string name="activity_wagon_title">Mon wagon</string>
-    <!-- Settings sections -->
     <string name="notifications_title">Notifications</string>
     <string name="notifications_subtitle">Recevoir les alertes et mises à jour</string>
     <string name="dark_mode_title">Mode sombre</string>
@@ -42,8 +41,8 @@
     <string name="passenger_rating_sample">Rating: 4.5/5</string>
     <string name="passenger_comments_title">Comments</string>
     <string name="passenger_number_ratings">422 users rates</string>
-    <string name="report_passenger_button_content">Report Passenger</string>
-    <string name="rate_passenger_button_content">Give Note</string>
+    <string name="report_passenger_button_content">Signaler un passager</string>
+    <string name="rate_passenger_button_content">Donner une note</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_plus">Plus</string>
     <string name="menu_chat">Chat</string>
@@ -68,7 +67,6 @@
     <string name="right_arrow_desc">right arrow desc</string>
     <string name="map_icon_more_desc">map_icon_more_desc</string>
     <string name="alert_icon_more_desc">alert_icon_more_desc</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -105,4 +103,16 @@
     <string name="text_send_sample">Send</string>
     <string name="error_message">Une erreur est survenue. Veuillez réessayer.</string>
     <string name="subscribe_icon_desc">Subscribe Icon</string>
+    <string name="wagon_image_desc">Image de votre wagon</string>
+    <string name="menu_more_logout">Déconnexion</string>
+    <string name="logout_icon_desc">Déconnexion bouton</string>
+    <string name="logout_dialog_title">Déconnexion</string>
+    <string name="logout_dialog_message">Voulez-vous vraiment vous déconnecter ?</string>
+    <string name="logout_dialog_confirm">Confirmer</string>
+    <string name="logout_dialog_cancel">Annuler</string>
+    <string name="star_rating">Star icon for ratings</string>
+    <string name="rating_comment_text">Votre commentaire</string>
+    <string name="leave_your_comment_here">Ecrivez votre commentaire</string>
+    <string name="cancel">Annuler</string>
+    <string name="submit">Valider</string>
 </resources>

@@ -13,15 +13,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        TokenManager.init(this)
+        initializeTokenManager()
+        navigateToAppropriateScreen()
+    }
 
-//        TokenManager.deleteToken()
-
-        if (TokenManager.getToken() != null) {
-            startActivity(Intent(this, HomeActivity::class.java))
-        } else {
-            startActivity(Intent(this, LoginActivity::class.java))
+    private fun initializeTokenManager() {
+        try {
+            TokenManager.init(applicationContext)
+        } catch (_: Exception) {
+            navigateToLogin()
+            return
         }
+    }
+
+    private fun navigateToAppropriateScreen() {
+        val intent =
+            when (TokenManager.getToken() != null) {
+                true -> Intent(this, HomeActivity::class.java)
+                false -> Intent(this, LoginActivity::class.java)
+            }
+
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }

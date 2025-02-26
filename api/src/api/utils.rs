@@ -2,11 +2,11 @@ use crate::models::users_models::UserResponse;
 use crate::schema::users;
 use actix_web::{HttpRequest, Result};
 use diesel::prelude::*;
-use diesel_async::pooled_connection::deadpool;
 use diesel_async::AsyncPgConnection;
 use diesel_async::RunQueryDsl;
-use jsonwebtoken::{decode, DecodingKey, Validation};
-use jsonwebtoken::{encode, EncodingKey, Header};
+use diesel_async::pooled_connection::deadpool;
+use jsonwebtoken::{DecodingKey, Validation, decode};
+use jsonwebtoken::{EncodingKey, Header, encode};
 use serde::Deserialize;
 use serde::Serialize;
 use std::env;
@@ -21,7 +21,7 @@ pub struct Claims {
 pub fn create_token(user_id: &i32) -> Result<String, jsonwebtoken::errors::Error> {
     let expiration =
         SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards").as_secs()
-            + 24 * 60 * 60; // 24 hours from now
+            + 7 * 24 * 60 * 60; // 1 week from now
 
     let claims = Claims { sub: *user_id, exp: expiration };
     dotenvy::dotenv().ok();
@@ -80,7 +80,7 @@ pub async fn user_exists(
 }
 
 pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
-    const EARTH_RADIUS_METERS: f64 = 6_371_000.0;
+    const EARTH_RADIUS_KM: f64 = 6_371.0;
 
     let d_lat = (lat2 - lat1).to_radians();
     let d_lon = (lon2 - lon1).to_radians();
@@ -93,7 +93,7 @@ pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
 
     let coords = 2.0 * angle.sqrt().atan2((1.0 - angle).sqrt());
 
-    EARTH_RADIUS_METERS * coords
+    EARTH_RADIUS_KM * coords
 }
 
 #[allow(dead_code)] // Used in tests
@@ -135,9 +135,9 @@ mod tests {
         let london_lat = 51.5074;
         let london_lon = -0.1278;
 
-        let expected_meters = 344_000.0;
+        let expected_km = 343.0;
         let calculated = haversine_distance(paris_lat, paris_lon, london_lat, london_lon);
 
-        assert!((calculated - expected_meters).abs() < expected_meters * 0.05);
+        assert!((calculated - expected_km).abs() < expected_km * 0.05);
     }
 }

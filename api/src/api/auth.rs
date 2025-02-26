@@ -4,7 +4,7 @@ use crate::models::users_models::{
     CreateUser, FullUserResponse, LoginRequest, LoginResponse, SignupRequest, UserResponse,
 };
 use crate::schema::users;
-use actix_web::{post, web, HttpResponse, Result};
+use actix_web::{HttpResponse, Result, post, web};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 use password_auth::{generate_hash, verify_password};
@@ -83,7 +83,7 @@ mod tests {
     use crate::{db, models};
 
     use super::*;
-    use actix_web::{http, test, App};
+    use actix_web::{App, http, test};
     use db::establish_connection;
     use models::users_models::CreateUser;
     use std::time::{SystemTime, UNIX_EPOCH};

@@ -5,9 +5,10 @@ use crate::models::users_models::SelfResponse;
 use crate::models::users_models::UserResponse;
 use crate::pagination::*;
 use crate::schema::users;
-use actix_web::{get, put, web, HttpRequest, HttpResponse, Result};
+use actix_web::{HttpRequest, HttpResponse, Result, get, put, web};
 use bigdecimal::ToPrimitive;
 use diesel::prelude::*;
+use diesel::result::Error;
 use diesel_async::RunQueryDsl;
 use serde_json::json;
 
@@ -118,40 +119,51 @@ async fn get_nearby_user(pool: web::Data<DbPool>, req: HttpRequest) -> Result<Ht
 
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let user = users::table
+    let user = match users::table
         .filter(users::id.eq(id_user))
         .select(UserResponse::as_select())
         .first::<UserResponse>(&mut conn)
         .await
-        .map_err(|e| match e {
-            diesel::result::Error::NotFound => actix_web::error::ErrorNotFound("User not found"),
-            _ => actix_web::error::ErrorInternalServerError(format!("Database error: {}", e)),
-        })?;
+    {
+        Ok(user) => user,
+        Err(Error::NotFound) => {
+            return Err(actix_web::error::ErrorNotFound("User not found"));
+        }
+        Err(_) => return Err(actix_web::error::ErrorInternalServerError("Database error")),
+    };
 
-    let nearby_users = users::table
+    let nearby_users = match users::table
         .filter(users::id.ne(id_user))
         .select(UserResponse::as_select())
         .load::<UserResponse>(&mut conn)
         .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Error querying nearby users"))?;
+    {
+        Ok(users) => users,
+        Err(_) => {
+            return Err(actix_web::error::ErrorInternalServerError("Error querying nearby users"));
+        }
+    };
 
     let nearby_users = nearby_users
         .into_iter()
         .filter(|u| u.latitude.is_some() && u.longitude.is_some())
         .filter(|u| {
-            let distance = utils::haversine_distance(
-                user.latitude.clone().unwrap().to_f64().unwrap(),
-                user.longitude.clone().unwrap().to_f64().unwrap(),
-                u.latitude.clone().unwrap().to_f64().unwrap(),
-                u.longitude.clone().unwrap().to_f64().unwrap(),
-            );
-
-            // println!(
-            //     "ID {}: {:} m",
-            //     u.id, distance
-            // );
-
-            distance <= 5.0
+            if let (Some(user_lat), Some(user_lon), Some(u_lat), Some(u_lon)) = (
+                user.latitude.clone(),
+                user.longitude.clone(),
+                u.latitude.clone(),
+                u.longitude.clone(),
+            ) {
+                let distance = utils::haversine_distance(
+                    user_lat.to_f64().unwrap(),
+                    user_lon.to_f64().unwrap(),
+                    u_lat.to_f64().unwrap(),
+                    u_lon.to_f64().unwrap(),
+                );
+                distance <= 5.0 // 5 km
+            } else {
+                false
+            }
         })
         .collect::<Vec<UserResponse>>();
 
@@ -172,7 +184,7 @@ pub fn config_users(cfg: &mut web::ServiceConfig) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use actix_web::{http, test, App};
+    use actix_web::{App, http, test};
 
     #[actix_web::test]
     async fn get_all_users() {

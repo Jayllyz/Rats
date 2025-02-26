@@ -2,8 +2,8 @@ use diesel::pg::Pg;
 use diesel::prelude::*;
 use diesel::query_builder::*;
 use diesel::sql_types::BigInt;
-use diesel_async::methods::LoadQuery;
 use diesel_async::AsyncPgConnection;
+use diesel_async::methods::LoadQuery;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -33,11 +33,7 @@ where
     D: serde::Deserializer<'de>,
 {
     let page = i64::deserialize(deserializer)?;
-    if page < MIN_PAGE {
-        Ok(MIN_PAGE)
-    } else {
-        Ok(page)
-    }
+    if page < MIN_PAGE { Ok(MIN_PAGE) } else { Ok(page) }
 }
 
 fn validate_page_size<'de, D>(deserializer: D) -> Result<i64, D::Error>

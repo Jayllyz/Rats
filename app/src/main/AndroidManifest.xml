@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.Chat"
+            android:name=".ui.activities.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.TrainLineActivity"

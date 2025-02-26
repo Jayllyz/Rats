@@ -95,4 +95,10 @@
     <string name="leave_your_comment_here">Ecrivez votre commentaire</string>
     <string name="cancel">Annuler</string>
     <string name="submit">Valider</string>
+    <string name="report_title">Signaler</string>
+    <string name="report_description_text">Description</string>
+    <string name="report_reason_text">Type d\'incident</string>
+    <string name="report_description_hint">Donnez une description pour l\'incident</string>
+    <string name="report_title_hint">Ceci sera affiché en premier</string>
+    <string name="report_title_text">Description rapide</string>
 </resources>

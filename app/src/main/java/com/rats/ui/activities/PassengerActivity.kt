@@ -28,6 +28,7 @@ class PassengerActivity : AppCompatActivity() {
 
         val recyclerView: RecyclerView = findViewById(R.id.comments_recycler_view)
         val ratingButton: Button = findViewById(R.id.note_button)
+        val reportButton: Button = findViewById(R.id.report_button)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         passengerViewModel.ratings.observe(this) { ratings ->
@@ -64,6 +65,14 @@ class PassengerActivity : AppCompatActivity() {
                 Intent(this, RatingActivity::class.java).apply {
                     putExtra("id", userId)
                     putExtra("name", name.text)
+                }
+            startActivity(intent)
+        }
+
+        reportButton.setOnClickListener {
+            val intent =
+                Intent(this, ReportActivity::class.java).apply {
+                    putExtra("id", userId)
                 }
             startActivity(intent)
         }

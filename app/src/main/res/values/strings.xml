@@ -96,4 +96,14 @@
     <string name="leave_your_comment_here">Ecrivez votre commentaire</string>
     <string name="cancel">Annuler</string>
     <string name="submit">Valider</string>
+    <string name="user_information">Vos informations</string>
+    <string name="profile_title">Bonjour</string>
+    <string name="user_registered">Membre depuis le</string>
+    <string name="_5">/5</string>
+    <string name="user_rating">Votre évaluation</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <plurals name="rating_count_format">
+        <item quantity="one">Basé sur %d évaluation</item>
+        <item quantity="other">Basé sur %d évaluations</item>
+    </plurals>
 </resources>

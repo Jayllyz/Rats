@@ -4,6 +4,7 @@ use crate::models::users_models::PositionRequest;
 use crate::models::users_models::SelfResponse;
 use crate::models::users_models::UserResponse;
 use crate::pagination::*;
+use crate::schema::ratings;
 use crate::schema::users;
 use actix_web::{HttpRequest, HttpResponse, Result, get, put, web};
 use bigdecimal::ToPrimitive;
@@ -72,8 +73,32 @@ async fn get_self(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpRespo
 
     match result {
         Ok(user) => {
-            let user_response =
-                SelfResponse { id: user.id, name: user.name.clone(), email: user.email.clone() };
+            let ratings = ratings::table
+                .filter(ratings::id_receiver.eq(id_user))
+                .select(ratings::stars)
+                .load::<i32>(&mut conn)
+                .await
+                .map_err(|_| {
+                    actix_web::error::ErrorInternalServerError("Error querying ratings")
+                })?;
+
+            let rating = if ratings.is_empty() {
+                0.0
+            } else {
+                let sum: i32 = ratings.iter().sum();
+                sum as f64 / ratings.len() as f64
+            };
+
+            let rating_count = ratings.len();
+
+            let user_response = SelfResponse {
+                id: user.id,
+                name: user.name.clone(),
+                email: user.email.clone(),
+                rating,
+                rating_count,
+                created_at: user.created_at.clone(),
+            };
 
             Ok(HttpResponse::Ok().json(user_response))
         }

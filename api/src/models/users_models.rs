@@ -23,6 +23,7 @@ pub struct FullUserResponse {
     pub latitude: Option<BigDecimal>,
     pub longitude: Option<BigDecimal>,
     pub token: Option<String>,
+    pub created_at: Option<chrono::NaiveDateTime>,
 }
 
 #[derive(Serialize, Selectable, Deserialize, Queryable)]
@@ -35,6 +36,7 @@ pub struct UserResponse {
     pub latitude: Option<BigDecimal>,
     pub longitude: Option<BigDecimal>,
     pub token: Option<String>,
+    pub created_at: Option<chrono::NaiveDateTime>,
 }
 
 #[derive(Deserialize)]
@@ -60,8 +62,10 @@ pub struct SelfResponse {
     pub id: i32,
     pub name: String,
     pub email: String,
+    pub rating: f64,
+    pub rating_count: usize,
+    pub created_at: Option<chrono::NaiveDateTime>,
 }
-
 #[derive(Deserialize, Serialize)]
 pub struct PositionRequest {
     pub latitude: BigDecimal,

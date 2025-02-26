@@ -7,9 +7,16 @@ import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
+import org.json.JSONObject
 
 interface RatingDao {
     suspend fun getUserRatings(id: Int): List<Rating>
+
+    suspend fun sendRating(
+        id: Int,
+        comment: String,
+        rating: Int,
+    )
 }
 
 class RatingDaoImpl(private val apiClient: ApiClient) : RatingDao {
@@ -23,6 +30,24 @@ class RatingDaoImpl(private val apiClient: ApiClient) : RatingDao {
             ratingDtos.map { it.toModel() }
         } else {
             emptyList()
+        }
+    }
+
+    override suspend fun sendRating(
+        id: Int,
+        comment: String,
+        rating: Int,
+    ) {
+        val body =
+            JSONObject().apply {
+                put("comment", comment)
+                put("stars", rating)
+            }
+
+        val response = apiClient.postRequest("ratings/$id", body, token)
+
+        if (response.code != 201) {
+            throw Exception("Erreur lors de l'envoi de la note")
         }
     }
 }

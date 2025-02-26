@@ -97,7 +97,7 @@ async fn get_self(pool: web::Data<DbPool>, req: HttpRequest) -> Result<HttpRespo
                 email: user.email.clone(),
                 rating,
                 rating_count,
-                created_at: user.created_at.clone(),
+                created_at: user.created_at,
             };
 
             Ok(HttpResponse::Ok().json(user_response))

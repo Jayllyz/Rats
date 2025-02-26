@@ -24,10 +24,6 @@ class RatingViewModel(private val ratingRepository: RatingRepository) : ViewMode
         }
     }
 
-    fun setName(name: String) {
-        _name.value = name
-    }
-
     fun setRating(rating: Int) {
         _rating.value = rating
     }

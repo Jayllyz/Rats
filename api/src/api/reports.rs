@@ -98,17 +98,11 @@ async fn get_nearby_reports(pool: web::Data<DbPool>, req: HttpRequest) -> Result
 async fn create_report(
     pool: web::Data<DbPool>,
     report: web::Json<CreateRequest>,
-    req: HttpRequest,
 ) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
-    let id_user = match utils::validate_token(&req) {
-        Ok(claims) => claims.sub,
-        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
-    };
-
     let new_report = CreateReport {
-        id_user,
+        id_user: report.id_user.unwrap(),
         title: report.title.clone(),
         description: report.description.clone(),
         report_type: report.report_type.clone(),

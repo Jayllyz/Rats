@@ -118,9 +118,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/comment_text_input_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/tv_comment_label"
+        app:layout_constraintBottom_toTopOf="@id/submit_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -128,7 +129,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/comment_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="match_parent"
             android:gravity="top|start"
             android:hint="@string/leave_your_comment_here"
             android:inputType="textMultiLine"
@@ -142,11 +143,11 @@
         android:text="@string/submit"
         android:backgroundTint="@color/md_theme_primary"
         android:layout_marginHorizontal="10dp"
-        app:layout_constraintTop_toBottomOf="@id/comment_text_input_layout"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/cancel_button"
-        app:layout_constraintHorizontal_weight="1"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintHorizontal_weight="1" />
 
     <Button
         android:id="@+id/cancel_button"
@@ -155,11 +156,10 @@
         android:text="@string/cancel"
         android:backgroundTint="@color/md_theme_secondary"
         android:layout_marginHorizontal="10dp"
-        app:layout_constraintTop_toBottomOf="@id/comment_text_input_layout"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/submit_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        android:layout_marginTop="16dp" />
-
+        app:layout_constraintHorizontal_weight="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

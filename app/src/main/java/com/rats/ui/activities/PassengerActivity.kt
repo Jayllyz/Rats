@@ -1,7 +1,9 @@
 package com.rats.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +20,14 @@ class PassengerActivity : AppCompatActivity() {
     private val passengerViewModel: PassengerViewModel by viewModels {
         PassengerViewModelFactory((application as RatsApp).ratingRepository)
     }
+    private var userId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_passenger)
 
         val recyclerView: RecyclerView = findViewById(R.id.comments_recycler_view)
+        val ratingButton: Button = findViewById(R.id.note_button)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         passengerViewModel.ratings.observe(this) { ratings ->
@@ -34,7 +38,7 @@ class PassengerActivity : AppCompatActivity() {
             Log.e("passenger error", "Error: $error")
         }
 
-        val userId = intent.getIntExtra("id", -1)
+        userId = intent.getIntExtra("id", -1)
         passengerViewModel.fetchRatings(userId)
 
         val name = findViewById<TextView>(R.id.tv_passenger_name)
@@ -53,6 +57,22 @@ class PassengerActivity : AppCompatActivity() {
                     append(commentsNbr)
                     append(" notes")
                 }
+        }
+
+        ratingButton.setOnClickListener {
+            val intent =
+                Intent(this, RatingActivity::class.java).apply {
+                    putExtra("id", userId)
+                    putExtra("name", name.text)
+                }
+            startActivity(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (userId != -1) {
+            passengerViewModel.fetchRatings(userId)
         }
     }
 }

@@ -75,14 +75,15 @@ class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
                 Log.e("UserDaoImpl", "Failed to parse user profile: ${e.message}", e)
                 try {
                     val userDto = json.decodeFromJsonElement<UserProfileDTO>(response.body)
-                    val profileDto = UserProfileDTO(
-                        id = userDto.id,
-                        name = userDto.name,
-                        email = userDto.email,
-                        rating = userDto.rating,
-                        ratingCount = userDto.ratingCount,
-                        createdAt = userDto.createdAt
-                    )
+                    val profileDto =
+                        UserProfileDTO(
+                            id = userDto.id,
+                            name = userDto.name,
+                            email = userDto.email,
+                            rating = userDto.rating,
+                            ratingCount = userDto.ratingCount,
+                            createdAt = userDto.createdAt,
+                        )
                     listOf(profileDto)
                 } catch (e2: Exception) {
                     Log.e("UserDaoImpl", "Failed to parse as UserDTO: ${e2.message}", e2)

@@ -9,7 +9,6 @@ import com.rats.data.repositories.UserRepository
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
-
     private val _userProfile = MutableLiveData<UserProfileDTO>()
     val userProfile: LiveData<UserProfileDTO> = _userProfile
 

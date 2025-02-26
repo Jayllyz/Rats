@@ -1,7 +1,6 @@
 package com.rats.data.repositories
 
 import com.rats.data.dao.UserDao
-import com.rats.data.dto.UserDTO
 import com.rats.data.dto.UserLocationDTO
 import com.rats.data.dto.UserLoginDTO
 import com.rats.data.dto.UserProfileDTO

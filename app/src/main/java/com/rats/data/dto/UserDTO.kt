@@ -21,5 +21,5 @@ data class UserProfileDTO(
     @SerialName("rating_count")
     val ratingCount: Int,
     @SerialName("created_at")
-    val createdAt: String
+    val createdAt: String,
 )

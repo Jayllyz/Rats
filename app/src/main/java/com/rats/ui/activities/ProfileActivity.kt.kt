@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ProfileActivity : AppCompatActivity() {
-
     private val userProfileViewModel: ProfileViewModel by viewModels {
         ProfileViewModelFactory((application as RatsApp).userRepository)
     }
@@ -123,10 +122,11 @@ class ProfileActivity : AppCompatActivity() {
         viewHolder.ratingBar.rating = rating
         viewHolder.ratingValueTextView.text = String.format("%.1f", rating)
 
-        viewHolder.ratingCountTextView.text = resources.getQuantityString(
-            R.plurals.rating_count_format,
-            userDto.ratingCount,
-            userDto.ratingCount
-        )
+        viewHolder.ratingCountTextView.text =
+            resources.getQuantityString(
+                R.plurals.rating_count_format,
+                userDto.ratingCount,
+                userDto.ratingCount,
+            )
     }
 }

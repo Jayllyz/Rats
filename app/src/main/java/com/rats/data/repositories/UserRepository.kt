@@ -7,7 +7,7 @@ import com.rats.models.User
 import com.rats.models.UserToken
 
 interface UserRepository {
-    suspend fun getWagonUsers(): List<User>
+    suspend fun getNearbyUsers(): List<User>
 
     suspend fun updateUserLocation(userLocationDTO: UserLocationDTO)
 
@@ -15,7 +15,7 @@ interface UserRepository {
 }
 
 class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
-    override suspend fun getWagonUsers(): List<User> = userDao.getNearbyUsers()
+    override suspend fun getNearbyUsers(): List<User> = userDao.getNearbyUsers()
 
     override suspend fun updateUserLocation(userLocationDTO: UserLocationDTO) = userDao.updateUserLocation(userLocationDTO)
 

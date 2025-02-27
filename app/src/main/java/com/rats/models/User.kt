@@ -20,3 +20,10 @@ data class UserProfile(
     val ratingCount: Int,
     val createdAt: String,
 )
+
+@Serializable
+data class UserNoLocation(
+    val id: Int,
+    val name: String,
+    val email: String,
+)

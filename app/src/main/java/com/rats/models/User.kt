@@ -10,3 +10,20 @@ data class User(
     val latitude: Double,
     val longitude: Double,
 )
+
+@Serializable
+data class UserProfile(
+    val id: Int,
+    val name: String,
+    val email: String,
+    val rating: Double,
+    val ratingCount: Int,
+    val createdAt: String,
+)
+
+@Serializable
+data class UserNoLocation(
+    val id: Int,
+    val name: String,
+    val email: String,
+)

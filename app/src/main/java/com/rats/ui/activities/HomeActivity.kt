@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -75,6 +76,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        val profileButton: ImageButton = findViewById(R.id.profile_button)
+        profileButton.setOnClickListener {
+            navigateToProfile()
+        }
+
         checkLocationPermissions()
 
         homeViewModel.nearbyUsers.observe(this) { users ->
@@ -84,6 +90,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         homeViewModel.nearbyReports.observe(this) { reports ->
             updateMapWithNearbyReports(reports)
         }
+    }
+
+    private fun navigateToProfile() {
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

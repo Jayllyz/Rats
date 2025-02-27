@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
@@ -56,9 +57,9 @@ class ReportActivity : AppCompatActivity() {
             registerReceiver(locationReceiver, IntentFilter("LOCATION_UPDATE"))
         }
 
-        val intent = Intent("REQUEST_IMMEDIATE_LOCATION")
-        intent.setPackage(packageName)
-        sendBroadcast(intent)
+        val locationIntent = Intent("REQUEST_IMMEDIATE_LOCATION")
+        locationIntent.setPackage(packageName)
+        sendBroadcast(locationIntent)
 
         val userId = intent.getIntExtra("id", -1)
 

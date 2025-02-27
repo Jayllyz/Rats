@@ -38,6 +38,12 @@ class PassengerViewModel(private val ratingRepository: RatingRepository) : ViewM
                 val users = ratingRepository.getUserRatings(id)
                 _ratings.value = users
 
+                if (users.isEmpty()) {
+                    _stars.value = "Aucune note"
+                    _commentsNbr.value = 0
+                    return@launch
+                }
+
                 var sum = 0
                 for (user: Rating in users) {
                     sum += user.stars

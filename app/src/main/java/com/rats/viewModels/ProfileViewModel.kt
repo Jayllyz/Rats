@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rats.data.dto.UserProfileDTO
 import com.rats.data.repositories.UserRepository
 import com.rats.models.UserProfile
 import kotlinx.coroutines.launch

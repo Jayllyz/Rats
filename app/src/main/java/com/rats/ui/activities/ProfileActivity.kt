@@ -103,10 +103,11 @@ class ProfileActivity : AppCompatActivity() {
     @SuppressLint("DefaultLocale", "StringFormatInvalid", "WeekBasedYear")
     private fun updateUI(userProfile: UserProfile) {
         viewHolder.userEmailTextView.text = userProfile.email
-        viewHolder.userWelcomeTextView.text = buildString {
-            append("Bienvenue, ")
-            append(userProfile.name.replaceFirstChar(Char::uppercase))
-        }
+        viewHolder.userWelcomeTextView.text =
+            buildString {
+                append("Bienvenue, ")
+                append(userProfile.name.replaceFirstChar(Char::uppercase))
+            }
 
         val inputFormat = SimpleDateFormat("DD-MM-YYYY", Locale.getDefault())
         val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())

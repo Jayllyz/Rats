@@ -14,8 +14,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.rats.R
 import com.rats.RatsApp
-import com.rats.data.dto.UserProfileDTO
 import com.rats.factories.ProfileViewModelFactory
+import com.rats.models.UserProfile
 import com.rats.utils.TokenManager
 import com.rats.viewModels.ProfileViewModel
 import java.text.SimpleDateFormat
@@ -27,7 +27,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private inner class ProfileViewHolder {
-        val userNameTextView: TextView = findViewById(R.id.tv_user_name)
         val userEmailTextView: TextView = findViewById(R.id.tv_user_email)
         val userCreatedAtTextView: TextView = findViewById(R.id.tv_user_created_at)
         val userWelcomeTextView: TextView = findViewById(R.id.tv_user_welcome)
@@ -52,9 +51,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        userProfileViewModel.userProfile.observe(this) { userDto ->
-            if (userDto != null) {
-                updateUI(userDto)
+        userProfileViewModel.userProfile.observe(this) { userProfile ->
+            userProfile?.let {
+                updateUI(it)
             }
         }
 
@@ -98,35 +97,37 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun loadUserProfile() {
-        userProfileViewModel.getUserProfile()
+        userProfileViewModel.fetchUserProfile()
     }
 
     @SuppressLint("DefaultLocale", "StringFormatInvalid", "WeekBasedYear")
-    private fun updateUI(userDto: UserProfileDTO) {
-        viewHolder.userNameTextView.text = userDto.name
-        viewHolder.userEmailTextView.text = userDto.email
-        viewHolder.userWelcomeTextView.text = userDto.name.replaceFirstChar(Char::uppercase)
+    private fun updateUI(userProfile: UserProfile) {
+        viewHolder.userEmailTextView.text = userProfile.email
+        viewHolder.userWelcomeTextView.text = buildString {
+            append("Bienvenue, ")
+            append(userProfile.name.replaceFirstChar(Char::uppercase))
+        }
 
         val inputFormat = SimpleDateFormat("DD-MM-YYYY", Locale.getDefault())
         val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
 
         try {
-            val date = inputFormat.parse(userDto.createdAt)
-            val formattedDate = date?.let { outputFormat.format(it) } ?: userDto.createdAt
+            val date = inputFormat.parse(userProfile.createdAt)
+            val formattedDate = date?.let { outputFormat.format(it) } ?: userProfile.createdAt
             viewHolder.userCreatedAtTextView.text = formattedDate
         } catch (e: Exception) {
-            viewHolder.userCreatedAtTextView.text = userDto.createdAt
+            viewHolder.userCreatedAtTextView.text = userProfile.createdAt
         }
 
-        val rating = userDto.rating.toFloat()
+        val rating = userProfile.rating.toFloat()
         viewHolder.ratingBar.rating = rating
         viewHolder.ratingValueTextView.text = String.format("%.1f", rating)
 
         viewHolder.ratingCountTextView.text =
             resources.getQuantityString(
                 R.plurals.rating_count_format,
-                userDto.ratingCount,
-                userDto.ratingCount,
+                userProfile.ratingCount,
+                userProfile.ratingCount,
             )
     }
 }

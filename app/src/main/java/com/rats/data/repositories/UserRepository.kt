@@ -3,8 +3,8 @@ package com.rats.data.repositories
 import com.rats.data.dao.UserDao
 import com.rats.data.dto.UserLocationDTO
 import com.rats.data.dto.UserLoginDTO
-import com.rats.data.dto.UserProfileDTO
 import com.rats.models.User
+import com.rats.models.UserProfile
 import com.rats.models.UserToken
 
 interface UserRepository {
@@ -14,7 +14,7 @@ interface UserRepository {
 
     suspend fun userLogin(userLoginDTO: UserLoginDTO): UserToken
 
-    suspend fun userProfile(): List<UserProfileDTO>
+    suspend fun getUserProfile(): UserProfile
 }
 
 class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
@@ -24,5 +24,5 @@ class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
 
     override suspend fun userLogin(userLoginDTO: UserLoginDTO): UserToken = userDao.userLogin(userLoginDTO)
 
-    override suspend fun userProfile() = userDao.userProfile()
+    override suspend fun getUserProfile() = userDao.getUserProfile()
 }

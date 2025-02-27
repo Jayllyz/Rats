@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rats.data.dto.UserProfileDTO
 import com.rats.data.repositories.UserRepository
+import com.rats.models.UserProfile
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
-    private val _userProfile = MutableLiveData<UserProfileDTO>()
-    val userProfile: LiveData<UserProfileDTO> = _userProfile
+    private val _userProfile = MutableLiveData<UserProfile>()
+    val userProfile: LiveData<UserProfile> = _userProfile
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -18,16 +19,12 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun getUserProfile() {
+    fun fetchUserProfile() {
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                val profileList = userRepository.userProfile()
-                if (profileList.isNotEmpty()) {
-                    _userProfile.value = profileList[0]
-                } else {
-                    _error.value = "No profile data found"
-                }
+                val userProfile = userRepository.getUserProfile()
+                _userProfile.value = userProfile
             } catch (e: Exception) {
                 _error.value = e.message ?: "Failed to load user profile"
             } finally {

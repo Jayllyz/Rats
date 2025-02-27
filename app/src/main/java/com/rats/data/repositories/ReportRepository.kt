@@ -1,6 +1,7 @@
 package com.rats.data.repositories
 
 import com.rats.data.dao.ReportDao
+import com.rats.models.Report
 
 interface ReportRepository {
     suspend fun sendReport(
@@ -11,6 +12,8 @@ interface ReportRepository {
         latitude: Double,
         longitude: Double,
     )
+
+    suspend fun getNearbyReports(): List<Report>
 }
 
 class ReportRepositoryImpl(private val reportDao: ReportDao) : ReportRepository {
@@ -22,4 +25,6 @@ class ReportRepositoryImpl(private val reportDao: ReportDao) : ReportRepository 
         latitude: Double,
         longitude: Double,
     ) = reportDao.sendReport(id, title, description, reportType, latitude, longitude)
+
+    override suspend fun getNearbyReports(): List<Report> = reportDao.getNearbyReports()
 }

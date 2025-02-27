@@ -26,7 +26,7 @@ class MyWagonViewModel(private val userRepository: UserRepository) : ViewModel()
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val users = userRepository.getWagonUsers()
+                val users = userRepository.getNearbyUsers()
                 _users.value = users
             } catch (e: Exception) {
                 Log.e("Error wagon", "Error: ${e.message}")

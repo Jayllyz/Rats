@@ -1,9 +1,9 @@
 package com.rats.data.dao
 
 import com.rats.data.dto.ReportDTO
+import com.rats.data.mapper.ReportMapper.toModel
 import com.rats.models.Report
 import com.rats.utils.ApiClient
-import com.rats.data.mapper.ReportMapper.toModel
 import com.rats.utils.TokenManager
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement

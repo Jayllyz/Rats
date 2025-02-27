@@ -10,7 +10,7 @@ import com.rats.models.Report
 import com.rats.models.User
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val userRepository: UserRepository, private val reportRepository: ReportRepository): ViewModel() {
+class HomeViewModel(private val userRepository: UserRepository, private val reportRepository: ReportRepository) : ViewModel() {
     private val _nearbyUsers = MutableLiveData<List<User>>()
     val nearbyUsers: LiveData<List<User>> = _nearbyUsers
 

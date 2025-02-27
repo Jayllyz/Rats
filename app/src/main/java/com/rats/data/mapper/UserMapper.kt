@@ -10,7 +10,7 @@ object UserMapper {
             name = this.name,
             email = this.email,
             latitude = this.latitude,
-            longitude = this.longitude
+            longitude = this.longitude,
         )
     }
 }

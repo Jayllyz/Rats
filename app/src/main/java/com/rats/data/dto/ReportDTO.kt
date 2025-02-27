@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReportDTO (
+data class ReportDTO(
     val id: Int,
     @SerialName("id_user")
     val idUser: Int?,

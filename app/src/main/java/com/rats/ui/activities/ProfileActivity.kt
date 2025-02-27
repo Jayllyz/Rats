@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +29,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private inner class ProfileViewHolder {
+        val backButton: ImageButton = findViewById(R.id.btn_back)
         val userEmailTextView: TextView = findViewById(R.id.tv_user_email)
         val userCreatedAtTextView: TextView = findViewById(R.id.tv_user_created_at)
         val userWelcomeTextView: TextView = findViewById(R.id.tv_user_welcome)
@@ -45,9 +48,25 @@ class ProfileActivity : AppCompatActivity() {
 
         viewHolder = ProfileViewHolder()
 
+        setupBackNavigation()
         setupObservers()
         setupClickListeners()
         loadUserProfile()
+    }
+
+    private fun setupBackNavigation() {
+        viewHolder.backButton.setOnClickListener {
+            finish()
+        }
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    finish()
+                }
+            },
+        )
     }
 
     private fun setupObservers() {
@@ -100,7 +119,7 @@ class ProfileActivity : AppCompatActivity() {
         userProfileViewModel.fetchUserProfile()
     }
 
-    @SuppressLint("DefaultLocale", "StringFormatInvalid", "WeekBasedYear")
+    @SuppressLint("DefaultLocale", "StringFormatInvalid", "WeekBasedYear", "SetTextI18n")
     private fun updateUI(userProfile: UserProfile) {
         viewHolder.userEmailTextView.text = userProfile.email
         viewHolder.userWelcomeTextView.text =
@@ -109,15 +128,21 @@ class ProfileActivity : AppCompatActivity() {
                 append(userProfile.name.replaceFirstChar(Char::uppercase))
             }
 
-        val inputFormat = SimpleDateFormat("DD-MM-YYYY", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-
         try {
-            val date = inputFormat.parse(userProfile.createdAt)
-            val formattedDate = date?.let { outputFormat.format(it) } ?: userProfile.createdAt
-            viewHolder.userCreatedAtTextView.text = formattedDate
-        } catch (e: Exception) {
-            viewHolder.userCreatedAtTextView.text = userProfile.createdAt
+            val datePart = userProfile.createdAt.substring(0, 10)
+            val simpleFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date = simpleFormat.parse(datePart)
+
+            val outputFormat = SimpleDateFormat("d MMMM yyyy", Locale.FRENCH)
+            val formattedDate = date?.let { outputFormat.format(it) }
+
+            if (formattedDate != null) {
+                viewHolder.userCreatedAtTextView.text = formattedDate
+            } else {
+                viewHolder.userCreatedAtTextView.text = "Date invalide"
+            }
+        } catch (_: Exception) {
+            viewHolder.userCreatedAtTextView.text = "Erreur de format"
         }
 
         val rating = userProfile.rating.toFloat()

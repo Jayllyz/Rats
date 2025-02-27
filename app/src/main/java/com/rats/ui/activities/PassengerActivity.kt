@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rats.R
@@ -30,6 +32,8 @@ class PassengerActivity : AppCompatActivity() {
         val ratingButton: Button = findViewById(R.id.note_button)
         val reportButton: Button = findViewById(R.id.report_button)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        setupToolbar()
 
         passengerViewModel.ratings.observe(this) { ratings ->
             recyclerView.adapter = PassengerCommentsAdapter(ratings)
@@ -75,6 +79,26 @@ class PassengerActivity : AppCompatActivity() {
                     putExtra("id", userId)
                 }
             startActivity(intent)
+        }
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    finish()
+                }
+            },
+        )
+    }
+
+    private fun setupToolbar() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+
+        toolbar.setNavigationOnClickListener {
+            finish()
         }
     }
 

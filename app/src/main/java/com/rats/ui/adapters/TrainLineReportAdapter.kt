@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.rats.R
-import com.rats.models.Report
+import com.rats.models.ReportNoLocation
 import com.rats.ui.viewHolders.TrainLineReportViewHolder
 
 class TrainLineReportAdapter(
-    private val reports: List<Report>,
+    private val reports: List<ReportNoLocation>,
 ) : RecyclerView.Adapter<TrainLineReportViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,

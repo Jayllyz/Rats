@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rats.data.repositories.TrainLinesRepository
-import com.rats.models.Report
+import com.rats.models.ReportNoLocation
 import kotlinx.coroutines.launch
 
 class TrainLineDetailViewModel(private val trainLinesRepository: TrainLinesRepository) : ViewModel() {
@@ -18,8 +18,8 @@ class TrainLineDetailViewModel(private val trainLinesRepository: TrainLinesRepos
     private val _subscribed = MutableLiveData<Boolean?>()
     val subscribed: LiveData<Boolean?> = _subscribed
 
-    private val _reports = MutableLiveData<List<Report>>()
-    val reports: LiveData<List<Report>> = _reports
+    private val _reports = MutableLiveData<List<ReportNoLocation>>()
+    val reports: LiveData<List<ReportNoLocation>> = _reports
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

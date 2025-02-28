@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.rats.R
+import com.rats.ui.activities.ChatActivity
 import com.rats.ui.activities.HomeActivity
 import com.rats.ui.activities.MoreMenuActivity
 import com.rats.ui.activities.MyWagonActivity
@@ -47,7 +48,11 @@ class BottomMenuFragment : Fragment() {
         }
 
         chatLayout.setOnClickListener {
-            println("clicked chat")
+            if (activity !is ChatActivity) {
+                val intent = Intent(activity, MyWagonActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
         }
 
         moreLayout.setOnClickListener {

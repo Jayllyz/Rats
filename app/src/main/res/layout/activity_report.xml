@@ -6,13 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".ui.activities.RatingActivity"
-    android:id="@+id/rating_activity">
+    tools:context=".ui.activities.ReportActivity"
+    android:id="@+id/report_activity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/placeholder"
+        android:text="@string/report_title"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -22,97 +22,107 @@
         android:padding="16dp"
         android:textColor="@color/md_theme_onSurface"
         android:background="@color/md_theme_primary"
-        android:id="@+id/tv_rating_title"/>
+        android:id="@+id/tv_report_title"/>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/direct_message_user_profile_picture_card_view"
+        android:id="@+id/camera_card_view"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        app:cardCornerRadius="125dp"
         app:strokeWidth="4dp"
         android:layout_marginTop="30dp"
         android:layout_marginHorizontal="40dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_rating_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_report_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/direct_message_user_profile_pic_image_view"
+            android:id="@+id/camera"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/roblox"
-            android:contentDescription="@string/passenger_profile_image"/>
+            android:padding="20dp"
+            android:contentDescription="@string/passenger_profile_image"
+            android:src="@drawable/camera" />
 
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:id="@+id/star1"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/star_empty"
-        android:contentDescription="@string/star_rating"
-        app:layout_constraintTop_toBottomOf="@id/direct_message_user_profile_picture_card_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/star2"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"/>
-
-    <ImageView
-        android:id="@+id/star2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/star_empty"
-        android:contentDescription="@string/star_rating"
-        app:layout_constraintTop_toTopOf="@id/star1"
-        app:layout_constraintStart_toEndOf="@id/star1"
-        app:layout_constraintEnd_toStartOf="@id/star3"
-        android:layout_marginEnd="8dp"/>
-
-    <ImageView
-        android:id="@+id/star3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/star_empty"
-        android:contentDescription="@string/star_rating"
-        app:layout_constraintTop_toTopOf="@id/star1"
-        app:layout_constraintStart_toEndOf="@id/star2"
-        app:layout_constraintEnd_toStartOf="@id/star4"
-        android:layout_marginEnd="8dp"/>
-
-    <ImageView
-        android:id="@+id/star4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/star_empty"
-        android:contentDescription="@string/star_rating"
-        app:layout_constraintTop_toTopOf="@id/star1"
-        app:layout_constraintStart_toEndOf="@id/star3"
-        app:layout_constraintEnd_toStartOf="@id/star5"
-        android:layout_marginEnd="8dp"/>
-
-    <ImageView
-        android:id="@+id/star5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/star_empty"
-        android:contentDescription="@string/star_rating"
-        app:layout_constraintTop_toTopOf="@id/star1"
-        app:layout_constraintStart_toEndOf="@id/star4"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="8dp"/>
-
     <TextView
-        android:id="@+id/tv_comment_label"
+        android:id="@+id/tv_title_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/rating_comment_text"
+        android:text="@string/report_title_text"
         android:textSize="16sp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/star1"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/camera_card_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"
+        android:paddingVertical="8dp"
+        android:textColor="@color/md_theme_onSurface" />
+
+    <EditText
+        android:id="@+id/title_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:padding="8dp"
+        android:hint="@string/report_title_hint"
+        android:background="@drawable/rounded_border"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_reason_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_reason_text"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/title_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="8dp"
+        android:textColor="@color/md_theme_onSurface" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reason_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        app:cardCornerRadius="12dp"
+        app:strokeColor="@color/md_theme_primary"
+        app:strokeWidth="2dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_reason_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Spinner
+            android:id="@+id/spinner_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/filter_options"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            android:spinnerMode="dropdown"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tv_description_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_description_text"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/reason_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="8dp"
         android:textColor="@color/md_theme_onSurface" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -121,18 +131,18 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_comment_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_description_label"
         app:layout_constraintBottom_toTopOf="@id/submit_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/comment_edit_text"
+            android:id="@+id/description_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="top|start"
-            android:hint="@string/leave_your_comment_here"
+            android:hint="@string/report_description_hint"
             android:inputType="textMultiLine"
             android:padding="12dp"/>
     </com.google.android.material.textfield.TextInputLayout>

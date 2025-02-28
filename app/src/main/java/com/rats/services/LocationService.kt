@@ -1,9 +1,12 @@
 package com.rats.services
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -49,6 +52,7 @@ class LocationService : Service() {
         private const val TAG = "LocationService"
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         super.onCreate()
 
@@ -60,6 +64,16 @@ class LocationService : Service() {
         setupLocationCallback()
         startForeground()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                immediateLocationReceiver,
+                IntentFilter("REQUEST_IMMEDIATE_LOCATION"),
+                RECEIVER_NOT_EXPORTED,
+            )
+        } else {
+            registerReceiver(immediateLocationReceiver, IntentFilter("REQUEST_IMMEDIATE_LOCATION"))
+        }
+
         sendImmediateLocation() // Send location immediately when app starts
         startLocationUpdates()
     }
@@ -69,6 +83,18 @@ class LocationService : Service() {
         sendLocationToServer(userLocation)
         sendLocationBroadcast(userLocation)
     }
+
+    private val immediateLocationReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                if (intent?.action == "REQUEST_IMMEDIATE_LOCATION") {
+                    sendImmediateLocation()
+                }
+            }
+        }
 
     private fun setupLocationCallback() {
         locationCallback =
@@ -175,6 +201,7 @@ class LocationService : Service() {
         try {
             fusedLocationClient.removeLocationUpdates(locationCallback)
             handler.removeCallbacks(locationUpdateRunnable)
+            unregisterReceiver(immediateLocationReceiver)
         } catch (e: Exception) {
             Log.e(TAG, "Error cleaning up service", e)
         }

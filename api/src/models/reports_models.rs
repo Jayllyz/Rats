@@ -19,6 +19,7 @@ pub struct CreateReport {
 #[diesel(table_name = crate::schema::reports)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct CreateRequest {
+    pub id_user: Option<i32>,
     pub title: String,
     pub description: String,
     pub report_type: String,

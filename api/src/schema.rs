@@ -52,6 +52,7 @@ diesel::table! {
         token -> Nullable<Varchar>,
         latitude -> Nullable<Numeric>,
         longitude -> Nullable<Numeric>,
+        created_at -> Nullable<Timestamp>,
     }
 }
 

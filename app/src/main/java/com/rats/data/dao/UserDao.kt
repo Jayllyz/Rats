@@ -3,8 +3,10 @@ package com.rats.data.dao
 import com.rats.data.dto.UserDTO
 import com.rats.data.dto.UserLocationDTO
 import com.rats.data.dto.UserLoginDTO
+import com.rats.data.dto.UserProfileDTO
 import com.rats.data.mapper.UserMapper.toModel
 import com.rats.models.User
+import com.rats.models.UserProfile
 import com.rats.models.UserToken
 import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
@@ -18,6 +20,8 @@ interface UserDao {
     suspend fun updateUserLocation(userLocationDTO: UserLocationDTO)
 
     suspend fun userLogin(userLoginDTO: UserLoginDTO): UserToken
+
+    suspend fun getUserProfile(): UserProfile
 }
 
 class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
@@ -57,6 +61,17 @@ class UserDaoImpl(private val apiClient: ApiClient) : UserDao {
             token
         } else {
             throw Exception("Failed to authenticate user")
+        }
+    }
+
+    override suspend fun getUserProfile(): UserProfile {
+        val response = apiClient.getRequest("self", token)
+
+        return if (response.code == 200 && response.body != null) {
+            val userProfileDTO = json.decodeFromJsonElement<UserProfileDTO>(response.body)
+            userProfileDTO.toModel()
+        } else {
+            throw Exception("Failed to get user profile")
         }
     }
 }

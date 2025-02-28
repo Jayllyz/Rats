@@ -36,6 +36,8 @@
         <activity android:name=".ui.activities.PassengerActivity" />
         <activity android:name=".ui.activities.TrainLineDetailActivity" />
         <activity android:name=".ui.activities.RatingActivity" />
+        <activity android:name=".ui.activities.ProfileActivity" />
+        <activity android:name=".ui.activities.ReportActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >

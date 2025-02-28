@@ -1,1 +1,0 @@
-package com.rats.ui.theme

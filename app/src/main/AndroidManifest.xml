@@ -26,13 +26,11 @@
         <activity
             android:name=".ui.activities.TrainLineActivity"
             android:exported="false" />
-        tools:targetApi="31" >
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <activity android:name=".ui.activities.TransportLinesActivity" />
         <activity android:name=".ui.activities.TrainLinesActivity" />
         <activity android:name=".ui.activities.MoreMenuActivity" />
         <activity android:name=".ui.activities.LoginActivity" />

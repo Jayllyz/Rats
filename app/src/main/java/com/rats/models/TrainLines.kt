@@ -15,5 +15,5 @@ data class TrainLineDetail(
     val name: String,
     val status: String,
     val subscribed: Boolean,
-    val reports: List<Report>,
+    val reports: List<ReportNoLocation>,
 )

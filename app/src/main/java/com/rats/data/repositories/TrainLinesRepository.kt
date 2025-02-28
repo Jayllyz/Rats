@@ -1,7 +1,7 @@
 package com.rats.data.repositories
 
 import com.rats.data.dao.TrainLinesDao
-import com.rats.models.Report
+import com.rats.models.ReportNoLocation
 import com.rats.models.TrainLineDetail
 import com.rats.models.TrainLines
 
@@ -17,7 +17,7 @@ interface TrainLinesRepository {
 
     suspend fun unsubscribeToTrainLine(id: Int)
 
-    suspend fun getSubscribedReports(): List<Report>
+    suspend fun getSubscribedReports(): List<ReportNoLocation>
 }
 
 class TrainLinesRepositoryImpl(private val trainLinesDao: TrainLinesDao) : TrainLinesRepository {
@@ -32,5 +32,5 @@ class TrainLinesRepositoryImpl(private val trainLinesDao: TrainLinesDao) : Train
 
     override suspend fun unsubscribeToTrainLine(id: Int) = trainLinesDao.unsubscribeToTrainLine(id)
 
-    override suspend fun getSubscribedReports(): List<Report> = trainLinesDao.getSubscribedReports()
+    override suspend fun getSubscribedReports(): List<ReportNoLocation> = trainLinesDao.getSubscribedReports()
 }

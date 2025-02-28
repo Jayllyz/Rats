@@ -6,7 +6,7 @@ import com.rats.data.dto.TrainLineDetailDTO
 import com.rats.data.dto.TrainLinesDTO
 import com.rats.data.mapper.ReportMapper.toModel
 import com.rats.data.mapper.TrainLinesMapper.toModel
-import com.rats.models.Report
+import com.rats.models.ReportNoLocation
 import com.rats.models.TrainLineDetail
 import com.rats.models.TrainLines
 import com.rats.utils.ApiClient
@@ -27,7 +27,7 @@ interface TrainLinesDao {
 
     suspend fun unsubscribeToTrainLine(id: Int)
 
-    suspend fun getSubscribedReports(): List<Report>
+    suspend fun getSubscribedReports(): List<ReportNoLocation>
 }
 
 class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
@@ -93,7 +93,7 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
         }
     }
 
-    override suspend fun getSubscribedReports(): List<Report> {
+    override suspend fun getSubscribedReports(): List<ReportNoLocation> {
         val response = apiClient.getRequest("train_lines/subscribed", token)
         return if (response.code == 200 && response.body != null) {
             val subscribedReportDTOs = json.decodeFromJsonElement<List<SubscribedReportDTO>>(response.body)

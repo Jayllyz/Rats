@@ -36,8 +36,8 @@ class TrainLinesAdapter(
         holder.warningIconView.setImageResource(
             when (trainLineState.status) {
                 "safe" -> R.drawable.safe_notification
-                "danger" -> R.drawable.warning_icon
-                else -> R.drawable.warning_notification
+                "danger" -> R.drawable.warning_notification
+                else -> R.drawable.warning_icon
             },
         )
 

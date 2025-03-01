@@ -1,6 +1,8 @@
 package com.rats.data.dao
 
+import com.rats.data.dto.MessageDTO
 import com.rats.data.dto.RatingDTO
+import com.rats.data.mapper.MessageMapper.toModel
 import com.rats.data.mapper.RatingMapper.toModel
 import com.rats.models.Message
 import com.rats.models.Rating
@@ -25,7 +27,13 @@ class MessageDAOImpl(private val apiClient: ApiClient) : MessageDao {
     private val token = TokenManager.getToken()
 
     override suspend fun getMessages(): List<Message> {
-        TODO("Not yet implemented")
+        val response = apiClient.getRequest("messages", token)
+        return if (response.code == 200 && response.body != null) {
+            val messagesDto = json.decodeFromJsonElement<List<MessageDTO>>(response.body)
+            messagesDto.map { it.toModel() }
+        } else {
+            emptyList()
+        }
     }
 
     override suspend fun sendMessage(content: String) {

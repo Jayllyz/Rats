@@ -1,7 +1,9 @@
 use crate::api::utils;
 use crate::db::DbPool;
-use crate::models::messages::{CreateMessage, MessageResponse, PaginationQuery};
-use crate::schema::messages;
+use crate::models::messages::{
+    CreateMessage, MessageResponse, MessageWithSenderName, PaginationQuery,
+};
+use crate::schema::{messages, users};
 use actix_web::{HttpRequest, HttpResponse, Result, get, post, web};
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
@@ -27,7 +29,35 @@ async fn get_messages(
         .await
         .map_err(actix_web::error::ErrorInternalServerError)?;
 
-    Ok(HttpResponse::Ok().json(messages))
+    let sender_ids: Vec<i32> = messages.iter().map(|msg| msg.id_sender).collect();
+
+    let users = users::table
+        .filter(users::id.eq_any(sender_ids))
+        .select((users::id, users::name))
+        .load::<(i32, String)>(&mut conn)
+        .await
+        .map_err(actix_web::error::ErrorInternalServerError)?;
+
+    let user_map: std::collections::HashMap<i32, String> = users.into_iter().collect();
+
+    let result: Vec<MessageWithSenderName> = messages
+        .into_iter()
+        .map(|msg| {
+            let sender_name =
+                user_map.get(&msg.id_sender).cloned().unwrap_or_else(|| "Unknown".to_string());
+
+            MessageWithSenderName {
+                id: msg.id,
+                content: msg.content,
+                id_sender: msg.id_sender,
+                sender_name,
+                created_at: msg.created_at,
+                updated_at: msg.updated_at,
+            }
+        })
+        .collect();
+
+    Ok(HttpResponse::Ok().json(result))
 }
 
 #[post("")]

@@ -18,6 +18,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
+    <TextView
+        android:id="@+id/no_messages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_messages_text"
+        android:layout_marginVertical="8dp"
+        android:paddingHorizontal="16dp"
+        app:layout_constrainedHeight="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_gchat"
+        app:layout_constraintTop_toBottomOf="@+id/train_title"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_gchat"
         android:layout_width="match_parent"
@@ -26,7 +37,7 @@
         tools:listitem="@layout/item_chat_message_vh"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/text_gchat_indicator"
-        app:layout_constraintTop_toBottomOf="@+id/train_title" />
+        app:layout_constraintTop_toBottomOf="@+id/no_messages" />
     <TextView
         android:id="@+id/text_gchat_indicator"
         android:layout_width="wrap_content"

@@ -14,7 +14,7 @@ class MessageAdapter(private val messages: List<Message>) : RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = messages[position]
-        holder.userName.text = message.sender.name;
+        holder.userName.text = message.sender_name;
         holder.messageContent.text = message.content;
         holder.messageDate.text = message.createdAt;
     }

@@ -123,6 +123,7 @@
                             android:layout_marginStart="8dp"
                             android:isIndicator="true"
                             android:numStars="5"
+                            android:progressTint="#FFC107"
                             android:rating="4.5"
                             />
 

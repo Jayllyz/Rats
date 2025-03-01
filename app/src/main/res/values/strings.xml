@@ -132,4 +132,5 @@
     <string name="report_description_hint">Donnez une description pour l\'incident</string>
     <string name="report_title_hint">Ceci sera affiché en premier</string>
     <string name="report_title_text">Description rapide</string>
+    <string name="passenger">Passagers</string>
 </resources>

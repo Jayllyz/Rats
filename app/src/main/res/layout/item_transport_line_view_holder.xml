@@ -28,22 +28,10 @@
         android:textColor="@color/md_theme_onSurface"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/trainIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/trainIcon"
         app:layout_constraintStart_toEndOf="@id/trainIcon"
         app:layout_constraintEnd_toStartOf="@id/warningIcon"
         android:layout_marginStart="16dp" />
-
-    <!-- Number of Alerts -->
-    <TextView
-        android:id="@+id/alertCount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/alert_count"
-        android:textSize="14sp"
-        android:textColor="@color/md_theme_tertiary"
-        app:layout_constraintTop_toBottomOf="@id/trainName"
-        app:layout_constraintStart_toStartOf="@id/trainName"
-        app:layout_constraintEnd_toEndOf="@id/trainName"
-        android:layout_marginTop="4dp" />
 
     <!-- Warning Icon (now placed to the left of the Arrow Icon) -->
     <ImageView

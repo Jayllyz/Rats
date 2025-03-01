@@ -47,7 +47,7 @@ class ReportActivity : AppCompatActivity() {
             }
         }
 
-    private val reportTypes = listOf("Individu dangereux", "Activité suspecte", "Déchet dangereux", "Autre")
+    private val reportTypes = listOf(getString(R.string.dangerous_individual), getString(R.string.suspect_activity), getString(R.string.dangerous_garbage), getString(R.string.other))
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +90,7 @@ class ReportActivity : AppCompatActivity() {
                 latitude,
                 longitude,
             )
-            Toast.makeText(this, "Signalement enregistré", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.registered_report_message), Toast.LENGTH_SHORT).show()
             finish()
         }
         cameraTakePicture.setOnClickListener {

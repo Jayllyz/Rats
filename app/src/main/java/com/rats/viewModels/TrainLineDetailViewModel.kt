@@ -48,8 +48,8 @@ class TrainLineDetailViewModel(private val trainLinesRepository: TrainLinesRepos
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _reports.value = trainLinesRepository.getSubscribedReports()
                 _title.value = "Vos newsletters"
+                _reports.value = trainLinesRepository.getSubscribedReports()
                 _status.value = null
                 _subscribed.value = null
             } catch (e: Exception) {

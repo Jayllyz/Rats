@@ -1,5 +1,6 @@
 package com.rats.utils
 
+import com.rats.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -17,8 +18,7 @@ object ApiClient {
     internal var client = OkHttpClient()
     private val json = Json { ignoreUnknownKeys = true }
 
-    // NOTE Simon: A modifer avec la vraie adresse IP pour la prod
-    private const val URL_START = "http://10.0.2.2:8000/"
+    private val URL_START = BuildConfig.API_BASE_URL
 
     fun setClient(client: OkHttpClient) {
         this.client = client

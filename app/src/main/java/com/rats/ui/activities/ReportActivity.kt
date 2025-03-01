@@ -1,22 +1,30 @@
 package com.rats.ui.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.google.android.material.card.MaterialCardView
 import com.rats.R
 import com.rats.RatsApp
 import com.rats.factories.ReportViewModelFactory
 import com.rats.viewModels.ReportViewModel
+import java.io.File
 
 class ReportActivity : AppCompatActivity() {
     private val reportViewModel: ReportViewModel by viewModels {
@@ -67,6 +75,7 @@ class ReportActivity : AppCompatActivity() {
         val spinner = findViewById<Spinner>(R.id.spinner_reason)
         val submitButton = findViewById<TextView>(R.id.submit_button)
         val cancelButton = findViewById<TextView>(R.id.cancel_button)
+        val cameraTakePicture = findViewById<MaterialCardView>(R.id.camera_card_view)
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, reportTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -84,9 +93,69 @@ class ReportActivity : AppCompatActivity() {
             Toast.makeText(this, "Signalement enregistré", Toast.LENGTH_SHORT).show()
             finish()
         }
+        cameraTakePicture.setOnClickListener {
+            if (checkPermissionsCamera()) {
+                openCamera()
+            } else {
+                requestCameraPermission()
+            }
+        }
 
         cancelButton.setOnClickListener {
             finish()
         }
+    }
+
+    private var photoUri: Uri? = null
+
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                photoUri?.let { uri ->
+                    Toast.makeText(this, "Image saved at: $uri", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted ->
+            if (isGranted) {
+                openCamera()
+            }
+        }
+
+    private fun openCamera() {
+        val photoFile = createImageFile()
+        val photoUri =
+            FileProvider.getUriForFile(
+                this,
+                "${this.packageName}.fileprovider",
+                photoFile,
+            )
+        takePictureLauncher.launch(photoUri)
+    }
+
+    private fun createImageFile(): File {
+        val storageDir = this.getExternalFilesDir(null)
+        return File.createTempFile(
+            "JPEG_${System.currentTimeMillis()}_",
+            ".jpg",
+            storageDir,
+        )
+    }
+
+    private fun checkPermissionsCamera(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA,
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestCameraPermission() {
+        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 }

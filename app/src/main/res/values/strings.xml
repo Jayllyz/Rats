@@ -137,4 +137,11 @@
     <string name="hide_users_subtitle">N\'affiche que votre position sur la carte</string>
     <string name="hide_reports_title">Cacher les signalements</string>
     <string name="hide_reports_subtitle">N\'affiche plus les signalements sur la carte</string>
+    <string name="registered_report_message">Signalement enregistré</string>
+    <string name="dangerous_individual">Individu dangereux</string>
+    <string name="suspect_activity">Activité suspecte</string>
+    <string name="dangerous_garbage">Déchet dangereux</string>
+    <string name="other">Autre</string>
+    <string name="invalid_date">Date invalide</string>
+    <string name="format_error">Erreur de format</string>
 </resources>

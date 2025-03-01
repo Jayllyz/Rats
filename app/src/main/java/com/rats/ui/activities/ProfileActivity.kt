@@ -139,10 +139,10 @@ class ProfileActivity : AppCompatActivity() {
             if (formattedDate != null) {
                 viewHolder.userCreatedAtTextView.text = formattedDate
             } else {
-                viewHolder.userCreatedAtTextView.text = "Date invalide"
+                viewHolder.userCreatedAtTextView.text = getString(R.string.invalid_date)
             }
         } catch (_: Exception) {
-            viewHolder.userCreatedAtTextView.text = "Erreur de format"
+            viewHolder.userCreatedAtTextView.text = getString(R.string.format_error)
         }
 
         val rating = userProfile.rating.toFloat()

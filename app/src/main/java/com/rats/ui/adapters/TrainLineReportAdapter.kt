@@ -16,7 +16,7 @@ class TrainLineReportAdapter(
     ): TrainLineReportViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_line_report_view_holder, parent, false)
+                .inflate(R.layout.item_alert_train_view_holder, parent, false)
         return TrainLineReportViewHolder(view)
     }
 

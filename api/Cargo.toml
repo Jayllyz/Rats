@@ -18,7 +18,7 @@ dotenvy = "0.15.7"
 password-auth = "1.0.0"
 argon2 = "0.5.3"
 jsonwebtoken = "9.3.1"
-chrono = { version = "0.4.39", features = ["serde"] }
+chrono = { version = "0.4.40", features = ["serde"] }
 bigdecimal = { version = "0.4.7", features = ["serde"] }
 
 [profile.release]

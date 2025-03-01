@@ -18,7 +18,7 @@ object ApiClient {
     internal var client = OkHttpClient()
     private val json = Json { ignoreUnknownKeys = true }
 
-    private val URL_START = BuildConfig.API_BASE_URL
+    private const val URL_START = BuildConfig.API_BASE_URL
 
     fun setClient(client: OkHttpClient) {
         this.client = client

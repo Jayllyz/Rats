@@ -38,12 +38,18 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            buildConfigField("String", "API_BASE_URL", "\"https://rats.jayllyz.fr/\"")
+        }
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8000/\"")
         }
     }
     compileOptions {

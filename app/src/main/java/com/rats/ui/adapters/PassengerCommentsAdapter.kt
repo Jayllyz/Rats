@@ -26,11 +26,7 @@ class PassengerCommentsAdapter(private val ratings: List<Rating>) : RecyclerView
     ) {
         val rating = ratings[position]
         holder.name.text = rating.sender.name
-        holder.stars.text =
-            buildString {
-                append("Note: ")
-                append(rating.stars)
-            }
+        holder.stars.rating = rating.stars.toFloat()
         holder.comment.text = rating.comment
         holder.date.text = rating.createdAt.split("T")[0]
     }

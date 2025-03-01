@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -48,11 +49,29 @@ class PassengerActivity : AppCompatActivity() {
 
         val name = findViewById<TextView>(R.id.tv_passenger_name)
         val rating = findViewById<TextView>(R.id.passenger_rating)
+        val ratingNumber = findViewById<RatingBar>(R.id.rating_bar)
 
         name.text = intent.getStringExtra("name")
 
         passengerViewModel.stars.observe(this) { ratingVar ->
             rating.text = ratingVar.toString()
+
+            if (ratingVar.contains("/")) {
+                val parts = ratingVar.split("/")
+                if (parts.size >= 2) {
+                    val numericPart = parts[0].trim().split(" ").last()
+                    try {
+                        ratingNumber.rating = numericPart.toFloat()
+                    } catch (e: NumberFormatException) {
+                        Log.e("RatingError", "Could not parse: $numericPart", e)
+                        ratingNumber.rating = 0f
+                    }
+                } else {
+                    ratingNumber.rating = 0f
+                }
+            } else {
+                ratingNumber.rating = 0f
+            }
         }
 
         passengerViewModel.commentsNbr.observe(this) { commentsNbr ->

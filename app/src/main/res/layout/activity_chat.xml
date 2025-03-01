@@ -53,14 +53,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/button_gchat_send"
+            android:layout_toStartOf="@+id/button_chat_send"
             android:background="@android:color/transparent"
             android:hint="@string/enter_message_input"
             android:inputType="text"
             android:maxLines="6"
             tools:ignore="Autofill" />
         <Button
-            android:id="@+id/button_gchat_send"
+            android:id="@+id/button_chat_send"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_alignParentEnd="true"

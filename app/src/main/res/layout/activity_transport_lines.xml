@@ -25,7 +25,6 @@ tools:context=".ui.activities.TrainLinesActivity">
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Search View -->
         <SearchView
             android:id="@+id/searchTrainLine"
             android:layout_width="0dp"
@@ -36,7 +35,6 @@ tools:context=".ui.activities.TrainLinesActivity">
             android:inputType="text"
             android:imeOptions="actionSearch"/>
 
-        <!-- Filter Spinner -->
         <Spinner
             android:id="@+id/filterTrainLine"
             android:layout_width="wrap_content"
@@ -60,7 +58,6 @@ tools:context=".ui.activities.TrainLinesActivity">
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_loading_error" />
 
-    <!-- Bottom Navigation - Fixed Height -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_bottom_navigation"
         android:name="com.rats.ui.fragments.BottomMenuFragment"

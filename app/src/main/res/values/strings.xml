@@ -133,4 +133,8 @@
     <string name="report_title_hint">Ceci sera affiché en premier</string>
     <string name="report_title_text">Description rapide</string>
     <string name="passenger">Passagers</string>
+    <string name="hide_users_title">Cacher les utilisateurs</string>
+    <string name="hide_users_subtitle">N\'affiche que votre position sur la carte</string>
+    <string name="hide_reports_title">Cacher les signalements</string>
+    <string name="hide_reports_subtitle">N\'affiche plus les signalements sur la carte</string>
 </resources>

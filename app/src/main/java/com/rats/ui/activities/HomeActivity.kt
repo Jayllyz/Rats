@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -164,18 +165,28 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun updateMapWithNearbyUsers(users: List<User>) {
         if (::mMap.isInitialized) {
-            for (user in users) {
-                val userLocation = LatLng(user.latitude, user.longitude)
-                mMap.addMarker(MarkerOptions().position(userLocation).title(user.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)))
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            val hideOtherUsers = prefs.getBoolean("hide_other_users", false)
+
+            if (!hideOtherUsers) {
+                for (user in users) {
+                    val userLocation = LatLng(user.latitude, user.longitude)
+                    mMap.addMarker(MarkerOptions().position(userLocation).title(user.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)))
+                }
             }
         }
     }
 
     private fun updateMapWithNearbyReports(reports: List<Report>) {
         if (::mMap.isInitialized) {
-            for (report in reports) {
-                val reportLocation = LatLng(report.latitude, report.longitude)
-                mMap.addMarker(MarkerOptions().position(reportLocation).title(report.reportType).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            val hideReports = prefs.getBoolean("hide_reports", false)
+
+            if (!hideReports) {
+                for (report in reports) {
+                    val reportLocation = LatLng(report.latitude, report.longitude)
+                    mMap.addMarker(MarkerOptions().position(reportLocation).title(report.reportType).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+                }
             }
         }
     }

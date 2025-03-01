@@ -32,7 +32,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- User Info Header -->
         <TextView
             android:id="@+id/tv_user_name"
             android:layout_width="0dp"
@@ -55,13 +54,6 @@
             app:layout_constraintStart_toEndOf="@id/direct_message_user_profile_picture_card_view"
             app:layout_constraintTop_toBottomOf="@id/tv_user_name">
 
-            <TextView
-                android:id="@+id/tv_star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="@string/passenger_note_template" />
-
             <RatingBar
                 android:id="@+id/comment_rating_bar"
                 style="?android:attr/ratingBarStyleSmall"
@@ -69,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:isIndicator="true"
+                android:progressTint="#FFC107"
                 android:numStars="5"
                 android:rating="4.0"
             />

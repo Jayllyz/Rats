@@ -40,7 +40,13 @@ class TrainLinesDaoImpl(private val apiClient: ApiClient) : TrainLinesDao {
     ): List<TrainLines> {
         val queries = mutableMapOf<String, String?>()
         if (filter != "") {
-            filter.let { queries["status"] = it }
+            if (filter == "Dangereux") {
+                filter.let { queries["status"] = "danger" }
+            } else if (filter == "Sûr") {
+                filter.let { queries["status"] = "safe" }
+            } else if (filter == "Incident") {
+                filter.let { queries["status"] = "warning" }
+            }
         }
         if (search != "") {
             search.let { queries["search"] = it }

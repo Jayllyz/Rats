@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rats.data.repositories.MessageRepository
 import com.rats.models.Message
-import com.rats.models.Rating
-import com.rats.models.Report
 import kotlinx.coroutines.launch
 
 class MessageViewModel(private val messageRepository: MessageRepository) : ViewModel() {
@@ -21,9 +19,7 @@ class MessageViewModel(private val messageRepository: MessageRepository) : ViewM
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun sendMessage(
-        content: String,
-    ) {
+    fun sendMessage(content: String) {
         viewModelScope.launch {
             messageRepository.sendMessage(content)
         }
@@ -35,7 +31,6 @@ class MessageViewModel(private val messageRepository: MessageRepository) : ViewM
             try {
                 val messages = messageRepository.getMessages()
                 _messages.value = messages
-
             } catch (e: Exception) {
                 Log.e("Error fetchMessages", "Error: ${e.message}")
             } finally {

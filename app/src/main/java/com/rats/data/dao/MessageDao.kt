@@ -1,12 +1,9 @@
 package com.rats.data.dao
 
 import com.rats.data.dto.MessageDTO
-import com.rats.data.dto.RatingDTO
 import com.rats.data.mapper.MessageMapper.toModel
 import com.rats.data.mapper.RatingMapper.toModel
 import com.rats.models.Message
-import com.rats.models.Rating
-import com.rats.models.User
 import com.rats.utils.ApiClient
 import com.rats.utils.TokenManager
 import kotlinx.serialization.json.Json
@@ -16,13 +13,10 @@ import org.json.JSONObject
 interface MessageDao {
     suspend fun getMessages(): List<Message>
 
-    suspend fun sendMessage(
-        content: String,
-    )
+    suspend fun sendMessage(content: String)
 }
 
 class MessageDAOImpl(private val apiClient: ApiClient) : MessageDao {
-
     private val json = Json { ignoreUnknownKeys = true }
     private val token = TokenManager.getToken()
 
@@ -48,5 +42,4 @@ class MessageDAOImpl(private val apiClient: ApiClient) : MessageDao {
             throw Exception("Erreur lors de l'envoi du message")
         }
     }
-
 }

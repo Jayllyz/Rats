@@ -28,7 +28,6 @@ pub struct MessageWithSenderName {
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct CreateMessage {
     pub content: String,
-    pub id_sender: i32,
 }
 
 #[derive(Deserialize)]

@@ -79,10 +79,11 @@ async fn create_message(
         Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
     };
 
-    let new_message = CreateMessage { content: message.content.clone(), id_sender };
-
     match diesel::insert_into(messages::table)
-        .values(&new_message)
+        .values((
+            messages::content.eq(&message.content),
+            messages::id_sender.eq(id_sender),
+        ))
         .returning(MessageResponse::as_select())
         .get_result(&mut conn)
         .await

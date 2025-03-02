@@ -47,7 +47,6 @@ class ReportActivity : AppCompatActivity() {
             }
         }
 
-    private val reportTypes = listOf(getString(R.string.dangerous_individual), getString(R.string.suspect_activity), getString(R.string.dangerous_garbage), getString(R.string.other))
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +75,8 @@ class ReportActivity : AppCompatActivity() {
         val submitButton = findViewById<TextView>(R.id.submit_button)
         val cancelButton = findViewById<TextView>(R.id.cancel_button)
         val cameraTakePicture = findViewById<MaterialCardView>(R.id.camera_card_view)
+
+        val reportTypes = listOf(getString(R.string.dangerous_individual), getString(R.string.suspect_activity), getString(R.string.dangerous_garbage), getString(R.string.other))
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, reportTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

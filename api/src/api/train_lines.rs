@@ -37,8 +37,13 @@ async fn get_train_lines(
 }
 
 #[get("/{id}")]
-async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Result<HttpResponse> {
+async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>, req: HttpRequest) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
 
     let result = train_lines::table
         .filter(train_lines::id.eq(*id_line))
@@ -64,6 +69,7 @@ async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Res
 
             let subscribed = users_lines::table
                 .filter(users_lines::id_line.eq(*id_line))
+                .filter(users_lines::id_user.eq(id_user))
                 .count()
                 .get_result::<i64>(&mut conn)
                 .await

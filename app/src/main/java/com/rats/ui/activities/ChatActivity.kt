@@ -24,6 +24,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private var isUserAtBottom = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -46,18 +47,23 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        recyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(
+                    recyclerView: RecyclerView,
+                    dx: Int,
+                    dy: Int,
+                ) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastVisiblePosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                    val totalItemCount = layoutManager.itemCount
 
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisiblePosition = layoutManager.findLastCompletelyVisibleItemPosition()
-                val totalItemCount = layoutManager.itemCount
-
-                isUserAtBottom = lastVisiblePosition == totalItemCount - 1
-            }
-        })
+                    isUserAtBottom = lastVisiblePosition == totalItemCount - 1
+                }
+            },
+        )
 
         messageViewModel.fetchMessages()
 

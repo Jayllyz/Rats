@@ -47,7 +47,6 @@ class ReportActivity : AppCompatActivity() {
             }
         }
 
-
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

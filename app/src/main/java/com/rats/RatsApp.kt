@@ -1,10 +1,13 @@
 package com.rats
 
 import android.app.Application
+import com.rats.data.dao.MessageDAOImpl
 import com.rats.data.dao.RatingDaoImpl
 import com.rats.data.dao.ReportDaoImpl
 import com.rats.data.dao.TrainLinesDaoImpl
 import com.rats.data.dao.UserDaoImpl
+import com.rats.data.repositories.MessageRepository
+import com.rats.data.repositories.MessageRepositoryImpl
 import com.rats.data.repositories.RatingRepository
 import com.rats.data.repositories.RatingRepositoryImpl
 import com.rats.data.repositories.ReportRepository
@@ -37,6 +40,12 @@ class RatsApp : Application() {
     val reportRepository: ReportRepository by lazy {
         ReportRepositoryImpl(
             ReportDaoImpl(ApiClient),
+        )
+    }
+
+    val messageRepository: MessageRepository by lazy {
+        MessageRepositoryImpl(
+            MessageDAOImpl(ApiClient),
         )
     }
 }

@@ -67,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.success.observe(this) { success ->
             if (success) {
+                loginViewModel.userId.value?.let { saveUserId(it) }
                 startActivity(Intent(this, HomeActivity::class.java))
                 finish()
             }
@@ -115,6 +116,13 @@ class LoginActivity : AppCompatActivity() {
                 }
             },
         )
+    }
+
+    private fun saveUserId(id: Int) {
+        this.applicationContext.getSharedPreferences("app", MODE_PRIVATE)
+            .edit()
+            .putInt("user_id", id)
+            .apply()
     }
 
     private fun showError(

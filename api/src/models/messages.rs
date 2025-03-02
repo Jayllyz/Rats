@@ -13,12 +13,21 @@ pub struct MessageResponse {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(Serialize)]
+pub struct MessageWithSenderName {
+    pub id: i32,
+    pub content: String,
+    pub id_sender: i32,
+    pub sender_name: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
 #[derive(Serialize, Deserialize, Insertable, Selectable)]
 #[diesel(table_name = crate::schema::messages)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct CreateMessage {
     pub content: String,
-    pub id_sender: i32,
 }
 
 #[derive(Deserialize)]

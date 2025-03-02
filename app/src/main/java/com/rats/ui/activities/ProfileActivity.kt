@@ -19,9 +19,8 @@ import com.rats.RatsApp
 import com.rats.factories.ProfileViewModelFactory
 import com.rats.models.UserProfile
 import com.rats.utils.TokenManager
+import com.rats.utils.prettyDate
 import com.rats.viewModels.ProfileViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class ProfileActivity : AppCompatActivity() {
     private val userProfileViewModel: ProfileViewModel by viewModels {
@@ -130,11 +129,7 @@ class ProfileActivity : AppCompatActivity() {
 
         try {
             val datePart = userProfile.createdAt.substring(0, 10)
-            val simpleFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val date = simpleFormat.parse(datePart)
-
-            val outputFormat = SimpleDateFormat("d MMMM yyyy", Locale.FRENCH)
-            val formattedDate = date?.let { outputFormat.format(it) }
+            val formattedDate = prettyDate(datePart)
 
             if (formattedDate != null) {
                 viewHolder.userCreatedAtTextView.text = formattedDate

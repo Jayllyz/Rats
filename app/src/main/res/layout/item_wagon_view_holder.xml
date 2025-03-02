@@ -12,6 +12,7 @@
         android:layout_height="65dp"
         app:cardCornerRadius="50dp"
         app:strokeWidth="4dp"
+        app:strokeColor="@color/md_theme_secondary"
         android:layout_marginHorizontal="4dp"
         android:layout_marginVertical="4dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="@color/black"
+            android:textColor="@color/md_theme_onBackground"
             android:text="@string/passenger_name_template"/>
 
         <TextView
@@ -49,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/black"
+            android:textColor="@color/md_theme_onBackground"
             android:text="@string/passenger_note_template"/>
 
     </LinearLayout>

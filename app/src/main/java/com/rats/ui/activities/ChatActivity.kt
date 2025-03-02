@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +23,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private lateinit var recyclerView: RecyclerView
-
+    private var isUserAtBottom = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -32,14 +33,31 @@ class ChatActivity : AppCompatActivity() {
         val messageAdapter = MessageAdapter(emptyList(), getUserId())
         recyclerView.adapter = messageAdapter
 
+        findViewById<ImageButton>(R.id.backButton).setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         messageViewModel.messages.observe(this) { messages ->
             recyclerView.post {
                 messageAdapter.updateMessages(messages)
-                if (messages.isNotEmpty()) {
+                if (messages.isNotEmpty() && isUserAtBottom) {
                     recyclerView.smoothScrollToPosition(messages.size - 1)
                 }
             }
         }
+
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisiblePosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                isUserAtBottom = lastVisiblePosition == totalItemCount - 1
+            }
+        })
 
         messageViewModel.fetchMessages()
 

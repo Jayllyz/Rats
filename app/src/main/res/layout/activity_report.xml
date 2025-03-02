@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="16dp"
-        android:textColor="@color/md_theme_onSurface"
+        android:textColor="@color/md_theme_background"
         android:background="@color/md_theme_primary"
         android:id="@+id/tv_report_title"/>
 

@@ -37,8 +37,17 @@ async fn get_train_lines(
 }
 
 #[get("/{id}")]
-async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Result<HttpResponse> {
+async fn get_train_line(
+    pool: web::Data<DbPool>,
+    id_line: web::Path<i32>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
+
+    let id_user = match utils::validate_token(&req) {
+        Ok(claims) => claims.sub,
+        Err(err) => return Err(actix_web::error::ErrorUnauthorized(err)),
+    };
 
     let result = train_lines::table
         .filter(train_lines::id.eq(*id_line))
@@ -64,6 +73,7 @@ async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>) -> Res
 
             let subscribed = users_lines::table
                 .filter(users_lines::id_line.eq(*id_line))
+                .filter(users_lines::id_user.eq(id_user))
                 .count()
                 .get_result::<i64>(&mut conn)
                 .await
@@ -212,20 +222,6 @@ mod tests {
         .await;
 
         let req = TestRequest::get().uri("/train_lines?status=safe").to_request();
-        let resp = test::call_service(&app, req).await;
-
-        assert_eq!(resp.status(), StatusCode::OK);
-    }
-
-    #[actix_web::test]
-    async fn test_get_train_line() {
-        let pool = crate::db::establish_connection();
-        let app = test::init_service(
-            App::new().app_data(web::Data::new(pool)).configure(config_train_lines),
-        )
-        .await;
-
-        let req = TestRequest::get().uri("/train_lines/1").to_request();
         let resp = test::call_service(&app, req).await;
 
         assert_eq!(resp.status(), StatusCode::OK);

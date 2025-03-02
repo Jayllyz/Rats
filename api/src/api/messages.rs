@@ -80,10 +80,7 @@ async fn create_message(
     };
 
     match diesel::insert_into(messages::table)
-        .values((
-            messages::content.eq(&message.content),
-            messages::id_sender.eq(id_sender),
-        ))
+        .values((messages::content.eq(&message.content), messages::id_sender.eq(id_sender)))
         .returning(MessageResponse::as_select())
         .get_result(&mut conn)
         .await

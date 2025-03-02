@@ -24,7 +24,7 @@ class MessageDAOImpl(private val apiClient: ApiClient) : MessageDao {
         val response = apiClient.getRequest("messages", token)
         return if (response.code == 200 && response.body != null) {
             val messagesDto = json.decodeFromJsonElement<List<MessageDTO>>(response.body)
-            messagesDto.map { it.toModel() }
+            messagesDto.map { it.toModel() }.sortedBy { it.id }
         } else {
             emptyList()
         }

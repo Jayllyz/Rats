@@ -43,8 +43,8 @@ class LocationService : Service() {
     private val lowBatteryUpdateInterval = 60000L // 1 min
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    private val hardcodedLatitude = 48.8566
-    private val hardcodedLongitude = 2.3522
+    private val hardcodedLatitude = 48.8492
+    private val hardcodedLongitude = 2.3898
 
     companion object {
         private const val NOTIFICATION_CHANNEL_ID = "location_service_channel"
@@ -79,6 +79,8 @@ class LocationService : Service() {
     }
 
     private fun sendImmediateLocation() {
+        // Android emulator does not support location services
+        // so we send a hardcoded location instead
         val userLocation = UserLocationDTO(hardcodedLatitude, hardcodedLongitude)
         sendLocationToServer(userLocation)
         sendLocationBroadcast(userLocation)

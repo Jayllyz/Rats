@@ -112,17 +112,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp"
+                android:textColor="@color/md_theme_onBackground"
+                android:textSize="18sp"
                 android:text="@string/no_account"
                 android:layout_marginEnd="4dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:text="@string/signup"
-                android:textStyle="bold"
-                android:textColor="@color/md_theme_tertiary"/>
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

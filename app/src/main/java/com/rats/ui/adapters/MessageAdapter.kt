@@ -33,7 +33,10 @@ class MessageAdapter(private var messages: List<Message>, private val userId: In
         val message = messages[position]
 
         if (message.id_sender == userId) {
-            holder.userName.text = "You"
+            holder.userName.text =
+                buildString {
+                    append("You")
+                }
         } else {
             holder.userName.text = message.sender_name
         }
@@ -60,7 +63,6 @@ class MessageAdapter(private var messages: List<Message>, private val userId: In
 
     fun updateMessages(newMessages: List<Message>) {
         this.messages = newMessages
-        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

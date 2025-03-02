@@ -154,7 +154,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         if (::mMap.isInitialized) {
             mMap.clear()
             val userLocation = LatLng(latitude, longitude)
-            userMarker = MarkerOptions().position(userLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+            userMarker = MarkerOptions().position(userLocation).title("Vous").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
             mMap.addMarker(userMarker)
             if (firstLaunch) {
                 mMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(userLocation, 15f))

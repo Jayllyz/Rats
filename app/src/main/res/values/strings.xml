@@ -30,7 +30,7 @@
     <string name="login_fields_required">Tous les champs sont requis</string>
     <string name="login_server_error">Erreur serveur. Veuillez réessayer plus tard</string>
     <string name="login_network_error">Erreur réseau. Veuillez vérifier votre connexion</string>
-    <string name="loading">Chargement...</string>
+    <string name="loading">Chargement…</string>
     <string name="passenger_name_template">John Doe</string>
     <string name="passenger_note_template">Note: 1.4</string>
     <string name="passenger_profile_image">passenger_profile_image</string>
@@ -80,7 +80,7 @@
     <string name="filter_dangerous">Dangereux</string>
     <string name="filter_safe">Sûr</string>
     <string name="filter_incident">Incident</string>
-    <string name="comment_date">28-08-4222</string>
+    <string name="comment_date">28–08–4222</string>
     <string name="alert_title_sample">Hippopotame Dangereux</string>
     <string name="alert_date_sample">12 mai 2024</string>
     <string name="alert_category_sample">Danger imminent</string>
@@ -144,4 +144,5 @@
     <string name="other">Autre</string>
     <string name="invalid_date">Date invalide</string>
     <string name="format_error">Erreur de format</string>
+    <string name="no_messages">No messages</string>
 </resources>

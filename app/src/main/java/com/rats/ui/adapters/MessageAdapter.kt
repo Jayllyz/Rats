@@ -1,5 +1,6 @@
 package com.rats.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ class MessageAdapter(private var messages: List<Message>, private val userId: In
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: MessageViewHolder,
         position: Int,
@@ -61,8 +63,10 @@ class MessageAdapter(private var messages: List<Message>, private val userId: In
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateMessages(newMessages: List<Message>) {
         this.messages = newMessages
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

@@ -37,7 +37,11 @@ async fn get_train_lines(
 }
 
 #[get("/{id}")]
-async fn get_train_line(pool: web::Data<DbPool>, id_line: web::Path<i32>, req: HttpRequest) -> Result<HttpResponse> {
+async fn get_train_line(
+    pool: web::Data<DbPool>,
+    id_line: web::Path<i32>,
+    req: HttpRequest,
+) -> Result<HttpResponse> {
     let mut conn = pool.get().await.expect("Couldn't get db connection from pool");
 
     let id_user = match utils::validate_token(&req) {

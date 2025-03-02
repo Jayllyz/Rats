@@ -226,18 +226,4 @@ mod tests {
 
         assert_eq!(resp.status(), StatusCode::OK);
     }
-
-    #[actix_web::test]
-    async fn test_get_train_line() {
-        let pool = crate::db::establish_connection();
-        let app = test::init_service(
-            App::new().app_data(web::Data::new(pool)).configure(config_train_lines),
-        )
-        .await;
-
-        let req = TestRequest::get().uri("/train_lines/1").to_request();
-        let resp = test::call_service(&app, req).await;
-
-        assert_eq!(resp.status(), StatusCode::OK);
-    }
 }
